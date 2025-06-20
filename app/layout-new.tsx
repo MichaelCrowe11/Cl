@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { ThemeProvider } from "@/components/theme-provider"
 import { ThemeToggle } from "@/components/ui/theme-toggle"
-import { ErrorBoundary } from "@/components/error-boundary"
 import {
   Settings,
   Layers,
@@ -24,30 +23,15 @@ import './globals.css'
 
 export const metadata = {
   title: 'Crowe Logic AI - Mycology Lab Assistant',
-  description: 'Professional mycology lab management and cultivation assistant powered by AI. Track batches, generate SOPs, and optimize your mushroom cultivation workflow.',
-  keywords: 'mycology, mushroom cultivation, lab management, AI assistant, batch tracking, cultivation protocols',
-  authors: [{ name: 'Crowe Logic AI' }],
-  creator: 'Crowe Logic AI',
-  robots: 'index, follow',
-  openGraph: {
-    title: 'Crowe Logic AI - Mycology Lab Assistant',
-    description: 'Professional mycology lab management and cultivation assistant powered by AI',
-    type: 'website',
-    locale: 'en_US',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Crowe Logic AI - Mycology Lab Assistant',
-    description: 'Professional mycology lab management and cultivation assistant powered by AI',
-  },
+  description: 'Professional mycology lab management and cultivation assistant',
+  generator: 'Next.js',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body>
-        <ErrorBoundary>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <div className="flex h-screen bg-background text-foreground">
             {/* Sidebar */}
             <div className="w-72 border-r bg-muted/20 flex flex-col">
@@ -129,9 +113,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     </Button>
                   </div>
                 </header>
-                <ErrorBoundary>
-                  {children}
-                </ErrorBoundary>
+                {children}
               </div>
 
               {/* Right Panel */}
@@ -160,7 +142,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </div>
           </div>
         </ThemeProvider>
-        </ErrorBoundary>
       </body>
     </html>
   )
