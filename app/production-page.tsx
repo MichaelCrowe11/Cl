@@ -8,6 +8,7 @@ import FunctionalSidebar from "@/components/functional-sidebar"
 import DemoChatInterface from "@/components/demo-chat-interface"
 import { User, Crown, Sparkles, TrendingUp, Activity, Target } from "lucide-react"
 import Link from "next/link"
+import ContextToolsPanel from "@/components/context-tools-panel"
 
 export default function ProductionDashboard() {
   const [activeSection, setActiveSection] = useState("chat")
@@ -286,92 +287,7 @@ export default function ProductionDashboard() {
         </div>
 
         {/* Right Panel - Context & Tools */}
-        <div className="w-80 border-l bg-muted/20 flex flex-col">
-          <div className="h-16 border-b px-4 flex items-center">
-            <h2 className="font-semibold text-md">Context & Tools</h2>
-          </div>
-          <div className="p-4">
-            <div className="flex gap-2 border-b pb-3 mb-3">
-              <Button variant="secondary" size="sm" className="flex-1 text-xs">
-                Generated Docs
-              </Button>
-              <Button variant="ghost" size="sm" className="flex-1 text-xs">
-                Context
-              </Button>
-              <Button variant="ghost" size="sm" className="flex-1 text-xs">
-                Tools
-              </Button>
-            </div>
-            <div className="text-sm text-muted-foreground mb-4">
-              {activeSection === "chat"
-                ? "AI conversation tools and context appear here during chat sessions."
-                : "Context and tools for this section will appear here."}
-            </div>
-
-            {activeSection === "chat" && (
-              <div className="space-y-3">
-                <div className="bg-card p-3 rounded border">
-                  <h4 className="font-medium text-xs mb-1">Current Session</h4>
-                  <p className="text-xs text-muted-foreground">Mycology Consultation</p>
-                  <div className="mt-2 flex gap-1">
-                    <Badge variant="outline" className="text-xs">
-                      Live
-                    </Badge>
-                  </div>
-                </div>
-                <div className="bg-card p-3 rounded border">
-                  <h4 className="font-medium text-xs mb-1">Strain Database</h4>
-                  <p className="text-xs text-muted-foreground">47 species profiles loaded</p>
-                  <div className="mt-2">
-                    <Badge variant="secondary" className="text-xs">
-                      Lion's Mane
-                    </Badge>
-                  </div>
-                </div>
-                <div className="bg-card p-3 rounded border">
-                  <h4 className="font-medium text-xs mb-1">Active Protocols</h4>
-                  <p className="text-xs text-muted-foreground">12 SOPs available</p>
-                  <div className="mt-2">
-                    <Badge variant="outline" className="text-xs">
-                      Ready
-                    </Badge>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {activeSection === "dashboard" && (
-              <div className="space-y-3">
-                <div className="bg-card p-3 rounded border">
-                  <h4 className="font-medium text-xs mb-1">Quick Actions</h4>
-                  <div className="space-y-2 mt-2">
-                    <Button variant="outline" size="sm" className="w-full text-xs">
-                      New Batch
-                    </Button>
-                    <Button variant="outline" size="sm" className="w-full text-xs">
-                      Generate Report
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {activeSection === "protocols" && (
-              <div className="space-y-3">
-                <div className="bg-card p-3 rounded border">
-                  <h4 className="font-medium text-xs mb-1">Protocol Templates</h4>
-                  <p className="text-xs text-muted-foreground">15 templates available</p>
-                </div>
-                <div className="bg-card p-3 rounded border">
-                  <h4 className="font-medium text-xs mb-1">AI Generator</h4>
-                  <Button variant="outline" size="sm" className="w-full text-xs mt-2">
-                    Create Custom SOP
-                  </Button>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
+        <ContextToolsPanel activeSection={activeSection} />
       </div>
     </div>
   )
