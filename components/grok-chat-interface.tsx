@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { useState, useEffect, useRef } from "react"
 import { useChat } from "ai/react"
 import { Button } from "@/components/ui/button"
@@ -9,76 +8,26 @@ import { Textarea } from "@/components/ui/textarea"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import {
-  Copy,
-  Download,
-  ThumbsUp,
-  ThumbsDown,
-  Mic,
-  Send,
-  Paperclip,
-  Smile,
-  Loader2,
-  Brain,
-  FlaskConical,
-  GitBranch,
-} from "lucide-react"
+import { Copy, Download, ThumbsUp, ThumbsDown, Mic, Send, Paperclip, Smile, Loader2, Zap, Brain } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useAuth } from "@/hooks/use-auth"
 import { toast } from "sonner"
 
-interface ChatSession {
-  id: string
-  title: string
-  created_at: string
+interface GrokChatInterfaceProps {
+  model?: string
 }
 
-type AIModel = "crowe-grok" | "deepseek-reasoning" | "openai-basic"
-
-const AI_MODELS = {
-  "crowe-grok": {
-    name: "Crowe Logic AI (Grok)",
-    endpoint: "/api/chat-grok-direct",
-    icon: FlaskConical,
-    description: "PhD-level mycology expertise with advanced analysis",
-    color: "from-emerald-500 to-blue-600",
-    badge: "PhD-Level",
-  },
-  "deepseek-reasoning": {
-    name: "DeepSeek R1 Reasoning",
-    endpoint: "/api/chat-groq-deepseek",
-    icon: GitBranch,
-    description: "Chain-of-thought analysis and systematic problem solving",
-    color: "from-purple-500 to-pink-600",
-    badge: "Reasoning",
-  },
-  "openai-basic": {
-    name: "OpenAI GPT-4",
-    endpoint: "/api/chat",
-    icon: Brain,
-    description: "Standard AI responses for general questions",
-    color: "from-blue-500 to-indigo-600",
-    badge: "Standard",
-  },
-}
-
-export default function FunctionalChatInterface() {
+export default function GrokChatInterface({ model = "grok-2-1212" }: GrokChatInterfaceProps) {
   const { user } = useAuth()
-  const [currentSession, setCurrentSession] = useState<ChatSession | null>(null)
-  const [sessions, setSessions] = useState<ChatSession[]>([])
-  const [selectedModel, setSelectedModel] = useState<AIModel>("crowe-grok")
+  const [currentSession, setCurrentSession] = useState<any>(null)
   const scrollAreaRef = useRef<HTMLDivElement>(null)
 
-  const currentModelConfig = AI_MODELS[selectedModel]
-
   const { messages, input, handleInputChange, handleSubmit, isLoading, error } = useChat({
-    api: currentModelConfig.endpoint,
+    api: "/api/chat-grok",
     body: {
       userId: user?.id,
       sessionId: currentSession?.id,
-      model: selectedModel === "deepseek-reasoning" ? "deepseek-r1-distill-llama-70b" : "grok-2-latest",
-      advanced_mode: selectedModel !== "openai-basic",
+      model,
     },
     onError: (error) => {
       toast.error("Failed to send message: " + error.message)
@@ -134,13 +83,12 @@ export default function FunctionalChatInterface() {
           "x-user-id": user.id,
         },
         body: JSON.stringify({
-          title: `${currentModelConfig.name} Session`,
+          title: "Grok Mycology Session",
         }),
       })
 
       const { session } = await response.json()
       setCurrentSession(session)
-      setSessions((prev) => [session, ...prev])
     } catch (error) {
       toast.error("Failed to create new session")
     }
@@ -160,7 +108,7 @@ export default function FunctionalChatInterface() {
     const url = URL.createObjectURL(blob)
     const a = document.createElement("a")
     a.href = url
-    a.download = `${selectedModel}-response-${messageId}.txt`
+    a.download = `grok-response-${messageId}.txt`
     document.body.appendChild(a)
     a.click()
     document.body.removeChild(a)
@@ -178,95 +126,44 @@ export default function FunctionalChatInterface() {
     }
   }
 
-  const handleModelChange = (newModel: AIModel) => {
-    setSelectedModel(newModel)
-    toast.success(`Switched to ${AI_MODELS[newModel].name}`)
-    // Create new session for the new model
-    setTimeout(() => {
-      createNewSession()
-    }, 100)
-  }
-
-  const quickPrompts = {
-    "crowe-grok": [
-      "Generate a comprehensive Lion's Mane cultivation SOP with biochemical analysis",
-      "Design a contamination prevention protocol using statistical risk assessment",
-      "Analyze substrate optimization with C:N ratios and enzymatic pathways",
-      "Create a yield prediction model with environmental parameters",
-    ],
-    "deepseek-reasoning": [
-      "Analyze the multi-step reasoning process for substrate optimization",
-      "Design a systematic troubleshooting framework using logical reasoning trees",
-      "Create a chain-of-thought analysis for contamination prevention",
-      "Develop a step-by-step yield optimization strategy",
-    ],
-    "openai-basic": [
-      "What's the best substrate for Lion's Mane?",
-      "How do I prevent contamination?",
-      "What temperature should I use for fruiting?",
-      "How long does colonization take?",
-    ],
-  }
+  const grokPrompts = [
+    "Analyze the optimal substrate composition for Lion's Mane cultivation",
+    "Explain the biochemical processes during mushroom fruiting",
+    "Compare contamination risks across different cultivation methods",
+    "Design an innovative sterile technique protocol",
+    "Predict yield outcomes based on environmental parameters",
+    "Troubleshoot slow mycelium colonization with reasoning",
+  ]
 
   if (!user) {
     return (
       <div className="flex-1 flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-xl font-semibold mb-2">Please sign in to continue</h2>
-          <p className="text-muted-foreground mb-4">You need to be authenticated to use Crowe Logic AI</p>
+          <p className="text-muted-foreground mb-4">You need to be authenticated to use Grok-powered AI</p>
           <Button onClick={() => (window.location.href = "/auth/login")}>Sign In</Button>
         </div>
       </div>
     )
   }
 
-  const ModelIcon = currentModelConfig.icon
-
   return (
     <div className="flex-1 flex flex-col bg-background">
-      {/* Enhanced Header with Model Selection */}
+      {/* Header */}
       <div className="border-b p-4">
-        <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className={`p-2 bg-gradient-to-r ${currentModelConfig.color} rounded-lg`}>
-              <ModelIcon className="h-5 w-5 text-white" />
+            <div className="p-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg">
+              <Brain className="h-5 w-5 text-white" />
             </div>
             <div>
-              <h2 className="font-semibold">Crowe Logic AI Platform</h2>
-              <p className="text-sm text-muted-foreground">{currentModelConfig.description}</p>
+              <h2 className="font-semibold">Grok-Powered Mycology AI</h2>
+              <p className="text-sm text-muted-foreground">Advanced reasoning for cultivation challenges</p>
             </div>
           </div>
-          <Badge
-            variant="secondary"
-            className={`bg-gradient-to-r ${currentModelConfig.color.replace("500", "100").replace("600", "100")} text-emerald-800`}
-          >
-            <ModelIcon className="h-3 w-3 mr-1" />
-            {currentModelConfig.badge}
-          </Badge>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <label className="text-sm font-medium">AI Model:</label>
-          <Select value={selectedModel} onValueChange={handleModelChange}>
-            <SelectTrigger className="w-64">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {Object.entries(AI_MODELS).map(([key, config]) => {
-                const Icon = config.icon
-                return (
-                  <SelectItem key={key} value={key}>
-                    <div className="flex items-center gap-2">
-                      <Icon className="h-4 w-4" />
-                      <span>{config.name}</span>
-                    </div>
-                  </SelectItem>
-                )
-              })}
-            </SelectContent>
-          </Select>
-          <Badge variant="outline" className="text-xs">
-            Endpoint: {currentModelConfig.endpoint}
+          <Badge variant="secondary" className="bg-gradient-to-r from-blue-100 to-purple-100 text-blue-800">
+            <Zap className="h-3 w-3 mr-1" />
+            {model}
           </Badge>
         </div>
       </div>
@@ -275,18 +172,19 @@ export default function FunctionalChatInterface() {
         <div className="space-y-6">
           {messages.length === 0 && (
             <div className="text-center py-12">
-              <div
-                className={`p-4 bg-gradient-to-r ${currentModelConfig.color} rounded-full w-20 h-20 mx-auto mb-4 flex items-center justify-center`}
-              >
-                <ModelIcon className="h-10 w-10 text-white" />
+              <div className="p-4 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full w-20 h-20 mx-auto mb-4 flex items-center justify-center">
+                <Brain className="h-10 w-10 text-white" />
               </div>
-              <h3 className="text-lg font-semibold mb-2">{currentModelConfig.name}</h3>
-              <p className="text-muted-foreground max-w-md mx-auto mb-6">{currentModelConfig.description}</p>
+              <h3 className="text-lg font-semibold mb-2">Welcome to Grok-Powered Mycology AI</h3>
+              <p className="text-muted-foreground max-w-md mx-auto mb-6">
+                Experience advanced reasoning and creative problem-solving for your mycology challenges. Grok brings
+                enhanced analytical capabilities to cultivation science.
+              </p>
 
               <div className="mb-6">
-                <h4 className="text-sm font-medium mb-3 text-muted-foreground">Try these prompts:</h4>
+                <h4 className="text-sm font-medium mb-3 text-muted-foreground">Try these Grok-powered prompts:</h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2 max-w-4xl mx-auto">
-                  {quickPrompts[selectedModel].map((prompt, index) => (
+                  {grokPrompts.map((prompt, index) => (
                     <Button
                       key={index}
                       variant="outline"
@@ -303,7 +201,7 @@ export default function FunctionalChatInterface() {
                       }}
                       disabled={isLoading}
                     >
-                      <ModelIcon className="h-3 w-3 mr-2 flex-shrink-0" />
+                      <Brain className="h-3 w-3 mr-2 flex-shrink-0" />
                       <span className="text-xs">{prompt}</span>
                     </Button>
                   ))}
@@ -320,24 +218,22 @@ export default function FunctionalChatInterface() {
               <Avatar className="h-8 w-8 border">
                 <AvatarImage
                   src={message.role === "assistant" ? "/crowe-avatar.png" : "/placeholder-user.jpg"}
-                  alt={message.role === "assistant" ? currentModelConfig.name : "User"}
+                  alt={message.role === "assistant" ? "Grok AI" : "User"}
                 />
-                <AvatarFallback>
-                  {message.role === "assistant" ? <ModelIcon className="h-4 w-4" /> : "U"}
-                </AvatarFallback>
+                <AvatarFallback>{message.role === "assistant" ? <Brain className="h-4 w-4" /> : "U"}</AvatarFallback>
               </Avatar>
               <div className={cn("space-y-1", message.role === "user" ? "items-end" : "items-start")}>
                 <div className={cn("flex items-center gap-2", message.role === "user" ? "flex-row-reverse" : "")}>
                   <span className="text-xs font-medium">
-                    {message.role === "assistant" ? currentModelConfig.name : user.name || "You"}
+                    {message.role === "assistant" ? "Grok Mycology AI" : user.name || "You"}
                   </span>
                   <span className="text-xs text-muted-foreground">
                     {new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                   </span>
                   {message.role === "assistant" && (
                     <Badge variant="outline" className="text-xs">
-                      <ModelIcon className="h-2 w-2 mr-1" />
-                      {currentModelConfig.badge}
+                      <Brain className="h-2 w-2 mr-1" />
+                      Grok
                     </Badge>
                   )}
                 </div>
@@ -345,7 +241,7 @@ export default function FunctionalChatInterface() {
                   className={cn(
                     "p-3 rounded-xl shadow-sm text-sm",
                     message.role === "assistant"
-                      ? `bg-gradient-to-r ${currentModelConfig.color.replace("500", "50").replace("600", "50")} dark:${currentModelConfig.color.replace("500", "950").replace("600", "950")} rounded-bl-none border border-emerald-200 dark:border-emerald-800`
+                      ? "bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950 dark:to-purple-950 rounded-bl-none border border-blue-200 dark:border-blue-800"
                       : "bg-primary text-primary-foreground rounded-br-none",
                   )}
                 >
@@ -385,30 +281,22 @@ export default function FunctionalChatInterface() {
             <div className="flex gap-3 max-w-[85%] mr-auto">
               <Avatar className="h-8 w-8 border">
                 <AvatarFallback>
-                  <ModelIcon className="h-4 w-4" />
+                  <Brain className="h-4 w-4" />
                 </AvatarFallback>
               </Avatar>
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-medium">{currentModelConfig.name}</span>
-                  <span className="text-xs text-muted-foreground">
-                    {selectedModel === "deepseek-reasoning" ? "reasoning..." : "analyzing..."}
-                  </span>
+                  <span className="text-xs font-medium">Grok Mycology AI</span>
+                  <span className="text-xs text-muted-foreground">reasoning...</span>
                   <Badge variant="outline" className="text-xs">
-                    <ModelIcon className="h-2 w-2 mr-1" />
-                    {currentModelConfig.badge}
+                    <Brain className="h-2 w-2 mr-1" />
+                    Grok
                   </Badge>
                 </div>
-                <div
-                  className={`bg-gradient-to-r ${currentModelConfig.color.replace("500", "50").replace("600", "50")} dark:${currentModelConfig.color.replace("500", "950").replace("600", "950")} p-3 rounded-xl rounded-bl-none border border-emerald-200 dark:border-emerald-800`}
-                >
+                <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950 dark:to-purple-950 p-3 rounded-xl rounded-bl-none border border-blue-200 dark:border-blue-800">
                   <div className="flex items-center gap-2">
                     <Loader2 className="h-4 w-4 animate-spin" />
-                    <span className="text-sm text-muted-foreground">
-                      {selectedModel === "crowe-grok" && "Applying Crowe Logic methodology..."}
-                      {selectedModel === "deepseek-reasoning" && "Applying chain-of-thought analysis..."}
-                      {selectedModel === "openai-basic" && "Processing your request..."}
-                    </span>
+                    <span className="text-sm text-muted-foreground">Grok is analyzing your mycology query...</span>
                   </div>
                 </div>
               </div>
@@ -420,13 +308,7 @@ export default function FunctionalChatInterface() {
       <div className="p-4 border-t bg-muted/30">
         <form onSubmit={handleSubmit} className="relative">
           <Textarea
-            placeholder={
-              selectedModel === "crowe-grok"
-                ? "Ask about advanced mycology, biochemical analysis, or systematic cultivation approaches..."
-                : selectedModel === "deepseek-reasoning"
-                  ? "Request systematic analysis, multi-step reasoning, or comprehensive logical frameworks..."
-                  : "Ask about substrate optimization, contamination prevention, yield predictions..."
-            }
+            placeholder="Ask Grok about advanced mycology concepts, complex cultivation challenges, or innovative research ideas..."
             value={input}
             onChange={handleInputChange}
             onKeyPress={handleKeyPress}
@@ -451,7 +333,7 @@ export default function FunctionalChatInterface() {
           </div>
         </form>
         <p className="text-xs text-muted-foreground mt-2 text-center">
-          Using {currentModelConfig.name} - {currentModelConfig.description}. Press Enter to send, Escape to clear.
+          Powered by Grok's advanced reasoning for complex mycology challenges. Press Enter to send, Escape to clear.
         </p>
       </div>
     </div>

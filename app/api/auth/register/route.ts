@@ -1,8 +1,9 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { createClient } from "@supabase/supabase-js"
 
+// Use the correct environment variable names
 const supabase = createClient(
-  process.env.SUPABASE_SUPABASE_NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SUPABASE_SERVICE_ROLE_KEY!,
 )
 

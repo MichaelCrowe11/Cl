@@ -1,6 +1,11 @@
-import { redirect } from "next/navigation"
+import EnhancedChatInterface from "@/components/enhanced-chat-interface"
 
 export default function ChatPage() {
-  // Redirect to main app with chat section
-  redirect("/?section=chat")
+  return (
+    <div className="flex h-screen bg-background">
+      <div className="flex-1 flex flex-col">
+        <EnhancedChatInterface />
+      </div>
+    </div>
+  )
 }

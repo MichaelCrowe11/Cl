@@ -1,7 +1,8 @@
 import { createClient } from "@supabase/supabase-js"
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+// Use the correct environment variable names from your setup
+const supabaseUrl = process.env.SUPABASE_NEXT_PUBLIC_SUPABASE_URL!
+const supabaseAnonKey = process.env.SUPABASE_NEXT_PUBLIC_SUPABASE_ANON_KEY!
 
 // Singleton pattern to prevent multiple instances
 let supabaseInstance: ReturnType<typeof createClient> | null = null

@@ -4,6 +4,7 @@ import { Inter } from "next/font/google"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/sonner"
+import Script from "next/script"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -46,147 +47,42 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              // Ultra-aggressive MetaMask polyfill - prevents ALL wallet detection
-              (function() {
-                if (typeof window === 'undefined') return;
-                
-                // Override console methods to suppress MetaMask errors completely
-                const originalError = console.error;
-                const originalWarn = console.warn;
-                const originalLog = console.log;
-                
-                console.error = function(...args) {
-                  const message = String(args[0] || '');
-                  if (message.includes('MetaMask') || 
-                      message.includes('ChromeTransport') || 
-                      message.includes('connectChrome') ||
-                      message.includes('extension not found') ||
-                      message.includes('inpage.js')) {
-                    return; // Completely suppress
-                  }
-                  return originalError.apply(console, args);
-                };
-                
-                console.warn = function(...args) {
-                  const message = String(args[0] || '');
-                  if (message.includes('MetaMask') || 
-                      message.includes('ChromeTransport') || 
-                      message.includes('connectChrome')) {
-                    return; // Completely suppress
-                  }
-                  return originalWarn.apply(console, args);
-                };
-                
-                // Comprehensive Chrome extension polyfill
-                window.chrome = window.chrome || {};
-                window.chrome.runtime = window.chrome.runtime || {
-                  connect: function() {
-                    // Return a mock port that doesn't throw errors
-                    return {
-                      postMessage: function() {},
-                      onMessage: { 
-                        addListener: function() {},
-                        removeListener: function() {}
-                      },
-                      onDisconnect: { 
-                        addListener: function() {},
-                        removeListener: function() {}
-                      },
-                      disconnect: function() {},
-                      name: 'mock-port',
-                      sender: null
-                    };
-                  },
-                  sendMessage: function() {
-                    return Promise.resolve(null);
-                  },
-                  onMessage: { 
-                    addListener: function() {},
-                    removeListener: function() {}
-                  },
-                  onConnect: {
-                    addListener: function() {},
-                    removeListener: function() {}
-                  },
-                  id: 'mock-extension-id'
-                };
-                
-                // Ethereum provider polyfill
-                window.ethereum = window.ethereum || {
-                  isMetaMask: false,
-                  isConnected: function() { return false; },
-                  request: function() { 
-                    return Promise.reject(new Error('MetaMask not installed')); 
-                  },
-                  on: function() {},
-                  removeListener: function() {},
-                  removeAllListeners: function() {},
-                  enable: function() {
-                    return Promise.reject(new Error('MetaMask not installed'));
-                  },
-                  send: function() {
-                    return Promise.reject(new Error('MetaMask not installed'));
-                  },
-                  sendAsync: function(payload, callback) {
-                    if (callback) callback(new Error('MetaMask not installed'), null);
-                  },
-                  selectedAddress: null,
-                  networkVersion: null,
-                  chainId: null
-                };
-                
-                // Web3 polyfill
-                window.web3 = window.web3 || {
-                  currentProvider: null,
-                  eth: {
-                    accounts: [],
-                    defaultAccount: null,
-                    getAccounts: function() { return Promise.resolve([]); }
-                  },
-                  version: { api: '1.0.0' }
-                };
-                
-                // Additional wallet polyfills
-                window.tronWeb = window.tronWeb || null;
-                window.solana = window.solana || null;
-                window.phantom = window.phantom || null;
-                
-                // Override any potential wallet detection
-                Object.defineProperty(window, 'ethereum', {
-                  value: window.ethereum,
-                  writable: false,
-                  configurable: false
-                });
-                
-                // Prevent dynamic script injection that might load wallet connectors
-                const originalCreateElement = document.createElement;
-                document.createElement = function(tagName) {
-                  const element = originalCreateElement.call(document, tagName);
-                  if (tagName.toLowerCase() === 'script') {
-                    const originalSetAttribute = element.setAttribute;
-                    element.setAttribute = function(name, value) {
-                      if (name === 'src' && typeof value === 'string') {
-                        if (value.includes('metamask') || 
-                            value.includes('wallet') || 
-                            value.includes('web3') ||
-                            value.includes('inpage')) {
-                          console.log('Blocked wallet script:', value);
-                          return; // Block wallet-related scripts
-                        }
-                      }
-                      return originalSetAttribute.call(element, name, value);
-                    };
-                  }
-                  return element;
-                };
-                
-              })();
-            `,
-          }}
-        />
+        {/* -- Wallet shim: injected before any other client JS ---------------- */}
+        <Script id="wallet-shim" strategy="beforeInteractive">
+          {`
+        /* Crowe Logic AI – wallet noise silencer */
+        (function () {
+          if (typeof window === 'undefined') return;
+
+          // Stub chrome.runtime to keep wallet helpers quiet
+          window.chrome = window.chrome || {};
+          window.chrome.runtime = window.chrome.runtime || {
+            connect() { return { postMessage() {}, disconnect() {}, onMessage:{addListener(){}}, onDisconnect:{addListener(){}} } },
+            sendMessage() { return Promise.resolve(null); },
+            onMessage:{ addListener(){} },
+            onConnect:{ addListener(){} },
+          };
+
+          // Stub ethereum provider
+          window.ethereum = window.ethereum || {
+            isMetaMask: false,
+            isConnected: () => false,
+            request: () => Promise.reject(new Error('MetaMask not installed')),
+            enable: () => Promise.reject(new Error('MetaMask not installed')),
+            send:   () => Promise.reject(new Error('MetaMask not installed')),
+            sendAsync: (_p, cb) => cb && cb(new Error('MetaMask not installed')),
+            on() {}, removeListener() {}, removeAllListeners() {},
+          };
+
+          // Filter console noise
+          const noisy = /MetaMask|ChromeTransport|connectChrome|extension not found|inpage\\.js/;
+          ['error','warn'].forEach(level => {
+            const orig = console[level]?.bind(console);
+            console[level] = (...a) => (noisy.test(String(a[0])) ? undefined : orig(...a));
+          });
+        })();
+        `}
+        </Script>
       </head>
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
