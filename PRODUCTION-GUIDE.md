@@ -37,20 +37,20 @@
 ## 🚀 Deployment Commands
 
 ### Development
-```bash
+\`\`\`bash
 pnpm dev
-```
+\`\`\`
 
 ### Production Build & Test
-```bash
+\`\`\`bash
 pnpm build:production  # Runs lint, type-check, and build
 pnpm preview          # Test production build locally
-```
+\`\`\`
 
 ### Deploy to Vercel
-```bash
+\`\`\`bash
 vercel --prod
-```
+\`\`\`
 
 ## 📊 Performance Metrics
 - **First Load JS:** 125KB (Excellent)
@@ -60,10 +60,10 @@ vercel --prod
 
 ## 🔧 Environment Variables
 Create `.env.local` for production:
-```env
+\`\`\`env
 NEXT_PUBLIC_APP_URL=https://your-domain.com
 NEXT_PUBLIC_ENVIRONMENT=production
-```
+\`\`\`
 
 ## 📱 Browser Support
 - Chrome 90+

@@ -1,5 +1,5 @@
-import ChatInterface from "../chat-interface"
+import ProductionDashboard from "./production-page"
 
 export default function Page() {
-  return <ChatInterface />
+  return <ProductionDashboard />
 }
