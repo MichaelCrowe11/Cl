@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
@@ -13,9 +12,6 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Loader2, Eye, EyeOff, Check } from "lucide-react"
 import Image from "next/image"
-import { createClient } from "@supabase/supabase-js"
-
-const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -48,6 +44,10 @@ export default function RegisterPage() {
       setError("Email is required")
       return false
     }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      setError("Please enter a valid email address")
+      return false
+    }
     if (formData.password.length < 8) {
       setError("Password must be at least 8 characters")
       return false
@@ -72,22 +72,28 @@ export default function RegisterPage() {
     setIsLoading(true)
 
     try {
+      console.log("Submitting registration for:", formData.email)
+
       const response = await fetch("/api/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
+          name: formData.name.trim(),
+          email: formData.email.trim().toLowerCase(),
           password: formData.password,
         }),
       })
 
       const data = await response.json()
+      console.log("Registration response:", data)
 
       if (!response.ok) {
         setError(data.error || "Registration failed")
+        if (data.details) {
+          console.error("Registration details:", data.details)
+        }
         return
       }
 
@@ -96,7 +102,8 @@ export default function RegisterPage() {
         router.push("/auth/login?message=Registration successful! Please sign in.")
       }, 2000)
     } catch (err) {
-      setError("An unexpected error occurred")
+      console.error("Registration error:", err)
+      setError("An unexpected error occurred. Please try again.")
     } finally {
       setIsLoading(false)
     }

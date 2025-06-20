@@ -1,22 +1,9 @@
 "use client"
 
 import type React from "react"
-
 import { createContext, useContext, useEffect, useState } from "react"
-import { createClient } from "@supabase/supabase-js"
 import type { User } from "@supabase/supabase-js"
-
-// Client-side Supabase instance – uses PUBLIC keys
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-const supabaseAnon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-
-if (!supabaseUrl || !supabaseAnon) {
-  throw new Error(
-    "Missing NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY env vars – add them in the Vercel dashboard",
-  )
-}
-
-const supabase = createClient(supabaseUrl, supabaseAnon)
+import { supabase } from "@/lib/supabase/client"
 
 interface AuthContextType {
   user: User | null
