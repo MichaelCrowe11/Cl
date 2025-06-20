@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Copy, Download, ThumbsUp, ThumbsDown, Mic, Send, Paperclip, Smile } from "lucide-react"
+import { Copy, Download, ThumbsUp, ThumbsDown, Mic, Send, Paperclip, Smile, Loader2 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 interface Message {
@@ -20,6 +20,7 @@ interface Message {
 
 export default function ChatInterface() {
   const [input, setInput] = useState("")
+  const [isLoading, setIsLoading] = useState(false)
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
@@ -62,7 +63,8 @@ export default function ChatInterface() {
   }, [messages])
 
   const handleSend = () => {
-    if (input.trim() === "") return
+    if (input.trim() === "" || isLoading) return
+    
     const newMessage: Message = {
       id: String(messages.length + 1),
       role: "user",
@@ -73,6 +75,7 @@ export default function ChatInterface() {
     }
     setMessages((prevMessages) => [...prevMessages, newMessage])
     setInput("")
+    setIsLoading(true)
 
     // Simulate AI response
     setTimeout(() => {
@@ -85,6 +88,7 @@ export default function ChatInterface() {
         timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
       }
       setMessages((prevMessages) => [...prevMessages, aiResponse])
+      setIsLoading(false)
     }, 1000)
   }
 
@@ -92,6 +96,17 @@ export default function ChatInterface() {
     if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault()
       handleSend()
+    }
+    if (event.key === "Escape") {
+      setInput("")
+    }
+  }
+
+  const copyToClipboard = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text)
+    } catch (err) {
+      console.error('Failed to copy text: ', err)
     }
   }
 
@@ -125,7 +140,12 @@ export default function ChatInterface() {
                 </div>
                 {message.role === "agent" && (
                   <div className="flex items-center gap-1 pt-1">
-                    <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground hover:text-foreground">
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      className="h-7 w-7 text-muted-foreground hover:text-foreground"
+                      onClick={() => copyToClipboard(message.content)}
+                    >
                       <Copy className="h-3.5 w-3.5" />
                     </Button>
                     <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground hover:text-foreground">
@@ -165,8 +185,12 @@ export default function ChatInterface() {
             <Button variant="ghost" size="icon" className="h-9 w-9 text-muted-foreground hover:text-primary">
               <Mic className="h-5 w-5" />
             </Button>
-            <Button onClick={handleSend} className="h-9 w-9 p-0" size="icon" disabled={!input.trim()}>
-              <Send className="h-4.5 w-4.5" />
+            <Button onClick={handleSend} className="h-9 w-9 p-0" size="icon" disabled={!input.trim() || isLoading}>
+              {isLoading ? (
+                <Loader2 className="h-4.5 w-4.5 animate-spin" />
+              ) : (
+                <Send className="h-4.5 w-4.5" />
+              )}
             </Button>
           </div>
         </div>

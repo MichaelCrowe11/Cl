@@ -1,12 +1,16 @@
 {
-  "name": "my-v0-project",
-  "version": "0.1.0",
+  "name": "crowe-logic-ai",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "lint:fix": "next lint --fix",
+    "type-check": "tsc --noEmit",
+    "build:production": "pnpm lint && pnpm type-check && pnpm build",
+    "preview": "pnpm build && pnpm start"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
