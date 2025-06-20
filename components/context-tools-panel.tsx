@@ -30,7 +30,6 @@ import {
   Mic,
   Share,
   RefreshCw,
-  AlertCircle,
 } from "lucide-react"
 
 interface ContextToolsPanelProps {
@@ -40,7 +39,6 @@ interface ContextToolsPanelProps {
 export default function ContextToolsPanel({ activeSection }: ContextToolsPanelProps) {
   const [activeTab, setActiveTab] = useState("docs")
   const [isGenerating, setIsGenerating] = useState(false)
-  const [clipboardSupported, setClipboardSupported] = useState(true)
   const [realtimeData, setRealtimeData] = useState({
     temperature: 72.3,
     humidity: 85.2,
@@ -50,178 +48,6 @@ export default function ContextToolsPanel({ activeSection }: ContextToolsPanelPr
     alerts: 2,
     lastUpdate: new Date(),
   })
-
-  // Check clipboard support on mount
-  useEffect(() => {
-    const checkClipboardSupport = () => {
-      if (!navigator.clipboard) {
-        setClipboardSupported(false)
-        console.warn("Clipboard API not supported in this browser")
-        return false
-      }
-
-      if (location.protocol !== "https:" && location.hostname !== "localhost") {
-        setClipboardSupported(false)
-        console.warn("Clipboard API requires HTTPS or localhost")
-        return false
-      }
-
-      return true
-    }
-
-    checkClipboardSupport()
-  }, [])
-
-  // Enhanced copy function with comprehensive error handling
-  const copyToClipboard = async (text: string, label = "content") => {
-    // Pre-flight checks
-    if (!clipboardSupported) {
-      toast.error("Clipboard not supported in this browser", {
-        description: "Try using a modern browser with HTTPS",
-      })
-      return fallbackCopy(text, label)
-    }
-
-    if (!text || text.trim() === "") {
-      toast.error("Nothing to copy", {
-        description: "The content appears to be empty",
-      })
-      return
-    }
-
-    try {
-      // Check if clipboard API is available
-      if (!navigator.clipboard || !navigator.clipboard.writeText) {
-        throw new Error("Clipboard API not available")
-      }
-
-      // Check document focus (required for clipboard access)
-      if (!document.hasFocus()) {
-        toast.warning("Please click on the page first", {
-          description: "Clipboard access requires page focus",
-        })
-        return
-      }
-
-      // Attempt to write to clipboard
-      await navigator.clipboard.writeText(text)
-
-      // Success feedback
-      toast.success(`${label} copied to clipboard!`, {
-        description: `Copied: ${text.length > 50 ? text.substring(0, 50) + "..." : text}`,
-      })
-
-      console.log(`Successfully copied to clipboard: ${label}`)
-    } catch (error: any) {
-      console.error("Clipboard error:", error)
-
-      // Handle specific error types
-      if (error.name === "NotAllowedError") {
-        toast.error("Clipboard access denied", {
-          description: "Please allow clipboard permissions in your browser",
-          action: {
-            label: "Learn More",
-            onClick: () => window.open("https://developer.mozilla.org/en-US/docs/Web/API/Clipboard_API", "_blank"),
-          },
-        })
-      } else if (error.name === "NotFoundError") {
-        toast.error("Clipboard not available", {
-          description: "Your browser doesn't support clipboard operations",
-        })
-      } else if (error.name === "SecurityError") {
-        toast.error("Security restriction", {
-          description: "Clipboard access blocked by browser security policy",
-        })
-      } else if (error.message?.includes("Document is not focused")) {
-        toast.warning("Page not focused", {
-          description: "Click on the page and try again",
-        })
-      } else {
-        toast.error("Failed to copy to clipboard", {
-          description: error.message || "Unknown clipboard error occurred",
-        })
-      }
-
-      // Fallback to manual copy
-      return fallbackCopy(text, label)
-    }
-  }
-
-  // Fallback copy method for unsupported browsers
-  const fallbackCopy = (text: string, label: string) => {
-    try {
-      // Create temporary textarea
-      const textarea = document.createElement("textarea")
-      textarea.value = text
-      textarea.style.position = "fixed"
-      textarea.style.opacity = "0"
-      textarea.style.pointerEvents = "none"
-
-      document.body.appendChild(textarea)
-      textarea.select()
-      textarea.setSelectionRange(0, text.length)
-
-      // Try legacy execCommand
-      const successful = document.execCommand("copy")
-      document.body.removeChild(textarea)
-
-      if (successful) {
-        toast.success(`${label} copied (fallback method)`, {
-          description: "Used legacy copy method",
-        })
-        console.log(`Fallback copy successful: ${label}`)
-      } else {
-        throw new Error("execCommand failed")
-      }
-    } catch (fallbackError) {
-      console.error("Fallback copy failed:", fallbackError)
-
-      // Final fallback - show text for manual copy
-      toast.error("Unable to copy automatically", {
-        description: "Please copy manually: " + (text.length > 30 ? text.substring(0, 30) + "..." : text),
-        duration: 10000,
-        action: {
-          label: "Select Text",
-          onClick: () => showManualCopyDialog(text, label),
-        },
-      })
-    }
-  }
-
-  // Manual copy dialog for complete failure cases
-  const showManualCopyDialog = (text: string, label: string) => {
-    // In a real app, this would open a modal with selectable text
-    const userConfirmed = window.confirm(
-      `Please manually copy this ${label}:\n\n${text}\n\nClick OK to close this dialog.`,
-    )
-
-    if (userConfirmed) {
-      toast.info("Manual copy completed", {
-        description: "Text should now be available for pasting",
-      })
-    }
-  }
-
-  // Test different error scenarios
-  const testCopyErrors = () => {
-    const errorTests = [
-      { name: "Empty Content", test: () => copyToClipboard("", "empty test") },
-      { name: "Very Large Content", test: () => copyToClipboard("x".repeat(100000), "large content") },
-      { name: "Special Characters", test: () => copyToClipboard("🍄🧪🔬💊🌿", "special chars") },
-      { name: "Null Content", test: () => copyToClipboard(null as any, "null test") },
-    ]
-
-    errorTests.forEach((test, index) => {
-      setTimeout(() => {
-        console.log(`Running error test: ${test.name}`)
-        test.test()
-      }, index * 1000)
-    })
-
-    toast.info("Running copy error tests", {
-      description: "Check console and notifications for results",
-    })
-  }
 
   // Simulate real-time data updates
   useEffect(() => {
@@ -243,6 +69,7 @@ export default function ContextToolsPanel({ activeSection }: ContextToolsPanelPr
     setIsGenerating(true)
     toast.loading(`Generating ${type} document...`)
 
+    // Simulate API call
     await new Promise((resolve) => setTimeout(resolve, 2000))
 
     setIsGenerating(false)
@@ -250,9 +77,22 @@ export default function ContextToolsPanel({ activeSection }: ContextToolsPanelPr
     console.log(`Generated ${type} document for ${activeSection} section`)
   }
 
+  const copyToClipboard = async (text: string, label = "content") => {
+    try {
+      await navigator.clipboard.writeText(text)
+      toast.success(`${label} copied to clipboard!`)
+    } catch (error) {
+      toast.error("Failed to copy to clipboard")
+      console.error("Clipboard error:", error)
+    }
+  }
+
   const exportData = async (format: string) => {
     toast.loading(`Exporting data as ${format}...`)
+
+    // Simulate export
     await new Promise((resolve) => setTimeout(resolve, 1500))
+
     toast.success(`Data exported as ${format}!`)
     console.log(`Exported ${activeSection} data as ${format}`)
   }
@@ -316,19 +156,6 @@ export default function ContextToolsPanel({ activeSection }: ContextToolsPanelPr
           </div>
         </div>
 
-        {/* Clipboard Support Warning */}
-        {!clipboardSupported && (
-          <Card className="p-3 border-yellow-200 bg-yellow-50 dark:bg-yellow-950">
-            <div className="flex items-center gap-2 text-yellow-800 dark:text-yellow-200">
-              <AlertCircle className="h-4 w-4" />
-              <div>
-                <p className="text-xs font-medium">Limited Copy Support</p>
-                <p className="text-xs">Clipboard API not available - using fallback method</p>
-              </div>
-            </div>
-          </Card>
-        )}
-
         <div className="space-y-2">
           {currentDocs.map((doc, index) => (
             <Card key={index} className="p-3 hover:shadow-sm transition-shadow">
@@ -370,14 +197,6 @@ export default function ContextToolsPanel({ activeSection }: ContextToolsPanelPr
               </div>
             </Card>
           ))}
-        </div>
-
-        {/* Error Testing Button */}
-        <div className="mt-4 pt-4 border-t">
-          <Button size="sm" variant="outline" onClick={testCopyErrors} className="w-full text-xs">
-            <AlertTriangle className="h-3 w-3 mr-1" />
-            Test Copy Error Handling
-          </Button>
         </div>
       </div>
     )
