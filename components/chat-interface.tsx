@@ -29,15 +29,14 @@ export function ChatInterface() {
     {
       id: '1',
       role: 'assistant',
-      content: `Welcome to Crowe Logic AI! I'm your expert mycology assistant powered by advanced fungal biotechnology data. I can help you with:
+      content: `Welcome to Crowe Logic AI! I'm your expert in mycology, environmental intelligence, and business strategy.
 
-🍄 Substrate optimization and scoring
-📊 Yield predictions and analytics
-🔬 Contamination risk assessment
-📋 Protocol generation
-📈 Batch tracking and analysis
+🍄 **Mycology Expertise**: Substrate optimization, contamination prevention, yield predictions
+🌍 **Environmental Intelligence**: Climate analysis, ecosystem monitoring, biodiversity tracking  
+💼 **Business Strategy**: Market analysis, operational efficiency, sustainable growth planning
+🔬 **Advanced Capabilities**: MEI platform integration, quantum modeling, biome intelligence
 
-What cultivation project are you working on today?`,
+How can I assist you today?`,
       timestamp: new Date(),
     },
   ])
@@ -164,8 +163,8 @@ What cultivation project are you working on today?`,
             <AvatarFallback className="bg-primary text-primary-foreground">CL</AvatarFallback>
           </Avatar>
           <div>
-            <h1 className="text-lg font-semibold">AI Assistant</h1>
-            <p className="text-sm text-muted-foreground">Mycology Expert</p>
+            <h1 className="text-lg font-semibold">Crowe Logic AI</h1>
+            <p className="text-sm text-muted-foreground">Mycology • Environmental Intelligence • Business Strategy</p>
           </div>
         </div>
         <div className="text-xs text-muted-foreground">
