@@ -161,7 +161,7 @@ What cultivation project are you working on today?`,
         <div className="flex items-center gap-3">
           <Avatar className="h-8 w-8">
             <AvatarImage src="/crowe-avatar.png" alt="Crowe Logic AI" />
-            <AvatarFallback>CL</AvatarFallback>
+            <AvatarFallback className="bg-primary text-primary-foreground">CL</AvatarFallback>
           </Avatar>
           <div>
             <h1 className="text-lg font-semibold">AI Assistant</h1>
@@ -188,7 +188,7 @@ What cultivation project are you working on today?`,
                 {message.role === 'assistant' ? (
                   <>
                     <AvatarImage src="/crowe-avatar.png" alt="Crowe Logic AI" />
-                    <AvatarFallback>CL</AvatarFallback>
+                    <AvatarFallback className="bg-primary text-primary-foreground">CL</AvatarFallback>
                   </>
                 ) : (
                   <AvatarFallback>You</AvatarFallback>
@@ -249,7 +249,7 @@ What cultivation project are you working on today?`,
             <div className="flex gap-3">
               <Avatar className="h-8 w-8">
                 <AvatarImage src="/crowe-avatar.png" alt="Crowe Logic AI" />
-                <AvatarFallback>CL</AvatarFallback>
+                <AvatarFallback className="bg-primary text-primary-foreground">CL</AvatarFallback>
               </Avatar>
               <div className="bg-muted rounded-lg px-3 py-2">
                 <Loader2 className="h-4 w-4 animate-spin" />
