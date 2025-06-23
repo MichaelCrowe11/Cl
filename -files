@@ -1,0 +1,10 @@
+[33m7abc9cd[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m add vercel.json to bypass frozen lockfile for build
+[33mb43ab26[m fix: update environment variables for auth setup
+[33m6bdb494[m fix: update environment variables for auth setup
+[33m604670d[m feat: add routing structure for single-page app
+[33md73a36e[m feat: restore v37 from v27
+[33m2aac5cf[m feat: implement user-specific database storage
+[33m019c5c7[m feat: enhance copy function error handling
+[33m42034ce[m feat: enhance Context & Tools panel testing
+[33me507ca7[m feat: enhance Context & Tools panel with full functionality
+[33mfd10fe8[m feat: inject MetaMask shim in document head
