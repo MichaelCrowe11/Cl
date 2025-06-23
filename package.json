@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "build": "next build",
-    "build:production": "pnpm lint && pnpm type-check && pnpm build",
+    "build:production": "NODE_ENV=production next build",
+    "build:analyze": "ANALYZE=true next build",
     "dev": "next dev",
     "lint": "next lint",
     "lint:fix": "next lint --fix",

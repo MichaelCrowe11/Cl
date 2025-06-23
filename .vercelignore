@@ -1,0 +1,53 @@
+# Documentation
+README.md
+*.md
+docs/
+
+# Development files
+.env.example
+env.example
+.env.local
+.env.development
+
+# Scripts
+deploy.sh
+deploy.ps1
+scripts/
+
+# Git
+.git/
+.gitignore
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test files
+__tests__/
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx
+
+# Source maps in production
+*.map
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependencies (Vercel will install these)
+node_modules/
+
+# Optional
+.eslintcache
+.next/
+out/ 

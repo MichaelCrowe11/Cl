@@ -1,5 +1,64 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  // Run pnpm without the strict “frozen-lockfile” check
-  "installCommand": "pnpm install --no-frozen-lockfile"
+  "installCommand": "pnpm install --no-frozen-lockfile",
+  "buildCommand": "pnpm build:production",
+  "framework": "nextjs",
+  
+  "functions": {
+    "app/api/ai/route.ts": {
+      "maxDuration": 30
+    }
+  },
+  
+  "regions": ["iad1"],
+  
+  "env": {
+    "NEXT_TELEMETRY_DISABLED": "1"
+  },
+  
+  "build": {
+    "env": {
+      "NODE_ENV": "production",
+      "NEXT_TELEMETRY_DISABLED": "1"
+    }
+  },
+  
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, max-age=0"
+        }
+      ]
+    },
+    {
+      "source": "/(.*).js",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/(.*).css",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/(.*).png",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    }
+  ]
 }
