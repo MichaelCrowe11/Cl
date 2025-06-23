@@ -13,37 +13,55 @@ export interface AIModelConfig {
 
 // Define your AI models here
 export const AI_MODELS: Record<string, AIModelConfig> = {
+  // OpenAI Models
   'gpt-4': {
     id: 'gpt-4',
     name: 'GPT-4',
-    description: 'OpenAI GPT-4 model for advanced reasoning',
+    description: 'Most capable OpenAI model for complex reasoning and analysis',
+    defaultTemperature: 0.7,
+    defaultMaxTokens: 4096,
+    supportedFeatures: ['chat', 'completion', 'function-calling', 'vision'],
+  },
+  'gpt-4-turbo': {
+    id: 'gpt-4-turbo',
+    name: 'GPT-4 Turbo',
+    description: 'Faster GPT-4 with updated knowledge and lower cost',
+    defaultTemperature: 0.7,
+    defaultMaxTokens: 4096,
+    supportedFeatures: ['chat', 'completion', 'function-calling', 'vision', 'json-mode'],
+  },
+  'gpt-3.5-turbo': {
+    id: 'gpt-3.5-turbo',
+    name: 'GPT-3.5 Turbo',
+    description: 'Fast and efficient model for most tasks',
     defaultTemperature: 0.7,
     defaultMaxTokens: 2048,
     supportedFeatures: ['chat', 'completion', 'function-calling'],
   },
-  'claude-3': {
-    id: 'claude-3',
-    name: 'Claude 3',
-    description: 'Anthropic Claude 3 for detailed analysis',
+  // Anthropic Claude Models
+  'claude-3-opus': {
+    id: 'claude-3-opus',
+    name: 'Claude 3 Opus',
+    description: 'Most powerful Claude model for complex analysis and creativity',
+    defaultTemperature: 0.7,
+    defaultMaxTokens: 4096,
+    supportedFeatures: ['chat', 'completion', 'long-context', 'vision'],
+  },
+  'claude-3-sonnet': {
+    id: 'claude-3-sonnet',
+    name: 'Claude 3 Sonnet',
+    description: 'Balanced Claude model for most tasks',
+    defaultTemperature: 0.7,
+    defaultMaxTokens: 4096,
+    supportedFeatures: ['chat', 'completion', 'long-context', 'vision'],
+  },
+  'claude-3-haiku': {
+    id: 'claude-3-haiku',
+    name: 'Claude 3 Haiku',
+    description: 'Fast and efficient Claude model',
     defaultTemperature: 0.7,
     defaultMaxTokens: 4096,
     supportedFeatures: ['chat', 'completion', 'long-context'],
-  },
-  'llama-2': {
-    id: 'llama-2',
-    name: 'Llama 2',
-    description: 'Meta Llama 2 for local deployment',
-    defaultTemperature: 0.8,
-    defaultMaxTokens: 2048,
-    supportedFeatures: ['chat', 'completion'],
-  },
-  'custom-mycology': {
-    id: 'custom-mycology',
-    name: 'Mycology Expert',
-    description: 'Custom fine-tuned model for mycology expertise',
-    defaultTemperature: 0.6,
-    defaultMaxTokens: 2048,
-    supportedFeatures: ['chat', 'completion', 'domain-specific'],
   },
 }
 

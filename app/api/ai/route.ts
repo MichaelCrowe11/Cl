@@ -19,24 +19,53 @@ interface AIResponse {
   }
 }
 
-// Model Registry - Add your custom models here
+// Model Registry - OpenAI and Anthropic models
 const MODEL_REGISTRY = {
+  // OpenAI Models
+  'gpt-4': {
+    name: 'GPT-4',
+    endpoint: process.env.OPENAI_API_ENDPOINT || 'https://api.openai.com/v1/chat/completions',
+    apiKey: process.env.OPENAI_API_KEY,
+    type: 'openai',
+  },
+  'gpt-4-turbo': {
+    name: 'GPT-4 Turbo',
+    endpoint: process.env.OPENAI_API_ENDPOINT || 'https://api.openai.com/v1/chat/completions',
+    apiKey: process.env.OPENAI_API_KEY,
+    type: 'openai',
+  },
+  'gpt-3.5-turbo': {
+    name: 'GPT-3.5 Turbo',
+    endpoint: process.env.OPENAI_API_ENDPOINT || 'https://api.openai.com/v1/chat/completions',
+    apiKey: process.env.OPENAI_API_KEY,
+    type: 'openai',
+  },
+  // Anthropic Claude Models
+  'claude-3-opus': {
+    name: 'Claude 3 Opus',
+    endpoint: process.env.ANTHROPIC_API_ENDPOINT || 'https://api.anthropic.com/v1/messages',
+    apiKey: process.env.ANTHROPIC_API_KEY,
+    type: 'anthropic',
+  },
+  'claude-3-sonnet': {
+    name: 'Claude 3 Sonnet',
+    endpoint: process.env.ANTHROPIC_API_ENDPOINT || 'https://api.anthropic.com/v1/messages',
+    apiKey: process.env.ANTHROPIC_API_KEY,
+    type: 'anthropic',
+  },
+  'claude-3-haiku': {
+    name: 'Claude 3 Haiku',
+    endpoint: process.env.ANTHROPIC_API_ENDPOINT || 'https://api.anthropic.com/v1/messages',
+    apiKey: process.env.ANTHROPIC_API_KEY,
+    type: 'anthropic',
+  },
+  // Default fallback
   'default': {
     name: 'Default Model',
     endpoint: process.env.DEFAULT_AI_ENDPOINT,
     apiKey: process.env.DEFAULT_AI_API_KEY,
+    type: 'openai',
   },
-  'custom-llm': {
-    name: 'Custom LLM',
-    endpoint: process.env.CUSTOM_LLM_ENDPOINT,
-    apiKey: process.env.CUSTOM_LLM_API_KEY,
-  },
-  'local-model': {
-    name: 'Local Model',
-    endpoint: process.env.LOCAL_MODEL_ENDPOINT || 'http://localhost:8000',
-    apiKey: process.env.LOCAL_MODEL_API_KEY,
-  },
-  // Add more models as needed
 }
 
 export async function POST(request: NextRequest) {
@@ -71,29 +100,79 @@ export async function POST(request: NextRequest) {
       max_tokens: max_tokens,
     }
 
-    // Call your AI model
-    // Example for OpenAI-compatible APIs:
+    // Call your AI model based on type
     if (modelConfig.endpoint) {
-      const response = await fetch(modelConfig.endpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${modelConfig.apiKey}`,
-        },
-        body: JSON.stringify(aiRequest),
-      })
+      let response: Response
+      let requestBody: any
+
+      if (modelConfig.type === 'anthropic') {
+        // Anthropic Claude API format
+        requestBody = {
+          model: model,
+          messages: [
+            {
+              role: 'user',
+              content: prompt
+            }
+          ],
+          system: system_prompt || 'You are an expert mycology assistant with deep knowledge of fungal biotechnology, substrate optimization, and cultivation techniques.',
+          max_tokens: max_tokens,
+          temperature: temperature,
+        }
+
+        response = await fetch(modelConfig.endpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': modelConfig.apiKey || '',
+            'anthropic-version': process.env.ANTHROPIC_API_VERSION || '2023-06-01',
+          },
+          body: JSON.stringify(requestBody),
+        })
+      } else {
+        // OpenAI API format (default)
+        requestBody = aiRequest
+
+        response = await fetch(modelConfig.endpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${modelConfig.apiKey}`,
+            ...(process.env.OPENAI_ORG_ID && { 'OpenAI-Organization': process.env.OPENAI_ORG_ID }),
+          },
+          body: JSON.stringify(requestBody),
+        })
+      }
 
       if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}))
+        console.error('AI API Error:', errorData)
         throw new Error(`AI model error: ${response.statusText}`)
       }
 
       const data = await response.json()
       
-      // Format response based on your model's output
+      // Format response based on model type
+      let responseContent: string
+      let usage: any
+
+      if (modelConfig.type === 'anthropic') {
+        responseContent = data.content?.[0]?.text || 'No response generated'
+        usage = {
+          prompt_tokens: data.usage?.input_tokens || 0,
+          completion_tokens: data.usage?.output_tokens || 0,
+          total_tokens: (data.usage?.input_tokens || 0) + (data.usage?.output_tokens || 0),
+        }
+      } else {
+        // OpenAI format
+        responseContent = data.choices?.[0]?.message?.content || 'No response generated'
+        usage = data.usage
+      }
+
       const aiResponse: AIResponse = {
-        response: data.choices?.[0]?.message?.content || data.response || 'No response generated',
+        response: responseContent,
         model: modelConfig.name,
-        usage: data.usage,
+        usage: usage,
       }
 
       return NextResponse.json(aiResponse)
