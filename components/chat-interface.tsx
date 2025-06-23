@@ -158,9 +158,9 @@ How can I assist you today?`,
       {/* Header */}
       <div className="border-b px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <Avatar className="h-8 w-8">
-            <AvatarImage src="/crowe-avatar.png" alt="Crowe Logic AI" />
-            <AvatarFallback className="bg-primary text-primary-foreground">CL</AvatarFallback>
+          <Avatar className="h-10 w-10 ring-2 ring-yellow-600/50">
+            <AvatarImage src="/crowe-avatar.png" alt="Crowe Logic AI" className="object-cover" />
+            <AvatarFallback className="bg-purple-600 text-white font-bold">CL</AvatarFallback>
           </Avatar>
           <div>
             <h1 className="text-lg font-semibold">Crowe Logic AI</h1>
@@ -183,14 +183,17 @@ How can I assist you today?`,
                 message.role === 'user' && "flex-row-reverse"
               )}
             >
-              <Avatar className="h-8 w-8 shrink-0">
+              <Avatar className={cn(
+                "h-8 w-8 shrink-0",
+                message.role === 'assistant' && "ring-2 ring-yellow-600/30"
+              )}>
                 {message.role === 'assistant' ? (
                   <>
-                    <AvatarImage src="/crowe-avatar.png" alt="Crowe Logic AI" />
-                    <AvatarFallback className="bg-primary text-primary-foreground">CL</AvatarFallback>
+                    <AvatarImage src="/crowe-avatar.png" alt="Crowe Logic AI" className="object-cover" />
+                    <AvatarFallback className="bg-purple-600 text-white font-bold text-sm">CL</AvatarFallback>
                   </>
                 ) : (
-                  <AvatarFallback>You</AvatarFallback>
+                  <AvatarFallback className="bg-secondary text-secondary-foreground">You</AvatarFallback>
                 )}
               </Avatar>
               <div
@@ -246,9 +249,9 @@ How can I assist you today?`,
           ))}
           {isLoading && (
             <div className="flex gap-3">
-              <Avatar className="h-8 w-8">
-                <AvatarImage src="/crowe-avatar.png" alt="Crowe Logic AI" />
-                <AvatarFallback className="bg-primary text-primary-foreground">CL</AvatarFallback>
+              <Avatar className="h-8 w-8 ring-2 ring-yellow-600/30">
+                <AvatarImage src="/crowe-avatar.png" alt="Crowe Logic AI" className="object-cover" />
+                <AvatarFallback className="bg-purple-600 text-white font-bold text-sm">CL</AvatarFallback>
               </Avatar>
               <div className="bg-muted rounded-lg px-3 py-2">
                 <Loader2 className="h-4 w-4 animate-spin" />
