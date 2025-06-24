@@ -1,12 +1,11 @@
 // O3/O4-Mini Function Calling Implementation Example
 // Practical implementation of the best practices for Crowe Logic AI
 
-import { OpenAI } from 'openai';
+import { openai } from '@ai-sdk/openai';
 
-// Initialize OpenAI client with o3/o4-mini support
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+// Note: This is a reference implementation for o3/o4-mini function calling
+// The actual OpenAI SDK for o3/o4-mini responses API may differ
+// This example shows the structure and best practices
 
 // Enhanced system prompt following o3/o4-mini best practices
 export const CROWE_LOGIC_SYSTEM_PROMPT = `You are Crowe Logic AI, an expert mycology assistant with deep knowledge of fungal biotechnology, substrate optimization, and cultivation techniques.
