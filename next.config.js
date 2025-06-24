@@ -20,11 +20,9 @@ const nextConfig = {
     removeConsole: process.env.NODE_ENV === 'production',
   },
   
-  // Experimental features
+  // Experimental features - simplified for Vercel compatibility
   experimental: {
     serverActions: true,
-    optimizeCss: true,
-    optimizePackageImports: ['lucide-react', '@radix-ui/react-icons'],
   },
   
   // Security headers
