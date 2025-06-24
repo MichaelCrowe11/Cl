@@ -48,9 +48,9 @@ How can I assist you today?`,
 
   // AI Model Configuration State
   const [aiConfig, setAiConfig] = useState<AIModelConfig>({
-    modelName: 'default',
-    temperature: 0.7,
-    maxTokens: 2048,
+    modelName: 'claude-3-opus',
+    temperature: 0.3,
+    maxTokens: 4096,
   })
 
   useEffect(() => {

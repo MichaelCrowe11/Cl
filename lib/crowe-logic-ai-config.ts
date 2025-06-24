@@ -51,18 +51,18 @@ export const CROWE_LOGIC_AI_CONFIG = {
   
   modelPreferences: {
     complex_analysis: 'claude-3-opus',
-    quick_responses: 'gpt-3.5-turbo',
-    balanced_tasks: 'gpt-4',
-    creative_work: 'claude-3-sonnet',
+    quick_responses: 'claude-3-haiku',
+    balanced_tasks: 'claude-3-sonnet',
+    creative_work: 'claude-3-opus',
     cost_effective: 'claude-3-haiku',
   },
   
   responseSettings: {
-    defaultTemperature: 0.7,
-    scientificTemperature: 0.3,  // Lower for factual accuracy
-    creativeTemperature: 0.9,    // Higher for creative solutions
-    defaultMaxTokens: 2048,
-    detailedMaxTokens: 4096,
+    defaultTemperature: 0.3,     // Lower default for accuracy
+    scientificTemperature: 0.2,  // Very low for maximum factual accuracy
+    creativeTemperature: 0.7,    // Moderate for creative but grounded solutions
+    defaultMaxTokens: 4096,
+    detailedMaxTokens: 6144,
     comprehensiveMaxTokens: 8192,
   },
   

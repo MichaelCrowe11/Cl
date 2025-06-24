@@ -71,7 +71,7 @@ const MODEL_REGISTRY = {
 export async function POST(request: NextRequest) {
   try {
     const body: AIRequest = await request.json()
-    const { prompt, model = 'default', temperature = 0.7, max_tokens = 2048, system_prompt } = body
+    const { prompt, model = 'claude-3-opus', temperature = 0.3, max_tokens = 4096, system_prompt } = body
 
     // Validate model
     const modelConfig = MODEL_REGISTRY[model as keyof typeof MODEL_REGISTRY]
