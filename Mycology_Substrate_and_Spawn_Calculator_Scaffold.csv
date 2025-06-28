@@ -1,0 +1,13 @@
+Tier,Calculator,Container,Dry Ingredient Example,Water Ratio,Spawn Rate,Notes
+Basic,Rye Grain Spawn,Quart Jar,Rye grain,1:1.2,N/A,Standard grain spawn
+Basic,Sawdust Substrate,1 lb Block,Sawdust + bran,60–65%,5–10%,Bran optional; for block production
+Intermediate,Wild Bird Seed Spawn,Quart Jar,WBS,1:1.2,N/A,"Needs rinsing, sometimes simmering"
+Intermediate,Millet-Based Spawn,Quart Jar,Millet,1:1.2,N/A,"Smaller grain, rapid colonizer"
+Intermediate,Popcorn-Based Spawn,Quart Jar,Popcorn,1:1.2,N/A,"Larger grain, robust"
+Intermediate,CVG Substrate,Tub/Tray,Coir + Vermiculite,Standard CVG,N/A,Uses ~650g coir brick + 8 cups verm
+Intermediate,Master's Mix,1 lb Block,Hardwood + Soy Hull,60%,5–10%,High yield commercial mix
+Intermediate,Coffee Ground Substrate,1 lb Block,Coffee + Straw,55–60%,5–10%,Needs pasteurization
+Intermediate,Brown Rice Flour (PF Tek),Half Pint Jar,BRF + Vermiculite,2:1:1 (Verm:BRF:Water),N/A,Half pint only; PF Tek
+Advanced,Compost-Based Substrate,1 lb Block,Compost Mix,Varies,N/A,"High contamination risk, use with care"
+Advanced,Manure-Based PF Tek,Half Pint Jar,Manure + BRF + Verm,2:1:1 (Verm:BRF:Water),N/A,Specialty method for Panaeolus
+Advanced,Cordyceps Militaris Substrate,1 lb Block,Rice + Yeast + Silkworm,1:1,N/A,"Precision substrate, sterile"

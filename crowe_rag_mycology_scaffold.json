@@ -1,0 +1,164 @@
+{
+  "species_profiles": [
+    {
+      "species": "Hericium erinaceus",
+      "common_name": "Lion's Mane",
+      "substrate_commercial": "50% hardwood sawdust + 50% soybean hulls",
+      "substrate_medicinal": "Proprietary formula (Crowe Layer\u2122)",
+      "spawn_type": [
+        "grain",
+        "liquid"
+      ],
+      "incubation_temp_C": [
+        20,
+        24
+      ],
+      "fruiting_temp_C": [
+        16,
+        20
+      ],
+      "humidity_range": [
+        85,
+        95
+      ],
+      "yield_lb_per_block": [
+        2.5,
+        3.5
+      ],
+      "notes": "High-value neurotrophic species; dual-use in culinary and extractive biotech"
+    },
+    {
+      "species": "Lentinula edodes",
+      "common_name": "Shiitake",
+      "substrate_commercial": "hardwood sawdust + 10-20% bran or wheat flour",
+      "substrate_medicinal": "supplemented oak sawdust with high lignin content",
+      "spawn_type": [
+        "grain",
+        "plug"
+      ],
+      "incubation_temp_C": [
+        22,
+        26
+      ],
+      "fruiting_temp_C": [
+        12,
+        18
+      ],
+      "humidity_range": [
+        85,
+        95
+      ],
+      "yield_lb_per_block": [
+        1.5,
+        2.5
+      ],
+      "notes": "Strong beta-glucan content; standard bearer for immune-modulatory fungi"
+    },
+    {
+      "species": "Ganoderma lucidum",
+      "common_name": "Reishi",
+      "substrate_commercial": "oak sawdust + bran, sterilized",
+      "substrate_medicinal": "proprietary high-polysaccharide formulation",
+      "spawn_type": [
+        "liquid",
+        "grain"
+      ],
+      "incubation_temp_C": [
+        25,
+        30
+      ],
+      "fruiting_temp_C": [
+        22,
+        28
+      ],
+      "humidity_range": [
+        85,
+        95
+      ],
+      "yield_lb_per_block": [
+        1.2,
+        2.0
+      ],
+      "notes": "High triterpene and ganoderic acid content; revered in traditional medicine"
+    },
+    {
+      "species": "Pleurotus ostreatus",
+      "common_name": "Oyster Mushroom",
+      "substrate_commercial": "pasteurized straw, cotton waste",
+      "substrate_medicinal": "fermented millet-straw mix (Crowe protocol)",
+      "spawn_type": [
+        "grain",
+        "sawdust"
+      ],
+      "incubation_temp_C": [
+        20,
+        30
+      ],
+      "fruiting_temp_C": [
+        15,
+        25
+      ],
+      "humidity_range": [
+        85,
+        95
+      ],
+      "yield_lb_per_block": [
+        2.0,
+        4.5
+      ],
+      "notes": "Fast-growing species; strong mycoremediation potential"
+    },
+    {
+      "species": "Cordyceps militaris",
+      "common_name": "Cordyceps",
+      "substrate_commercial": "rice + silkworm pupae + yeast",
+      "substrate_medicinal": "proprietary Crowe media with cordycepin upregulation",
+      "spawn_type": [
+        "liquid culture"
+      ],
+      "incubation_temp_C": [
+        20,
+        24
+      ],
+      "fruiting_temp_C": [
+        18,
+        22
+      ],
+      "humidity_range": [
+        85,
+        90
+      ],
+      "yield_lb_per_block": [
+        0.3,
+        0.6
+      ],
+      "notes": "Delicate fruiting; known for cordycepin and adenosine analogs"
+    },
+    {
+      "species": "Grifola frondosa",
+      "common_name": "Maitake",
+      "substrate_commercial": "hardwood logs or blocks with bran",
+      "substrate_medicinal": "nutrient-dense sawdust formula",
+      "spawn_type": [
+        "grain"
+      ],
+      "incubation_temp_C": [
+        20,
+        24
+      ],
+      "fruiting_temp_C": [
+        12,
+        18
+      ],
+      "humidity_range": [
+        90,
+        95
+      ],
+      "yield_lb_per_block": [
+        1.0,
+        2.0
+      ],
+      "notes": "Renowned for D-fraction immune-modulating polysaccharides"
+    }
+  ]
+}

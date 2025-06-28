@@ -1,0 +1,160 @@
+# crowe_logic_ai_core.py
+
+"""
+Crowe Logic™ AI — Advanced Ecological Intelligence Core
+© 2025 Michael Crowe | Southwest Mushrooms | CroweOS™
+
+Description:
+  Dense, modular architecture for ecological AI: real-time sensor fusion,
+  ML inference, edge–cloud sync, and regenerative systems logic.
+
+  Core logic: domain models, ML architectures, edge/cloud hooks,
+  knowledge graph, and Crowe Layer™ tags for SOPs, substrate, and extract logic.
+"""
+
+import json
+import yaml
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+
+# ---- Crowe Layer™ Tags & System Profile -------------------------------------
+
+CROWE_LAYER = {
+    "MUSHROOMS": [
+        {"species": "Hericium erinaceus", "tag": "Lion's Mane", "substrate": "50% hardwood, 50% soybean hulls", "ROI": ["extract", "ecosystem", "data"]},
+        {"species": "Ganoderma lucidum", "tag": "Reishi", "substrate": "oak sawdust + bran", "ROI": ["triterpene", "remediation", "wellness"]},
+        {"species": "Pleurotus ostreatus", "tag": "Oyster", "substrate": "straw, cotton waste", "ROI": ["mycoremediation", "fast biomass", "CPG"]}
+    ],
+    "EXTRACT_TIERS": ["Flagship Reserve", "Clinical Standard", "Pilot Batch"],
+    "PHASES": ["Ethanol soak", "Decoction 10:1", "Recombine", "Bottle"],
+    "SENSOR_TYPES": ["bioelectric", "CO2", "humidity", "temp", "impedance", "image"],
+    "PROTOCOL_TAGS": ["CLX-R050420", "CLX-LM001"]
+}
+
+# ---- 1. Domain Logic Engine & Reasoning -------------------------------------
+
+class EcologicalLogicEngine:
+    def __init__(self, context):
+        self.context = context
+        self.strategy = {}
+        self.monitoring = {}
+
+    def plan_strategy(self):
+        f = self.context
+        if f.get('contaminant') == "hydrocarbons" and "Pleurotus" in f.get('fungal_species', ""):
+            self.strategy = {
+                "deployment": "straw logs (inoculated)",
+                "method": "shallow trench",
+                "duration_days": 45,
+                "outputs": ["hydrocarbon degradation", "soil structure gain"],
+                "ROI_factors": ["pollutant reduction", "mycelial spread"]
+            }
+        else:
+            self.strategy = {"deployment": "custom", "outputs": [], "ROI_factors": []}
+        return self.strategy
+
+    def configure_monitoring(self):
+        self.monitoring = {
+            "sensors": ["MycoPulse VOC", "Soil moisture", "Edge Camera"],
+            "frequency": "weekly",
+            "metrics": ["VOC drop", "carbon index", "mycelial signal"]
+        }
+        return self.monitoring
+
+# ---- 2. Multi-Modal ML Core (Sensor Fusion, Image, Graph, RL) --------------
+
+class EcoMultiModalAI(nn.Module):
+    def __init__(self, sensor_dim=10, img_channels=3, graph_dim=20, out_dim=1):
+        super().__init__()
+        self.lstm = nn.LSTM(input_size=sensor_dim, hidden_size=32, batch_first=True)
+        self.cnn = nn.Sequential(
+            nn.Conv2d(img_channels, 16, 3, padding=1), nn.ReLU(),
+            nn.MaxPool2d(2), nn.Conv2d(16, 32, 3, padding=1), nn.ReLU(),
+            nn.AdaptiveAvgPool2d((1, 1))
+        )
+        self.cnn_fc = nn.Linear(32, 32)
+        self.graph_fc = nn.Linear(graph_dim, 32)
+        self.fusion = nn.Linear(96, 64)
+        self.output = nn.Linear(64, out_dim)
+
+    def forward(self, sensor_seq, image, graph_feat):
+        _, (h_n, _) = self.lstm(sensor_seq)
+        sensor_emb = h_n[-1]
+        img_emb = torch.relu(self.cnn_fc(self.cnn(image).view(image.size(0), -1)))
+        graph_emb = torch.relu(self.graph_fc(graph_feat))
+        fused = torch.cat([sensor_emb, img_emb, graph_emb], dim=1)
+        return self.output(torch.relu(self.fusion(fused)))
+
+# ---- 3. Edge–Cloud Data Pipeline Hooks & Deployment Templates --------------
+
+def edge_device_publish(data, topic="clx/sensor"):
+    # Placeholder: push JSON data to MQTT or Kafka for cloud ingestion
+    print(f"[EDGE→CLOUD] Topic: {topic} | Data: {json.dumps(data)[:120]}...")
+
+def deploy_to_edge(model_path, device_id):
+    # Placeholder: logic to containerize/export model for edge deployment
+    print(f"[DEPLOY] Exporting model to edge device {device_id}")
+
+# ---- 4. Knowledge Graph & Tag Ontology -------------------------------------
+
+CROWE_ONTOLOGY = {
+    "bioactives": {
+        "Lion's Mane": ["Hericenones", "Erinacines", "β-glucans"],
+        "Reishi": ["Triterpenoids", "Polysaccharides"],
+        "Shiitake": ["Lentinan", "Eritadenine"]
+    },
+    "protocols": {
+        "dual_extract": ["Ethanol soak", "Decoction 10:1", "Recombine"],
+        "sterile_lab": ["HEPA filter", "Alcohol wipe", "Laminar flow"]
+    },
+    "sop_tags": ["[PROBLEM] Yellowing = Low RH", "[PHASE] Decoction 10:1"]
+}
+
+# ---- 5. Reinforcement & Continuous Learning Loop ----------------------------
+
+def simulate_env_step(state):
+    action = "reduce_irrigation" if state.get("mycelial_spread") == "low" else "increase_airflow"
+    reward = {"VOC_reduction": 0.7, "ROI_score": 1.0}
+    next_state = {"mycelial_spread": "improving", "VOC_ppm": max(state.get("VOC_ppm", 200) - 80, 0)}
+    return action, reward, next_state
+
+# ---- 6. Output Formatting (Markdown, JSON, Crowe Layer™) -------------------
+
+def logic_output(event, payload):
+    return {
+        "event": event,
+        "payload": payload,
+        "format": "CroweLogic",
+        "layer": CROWE_LAYER
+    }
+
+# ---- Example Main (Test Run) -----------------------------------------------
+
+if __name__ == "__main__":
+    # 1. Reasoning Core
+    logic = EcologicalLogicEngine({
+        "soil_type": "clay-loam",
+        "contaminant": "hydrocarbons",
+        "climate_zone": "Sonoran",
+        "substrate": "cardboard + straw",
+        "fungal_species": "Pleurotus ostreatus"
+    })
+    print(json.dumps(logic.plan_strategy(), indent=2))
+    print(json.dumps(logic.configure_monitoring(), indent=2))
+
+    # 2. ML Core (dummy tensors)
+    ai = EcoMultiModalAI()
+    s, i, g = torch.randn(2, 50, 10), torch.randn(2, 3, 64, 64), torch.randn(2, 20)
+    pred = ai(s, i, g)
+    print("ML Output:", pred.shape)
+
+    # 3. Edge–Cloud Data Sync Example
+    edge_device_publish({"sensor_id": "CLX001", "CO2": 588, "bioelec": [0.21, 0.22], "timestamp": "2025-06-13"})
+
+    # 4. Simulate RL Step
+    action, reward, ns = simulate_env_step({"mycelial_spread": "low", "VOC_ppm": 160})
+    print("RL Loop:", action, reward, ns)
+
+    # 5. Crowe Layer Output Example
+    print(json.dumps(logic_output("remediation_update", {"status": "deployed", "roi": 1.0}), indent=2))

@@ -1,0 +1,33 @@
+
+Title: Mushroom Cultivation Facility Spatial Logic Guide
+
+Overview:
+This document defines the core spatial layout and operational flow of a high-performance mushroom cultivation facility. It is designed for use by Crowe Logic's architectural reasoning module.
+
+Zone Definitions:
+- Substrate Prep: Requires proximity to water, drainage, and thermal-tolerant materials.
+- Sterilization Area: Houses autoclaves or steam sterilizers; must be isolated and ventilated.
+- Lab (Clean Room): Positive pressure, HEPA filtered, sealed with antechamber entry.
+- Incubation: Low light, stable temperature (~75°F), low airflow, medium humidity.
+- Fruiting Chambers: High humidity (85–95%), high airflow, CO2 scrubbing, misting/humidity automation.
+- Cold Storage: Insulated space for harvested product; ideally near loading area.
+- Waste/Compost: Downwind, isolated; includes spent block storage and compost bins.
+- Office/Utility: Workspace and facility controls.
+
+Flow Logic:
+1. Raw Materials > Substrate Prep > Sterilization
+2. Sterile Substrate > Lab > Incubation
+3. Colonized Substrate > Fruiting
+4. Harvested Mushrooms > Cold Storage
+5. Spent Substrate > Waste/Compost
+
+Design Principles:
+- Maintain clean-to-dirty airflow direction
+- Minimize cross-contamination by zoning
+- Use washable, mold-resistant surfaces in humid areas
+
+Facility Sizing:
+Rule of Thumb: 2.0–2.5 sq ft per pound of weekly mushroom output
+Example: 2000 lbs/week = ~4000–5000 sq ft
+
+Author: Crowe Logic AI
