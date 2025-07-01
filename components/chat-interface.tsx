@@ -101,31 +101,33 @@ How can I assist you today?`,
     }
   }
 
-  // Placeholder for AI model integration
+  // AI model integration with actual API call
   async function callAIModel(prompt: string, config: AIModelConfig): Promise<string> {
-    // TODO: Replace with actual AI model API call
-    // Example structure:
-    // const response = await fetch(config.endpoint || '/api/ai', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //     'Authorization': `Bearer ${config.apiKey}`,
-    //   },
-    //   body: JSON.stringify({
-    //     prompt,
-    //     model: config.modelName,
-    //     temperature: config.temperature,
-    //     max_tokens: config.maxTokens,
-    //   }),
-    // })
-    // const data = await response.json()
-    // return data.response
+    try {
+      const response = await fetch('/api/ai', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          prompt,
+          model: config.modelName,
+          temperature: config.temperature,
+          max_tokens: config.maxTokens,
+          system_prompt: 'You are an expert mycology assistant with deep knowledge of fungal biotechnology, substrate optimization, and cultivation techniques. Provide detailed, scientific responses while remaining accessible.'
+        }),
+      })
 
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    
-    // Return a placeholder response
-    return `I understand you're asking about "${prompt}". This is where your custom AI model response will appear. The system is ready for AI model integration.`
+      if (!response.ok) {
+        throw new Error(`API error: ${response.statusText}`)
+      }
+
+      const data = await response.json()
+      return data.response || 'No response generated'
+    } catch (error) {
+      console.error('AI API Error:', error)
+      throw error
+    }
   }
 
   const handleCopy = async (content: string, id: string) => {
