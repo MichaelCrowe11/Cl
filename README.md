@@ -30,36 +30,36 @@
 ## 🚀 Quick Start
 
 ### Development
-\`\`\`bash
+```bash
 # Install dependencies
-pnpm install
+npm install
 
 # Start development server
-pnpm dev
+npm run dev
 
 # Open http://localhost:3000
-\`\`\`
+```
 
 ### Production Build
-\`\`\`bash
+```bash
 # Run production build with checks
-pnpm build:production
+npm run build:production
 
 # Start production server
-pnpm start
-\`\`\`
+npm start
+```
 
 ### Deploy to Vercel
-\`\`\`bash
+```bash
 # Option 1: Use deployment script
-./deploy.sh
+npm run deploy
 
 # Option 2: Manual deployment
-vercel --prod
+npm run deploy
 
 # Option 3: Git-based deployment
 git push origin main  # Auto-deploys if connected to Vercel
-\`\`\`
+```
 
 ## 📊 Performance
 
@@ -90,7 +90,7 @@ git push origin main  # Auto-deploys if connected to Vercel
 
 ## 📁 Project Structure
 
-\`\`\`
+```
 ├── app/
 │   ├── layout.tsx          # Root layout with integrated dashboard
 │   ├── page.tsx            # Main chat page
@@ -109,7 +109,7 @@ git push origin main  # Auto-deploys if connected to Vercel
 │   └── crowe-avatar.png   # Official branding
 └── lib/
     └── utils.ts           # Utility functions
-\`\`\`
+```
 
 ## 🐛 Bug Fixes Applied
 
