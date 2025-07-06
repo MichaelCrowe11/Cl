@@ -68,24 +68,24 @@ export async function POST(request: NextRequest) {
         try {
           const args = JSON.parse(toolCall.arguments)
           console.log(`Executing function: ${toolCall.name}`, args)
-          
+
           const functionResult = await executeMycologyFunction(toolCall.name, args)
-          
+
           // Add function result to context
           currentContext.messages.push({
             type: 'function_call_output',
             call_id: toolCall.call_id,
             output: functionResult
           })
-          
-        } catch (error) {
+        } catch (error: unknown) {
           console.error(`Error executing function ${toolCall.name}:`, error)
-          
+          const errMsg = error instanceof Error ? error.message : String(error)
+
           // Add error to context
           currentContext.messages.push({
             type: 'function_call_output',
             call_id: toolCall.call_id,
-            output: `Error executing function: ${error.message}`
+            output: `Error executing function: ${errMsg}`
           })
         }
       }
@@ -133,18 +133,19 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(o3Response)
 
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('o3/o4-mini API Error:', error)
+    const message = error instanceof Error ? error.message : String(error)
     
     // Enhanced error handling
-    if (error.message?.includes('model not found')) {
+    if (message.includes('model not found')) {
       return NextResponse.json(
         { error: 'o3/o4-mini models not available. Please check your OpenAI API access.' },
         { status: 400 }
       )
     }
     
-    if (error.message?.includes('rate limit')) {
+    if (message.includes('rate limit')) {
       return NextResponse.json(
         { error: 'Rate limit exceeded. Please try again later.' },
         { status: 429 }
@@ -154,7 +155,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       { 
         error: 'Failed to process o3/o4-mini request',
-        details: error.message 
+        details: message 
       },
       { status: 500 }
     )

@@ -1,7 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  swcMinify: true,
   
   // Image optimization
   images: {
@@ -21,9 +20,7 @@ const nextConfig = {
   },
   
   // Experimental features - simplified for Vercel compatibility
-  experimental: {
-    serverActions: true,
-  },
+  // Note: Removed unsupported experimental options for Next.js 15
   
   // Security headers
   async headers() {
@@ -64,4 +61,4 @@ const nextConfig = {
   },
 }
 
-module.exports = nextConfig 
+module.exports = nextConfig
