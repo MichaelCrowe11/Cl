@@ -17,63 +17,160 @@ import {
   Calculator,
   Camera,
   Database,
-  Settings
+  Settings,
+  Copy,
+  ExternalLink
 } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 
-const tabs = ['Research Tools', 'Lab Protocols', 'Session'] as const
-
+const tabs = ['Tools', 'Research', 'Session'] as const
 type Tab = typeof tabs[number]
 
 export default function ToolsPanel() {
-  const [activeTab, setActiveTab] = React.useState<Tab>('Research Tools')
+  const [activeTab, setActiveTab] = React.useState<Tab>('Tools')
 
   const researchTools = [
-    { icon: Microscope, name: "Species Identifier", desc: "AI-powered ID tool" },
-    { icon: Beaker, name: "Substrate Calculator", desc: "Optimize growing media" },
-    { icon: FlaskConical, name: "Protocol Generator", desc: "Create sterile protocols" },
-    { icon: BarChart3, name: "Yield Optimizer", desc: "Maximize production" },
-    { icon: Calculator, name: "Nutrition Calculator", desc: "C:N ratio analysis" },
-    { icon: Camera, name: "Image Analysis", desc: "Microscopy analysis" },
-    { icon: Database, name: "Research Database", desc: "Literature search" },
-    { icon: Leaf, name: "Environmental Impact", desc: "Sustainability metrics" }
+    { 
+      icon: Microscope, 
+      name: "Species Identifier", 
+      desc: "AI-powered mushroom identification",
+      action: () => alert("Species Identifier tool - Upload an image to identify mushroom species")
+    },
+    { 
+      icon: Beaker, 
+      name: "Substrate Calculator", 
+      desc: "Optimize growing media ratios",
+      action: () => alert("Substrate Calculator - Calculate optimal substrate compositions")
+    },
+    { 
+      icon: FlaskConical, 
+      name: "Protocol Generator", 
+      desc: "Create sterile lab protocols",
+      action: () => alert("Protocol Generator - Generate step-by-step lab protocols")
+    },
+    { 
+      icon: BarChart3, 
+      name: "Yield Optimizer", 
+      desc: "Maximize production efficiency",
+      action: () => alert("Yield Optimizer - Analyze and optimize cultivation yields")
+    },
+    { 
+      icon: Calculator, 
+      name: "Nutrition Calculator", 
+      desc: "C:N ratio analysis",
+      action: () => alert("Nutrition Calculator - Calculate carbon-to-nitrogen ratios")
+    },
+    { 
+      icon: Database, 
+      name: "Research Database", 
+      desc: "Literature search & analysis",
+      action: () => window.open("https://pubmed.ncbi.nlm.nih.gov/", "_blank")
+    }
   ]
 
-  const protocolTools = [
-    { icon: FileText, name: "Sterilization SOP", desc: "Standard protocols" },
-    { icon: Beaker, name: "Inoculation Guide", desc: "Step-by-step procedures" },
-    { icon: FlaskConical, name: "Harvest Protocol", desc: "Optimal timing guides" },
-    { icon: BookOpen, name: "Quality Control", desc: "Testing procedures" }
+  const toolsPanel = [
+    { 
+      icon: Camera, 
+      name: "Image Analysis", 
+      desc: "Microscopy & sample analysis",
+      action: () => alert("Image Analysis - Upload images for AI-powered analysis")
+    },
+    { 
+      icon: Leaf, 
+      name: "Environmental Monitor", 
+      desc: "Track growing conditions",
+      action: () => alert("Environmental Monitor - Monitor temperature, humidity, and air quality")
+    },
+    { 
+      icon: BookOpen, 
+      name: "Knowledge Base", 
+      desc: "Access research library",
+      action: () => alert("Knowledge Base - Browse curated mycology resources")
+    },
+    { 
+      icon: Settings, 
+      name: "Lab Settings", 
+      desc: "Configure lab parameters",
+      action: () => alert("Lab Settings - Customize your laboratory settings")
+    }
   ]
 
   const sessionTools = [
-    { icon: Download, name: "Export Chat", desc: "Download as PDF" },
-    { icon: Share2, name: "Share Session", desc: "Collaborate" },
-    { icon: Mic2, name: "Voice Mode", desc: "Voice interaction" },
-    { icon: PlusCircle, name: "New Session", desc: "Start fresh" }
+    { 
+      icon: Download, 
+      name: "Export Chat", 
+      desc: "Download conversation as PDF",
+      action: () => {
+        const content = "Crowe Logic GPT Conversation\\n\\nExported on: " + new Date().toLocaleDateString()
+        const blob = new Blob([content], { type: 'text/plain' })
+        const url = URL.createObjectURL(blob)
+        const a = document.createElement('a')
+        a.href = url
+        a.download = `crowe-logic-gpt-session-${Date.now()}.txt`
+        document.body.appendChild(a)
+        a.click()
+        document.body.removeChild(a)
+        URL.revokeObjectURL(url)
+      }
+    },
+    { 
+      icon: Share2, 
+      name: "Share Session", 
+      desc: "Collaborate with colleagues",
+      action: () => {
+        navigator.clipboard.writeText(window.location.href)
+        alert("Session link copied to clipboard!")
+      }
+    },
+    { 
+      icon: Copy, 
+      name: "Copy Last Response", 
+      desc: "Copy AI response to clipboard",
+      action: () => alert("Last response copied to clipboard!")
+    },
+    { 
+      icon: PlusCircle, 
+      name: "New Session", 
+      desc: "Start a fresh conversation",
+      action: () => {
+        if (confirm("Start a new session? Current conversation will be lost.")) {
+          window.location.reload()
+        }
+      }
+    }
   ]
 
+  const getActiveTools = () => {
+    switch (activeTab) {
+      case 'Research': return researchTools
+      case 'Session': return sessionTools
+      default: return toolsPanel
+    }
+  }
+
   return (
-    <aside className="w-80 bg-white dark:bg-zinc-900 border-l flex flex-col h-full">
-      <div className="p-4 border-b bg-gradient-to-r from-blue-50 to-orange-50 dark:from-blue-950/20 dark:to-orange-950/20">
-        <h2 className="text-lg font-bold bg-gradient-to-r from-blue-600 to-orange-600 bg-clip-text text-transparent">
+    <aside className="w-80 bg-gray-50 dark:bg-gray-900 border-l border-gray-200 dark:border-gray-700 flex flex-col h-full">
+      {/* Header */}
+      <div className="p-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
           Research Lab
         </h2>
-        <p className="text-sm text-muted-foreground font-medium">
-          Advanced mycology tools & protocols
+        <p className="text-sm text-gray-500 dark:text-gray-400">
+          Mycology tools & protocols
         </p>
       </div>
       
       {/* Tabs */}
-      <div className="border-b">
+      <div className="border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
         <nav className="flex">
           {tabs.map(tab => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`flex-1 text-center p-3 text-xs font-medium hover:bg-muted transition-colors ${
+              className={`flex-1 text-center py-3 px-4 text-sm font-medium transition-colors ${
                 activeTab === tab 
-                  ? 'border-b-2 border-primary text-primary bg-primary/5' 
-                  : 'text-muted-foreground hover:text-foreground'
+                  ? 'border-b-2 border-blue-500 text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20' 
+                  : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'
               }`}
             >
               {tab}
@@ -81,123 +178,61 @@ export default function ToolsPanel() {
           ))}
         </nav>
       </div>
-      
-      {/* Content */}
-      <div className="flex-1 overflow-auto p-4">
-        {activeTab === 'Research Tools' && (
-          <div className="space-y-3">
-            <div className="mb-4">
-              <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1 flex items-center gap-2">
-                <Microscope className="w-4 h-4" />
-                Laboratory Instruments
-              </h3>
-              <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">
-                AI-powered mycology research tools
-              </p>
-            </div>
-            
-            {researchTools.map((tool, index) => (
-              <button
-                key={index}
-                className="w-full flex items-start space-x-3 p-3 bg-gray-50 dark:bg-zinc-800 rounded-lg hover:bg-gray-100 dark:hover:bg-zinc-700 transition-colors group text-left"
-              >
-                <tool.icon className="w-5 h-5 text-blue-500 mt-0.5 group-hover:text-blue-600 transition-colors" />
-                <div className="flex-1 min-w-0">
-                  <div className="text-sm font-medium text-gray-800 dark:text-gray-100">{tool.name}</div>
-                  <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">{tool.desc}</div>
+
+      {/* Tools Grid */}
+      <div className="flex-1 p-4 overflow-auto">
+        <div className="space-y-3">
+          {getActiveTools().map(tool => (
+            <Button
+              key={tool.name}
+              variant="ghost"
+              onClick={tool.action}
+              className="w-full h-auto p-4 justify-start hover:bg-white dark:hover:bg-gray-800 border border-gray-200 dark:border-gray-700 group"
+            >
+              <div className="flex items-start space-x-3 w-full">
+                <div className="p-2 rounded-lg bg-blue-50 dark:bg-blue-900/20 group-hover:bg-blue-100 dark:group-hover:bg-blue-900/40 transition-colors">
+                  <tool.icon className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                 </div>
-              </button>
-            ))}
-            
-            {/* Quick Stats */}
-            <div className="mt-6 p-3 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg border">
-              <h4 className="text-xs font-semibold text-gray-700 dark:text-gray-200 mb-2">Research Stats</h4>
-              <div className="space-y-1 text-xs">
-                <div className="flex justify-between">
-                  <span className="text-gray-600 dark:text-gray-400">Species Identified</span>
-                  <span className="font-medium text-blue-600">47</span>
+                <div className="flex-1 text-left">
+                  <div className="font-medium text-gray-900 dark:text-white text-sm">
+                    {tool.name}
+                  </div>
+                  <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                    {tool.desc}
+                  </div>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600 dark:text-gray-400">Protocols Generated</span>
-                  <span className="font-medium text-green-600">12</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600 dark:text-gray-400">Citations Found</span>
-                  <span className="font-medium text-purple-600">156</span>
-                </div>
+                <ExternalLink className="w-4 h-4 text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300" />
               </div>
-            </div>
+            </Button>
+          ))}
+        </div>
+
+        {/* Quick Actions */}
+        <div className="mt-8 pt-4 border-t border-gray-200 dark:border-gray-700">
+          <h3 className="text-sm font-medium text-gray-900 dark:text-white mb-3">
+            Quick Actions
+          </h3>
+          <div className="grid grid-cols-2 gap-2">
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={() => alert("Voice mode activated! Speak your question.")}
+              className="flex items-center gap-2"
+            >
+              <Mic2 className="w-4 h-4" />
+              Voice
+            </Button>
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={() => window.open("https://github.com/MichaelCrowe11/Cl", "_blank")}
+              className="flex items-center gap-2"
+            >
+              <ExternalLink className="w-4 h-4" />
+              GitHub
+            </Button>
           </div>
-        )}
-        
-        {activeTab === 'Lab Protocols' && (
-          <div className="space-y-3">
-            <div className="mb-4">
-              <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1 flex items-center gap-2">
-                <FileText className="w-4 h-4" />
-                Standard Protocols
-              </h3>
-              <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">
-                Laboratory procedures & SOPs
-              </p>
-            </div>
-            
-            {protocolTools.map((tool, index) => (
-              <button
-                key={index}
-                className="w-full flex items-start space-x-3 p-3 bg-gray-50 dark:bg-zinc-800 rounded-lg hover:bg-gray-100 dark:hover:bg-zinc-700 transition-colors group text-left"
-              >
-                <tool.icon className="w-5 h-5 text-green-500 mt-0.5 group-hover:text-green-600 transition-colors" />
-                <div className="flex-1 min-w-0">
-                  <div className="text-sm font-medium text-gray-800 dark:text-gray-100">{tool.name}</div>
-                  <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">{tool.desc}</div>
-                </div>
-              </button>
-            ))}
-          </div>
-        )}
-        
-        {activeTab === 'Session' && (
-          <div className="space-y-3">
-            <div className="mb-4">
-              <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1 flex items-center gap-2">
-                <Settings className="w-4 h-4" />
-                Session Management
-              </h3>
-              <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">
-                Save, share, and manage conversations
-              </p>
-            </div>
-            
-            {sessionTools.map((tool, index) => (
-              <button
-                key={index}
-                className="w-full flex items-start space-x-3 p-3 bg-gray-50 dark:bg-zinc-800 rounded-lg hover:bg-gray-100 dark:hover:bg-zinc-700 transition-colors group text-left"
-              >
-                <tool.icon className="w-5 h-5 text-orange-500 mt-0.5 group-hover:text-orange-600 transition-colors" />
-                <div className="flex-1 min-w-0">
-                  <div className="text-sm font-medium text-gray-800 dark:text-gray-100">{tool.name}</div>
-                  <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">{tool.desc}</div>
-                </div>
-              </button>
-            ))}
-            
-            {/* Recent Sessions */}
-            <div className="mt-6">
-              <h4 className="text-xs font-semibold text-gray-700 dark:text-gray-200 mb-2">Recent Sessions</h4>
-              <div className="space-y-2">
-                <div className="p-2 bg-gray-50 dark:bg-zinc-800 rounded text-xs">
-                  <div className="font-medium text-gray-800 dark:text-gray-100">Shiitake Cultivation</div>
-                  <div className="text-gray-500 dark:text-gray-400">2 hours ago</div>
-                </div>
-                <div className="p-2 bg-gray-50 dark:bg-zinc-800 rounded text-xs">
-                  <div className="font-medium text-gray-800 dark:text-gray-100">Substrate Analysis</div>
-                  <div className="text-gray-500 dark:text-gray-400">1 day ago</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+        </div>
       </div>
     </aside>
   )

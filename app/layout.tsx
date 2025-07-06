@@ -30,14 +30,14 @@ export default function RootLayout({
       <body className={inter.className}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
+          defaultTheme="dark"
           enableSystem
           disableTransitionOnChange
         >
-          <CroweBackdrop />
-          <div className="flex h-screen relative">
+          <CroweBackdrop opacity={0.02} />
+          <div className="flex h-screen relative bg-white dark:bg-gray-900">
             <Sidebar />
-            <main className="flex-1 overflow-auto bg-background">
+            <main className="flex-1 overflow-auto">
               {children}
             </main>
             <ToolsPanel />

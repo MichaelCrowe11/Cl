@@ -1,11 +1,11 @@
 "use client"
 
 import React from 'react'
-import { CroweLogoSVG } from './crowe-logo'
-import { Bot, Cpu, BookOpen, Plug, Settings, PlusCircle, Clock, Microscope, FlaskConical } from 'lucide-react'
+import Image from 'next/image'
+import { Bot, Cpu, BookOpen, Plug, Settings, PlusCircle, Clock, Microscope, FlaskConical, MessageSquare } from 'lucide-react'
 
 const navItems = [
-  { label: 'Crowe Logic GPT', icon: Bot },
+  { label: 'Crowe Logic GPT', icon: MessageSquare },
   { label: 'Research Models', icon: Cpu },
   { label: 'Mycology Database', icon: Microscope },
   { label: 'Lab Protocols', icon: FlaskConical },
@@ -24,54 +24,66 @@ const recentSessions = [
 
 export default function Sidebar() {
   return (
-    <aside className="w-64 bg-white dark:bg-zinc-900 border-r flex flex-col">
-      <div className="p-4 border-b flex items-center bg-gradient-to-r from-blue-50 to-orange-50 dark:from-blue-950/20 dark:to-orange-950/20">
-        <CroweLogoSVG size={32} className="mr-3" />
-        <div>
-          <span className="text-lg font-bold bg-gradient-to-r from-blue-600 to-orange-600 bg-clip-text text-transparent">
-            Crowe Logic
-          </span>
-          <div className="text-xs text-muted-foreground font-medium">GPT Research Platform</div>
+    <aside className="w-64 bg-gray-900 text-white flex flex-col h-full">
+      {/* Header with Crowe Logic Avatar */}
+      <div className="p-4 border-b border-gray-700">
+        <div className="flex items-center space-x-3">
+          <div className="relative w-8 h-8 rounded-lg overflow-hidden">
+            <Image
+              src="/crowe-avatar.png"
+              alt="Crowe Logic"
+              width={32}
+              height={32}
+              className="w-full h-full object-cover"
+            />
+          </div>
+          <div>
+            <div className="font-semibold text-white text-sm">Crowe Logic GPT</div>
+            <div className="text-xs text-gray-400">Mycology Research</div>
+          </div>
         </div>
       </div>
-      <nav className="flex-1 p-4 overflow-auto">
-        {/* New Chat Button */}
-        <button className="w-full mb-4 p-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors flex items-center justify-center gap-2 font-medium shadow-sm">
+
+      {/* New Chat Button */}
+      <div className="p-3">
+        <button className="w-full flex items-center space-x-3 p-3 rounded-lg bg-gray-800 hover:bg-gray-700 transition-colors border border-gray-600">
           <PlusCircle className="w-4 h-4" />
-          New Research Chat
+          <span className="text-sm font-medium">New chat</span>
         </button>
-        
-        <ul className="space-y-1">
+      </div>
+
+      {/* Navigation */}
+      <nav className="flex-1 px-3 overflow-auto">
+        <div className="space-y-1">
           {navItems.map(item => (
-            <li key={item.label}>
-              <a href="#" className="group flex items-center space-x-3 p-3 rounded-lg hover:bg-muted transition-colors">
-                <item.icon className="w-5 h-5 text-muted-foreground group-hover:text-foreground" />
-                <span className="text-sm font-medium text-muted-foreground group-hover:text-foreground">{item.label}</span>
-              </a>
-            </li>
+            <button
+              key={item.label}
+              className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-800 transition-colors text-left"
+            >
+              <item.icon className="w-4 h-4 text-gray-400" />
+              <span className="text-sm text-gray-300">{item.label}</span>
+            </button>
           ))}
-        </ul>
+        </div>
         
+        {/* Recent Sessions */}
         <div className="mt-8">
-          <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Recent Sessions</h3>
-          <ul className="space-y-1">
+          <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 px-3">
+            Recent
+          </h3>
+          <div className="space-y-1">
             {recentSessions.map(session => (
-              <li key={session}>
-                <a href="#" className="group flex items-center space-x-3 p-2 rounded-lg hover:bg-muted transition-colors">
-                  <Clock className="w-4 h-4 text-muted-foreground group-hover:text-foreground flex-shrink-0" />
-                  <span className="text-sm text-muted-foreground group-hover:text-foreground truncate">{session}</span>
-                </a>
-              </li>
+              <button
+                key={session}
+                className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-800 transition-colors text-left group"
+              >
+                <MessageSquare className="w-4 h-4 text-gray-500 group-hover:text-gray-400" />
+                <span className="text-sm text-gray-400 group-hover:text-gray-300 truncate">{session}</span>
+              </button>
             ))}
-          </ul>
+          </div>
         </div>
       </nav>
-      <div className="p-4 border-t">
-        <button className="w-full flex items-center justify-center space-x-2 p-2 bg-blue-600 text-white rounded hover:bg-blue-700">
-          <PlusCircle className="w-5 h-5" />
-          <span>New Session</span>
-        </button>
-      </div>
     </aside>
   )
 }
