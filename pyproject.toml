@@ -33,4 +33,5 @@ dependencies = [
     "lxml>=5.4.0",
     "beautifulsoup4>=4.13.4",
     "anthropic>=0.52.0",
+    "flask-cors>=3.0.10",
 ]

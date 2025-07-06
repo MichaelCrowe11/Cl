@@ -7,6 +7,7 @@ from werkzeug.middleware.proxy_fix import ProxyFix
 from flasgger import Swagger
 from prometheus_client import make_wsgi_app
 from werkzeug.middleware.dispatcher import DispatcherMiddleware
+from flask_cors import CORS
 
 from config import active_config
 
@@ -29,6 +30,8 @@ db = SQLAlchemy(model_class=Base)
 def create_app(config_object=active_config):
     """Application factory pattern."""
     app = Flask(__name__)
+    # Enable Cross-Origin requests from the frontend
+    CORS(app, resources={r"/ai/*": {"origins": "*"}})
     app.config.from_object(config_object)
     
     # Set secret key

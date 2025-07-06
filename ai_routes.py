@@ -96,6 +96,42 @@ def analyze_sample_route(sample_id):
     return render_template('ai/analyze_sample.html', sample=sample)
 
 
+@ai_bp.route('/chat', methods=['POST'])
+def chat():
+    """Generic chat endpoint to interact with the AI Assistant."""
+    data = request.get_json()
+    if not data or not data.get('message'):
+        return jsonify({"error": "Message is required."}), 400
+
+    message = data['message']
+    
+    # For simplicity, we'll use a generic prompt structure.
+    # In a real application, you might have more sophisticated prompt engineering.
+    try:
+        assistant = AIAssistant()
+        # We can use generate_research_hypothesis as a generic text-generation endpoint for now
+        # or create a new method in AIAssistant for generic chat.
+        # Let's assume a simple prompt for now.
+        prompt = f"""The user has sent the following message. Please provide a helpful and relevant response.
+
+User message: {message}
+"""
+        
+        # Using a generic method in AIAssistant. Let's use `generate_research_hypothesis`
+        # as a stand-in for a generic chat method.
+        context_data = {"query": prompt}
+        response = assistant.generate_research_hypothesis(context_data)
+
+        if response.get("error"):
+            raise Exception(response["error"])
+
+        return jsonify({"response": response.get("raw_response")})
+
+    except Exception as e:
+        logger.error(f"Error in chat endpoint: {str(e)}")
+        return jsonify({"error": "An error occurred while processing your request."}), 500
+
+
 @ai_bp.route('/generate-hypothesis', methods=['GET', 'POST'])
 def generate_hypothesis_route():
     """Generate research hypotheses using AI."""

@@ -136,6 +136,85 @@ For issues or questions about deployment:
 2. Run `./verify-components.sh` to check component status
 3. Use `./deploy.sh` for automated deployment
 
+# Getting Started
+
+Follow these steps to launch the Crowe Logic AI platform locally:
+
+1.  **Copy environment template**
+
+    ```bash
+    cp env.example .env
+    ```
+
+2.  **Configure Environment Variables**
+
+    -  Open `.env` and set:
+       - `GOOGLE_API_KEY`: Your Google API key for Gemini.
+       - `NEXT_PUBLIC_BACKEND_URL`: URL of the Flask backend (e.g., `http://localhost:5000`).
+       - `FLASK_ENV`: `development` for local testing.
+       - `SECRET_KEY`: A secure random string for session management.
+
+3.  **Install Python Dependencies**
+
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+    Make sure `flask-cors` is included to enable CORS support.
+
+4.  **Start the Flask Backend**
+
+    ```bash
+    flask run
+    ```
+
+    The backend API will be available at `http://localhost:5000` by default.
+
+5.  **Install Frontend Dependencies**
+
+    ```bash
+    npm install
+    ```
+
+6.  **Start the Next.js Frontend**
+
+    ```bash
+    npm run dev
+    ```
+
+    The frontend will be available at `http://localhost:3000`.
+
+7.  **Interact with the AI**
+
+    Open your browser to `http://localhost:3000` and send a message in the chat interface. The request will be routed through `/api/chat` to the Flask backend and powered by the Gemini API.
+
+---
+
+## Deployment
+
+This project is divided into a Next.js frontend and a Flask backend.
+
+### Frontend (Vercel)
+
+The frontend is configured for deployment on [Vercel](https://vercel.com). To deploy, simply push your changes to the `main` branch of your Git repository. Vercel will automatically build and deploy the new version.
+
+### Backend (Linux Server)
+
+The Flask backend can be deployed to any server that supports Python. A common setup involves using Gunicorn as the application server and Nginx as a reverse proxy.
+
+Refer to the `deploy.sh` script for a template of the steps involved in a typical backend deployment. You will need to adapt these steps to your specific server environment.
+
+### Environment Variables for Production
+
+Before deploying, ensure you have set the necessary environment variables in your production environment:
+
+-   `GOOGLE_API_KEY`: Your Google API key for Gemini.
+-   `FLASK_ENV`: Set to `production`.
+-   `SECRET_KEY`: A strong, unique secret key for Flask sessions.
+-   `DATABASE_URL`: If you are using a production database.
+
+For Vercel, these can be set in the project settings. For a backend server, they should be set as environment variables for the application process.
+
 ---
 
 **Ready for Production Deployment! 🎉**

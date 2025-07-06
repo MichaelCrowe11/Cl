@@ -73,61 +73,29 @@ How can I assist you today?`,
     setInput('')
     setIsLoading(true)
 
-    // TODO: Integrate with your custom AI model here
-    // This is where you'll call your AI model API
-    try {
-      const response = await callAIModel(userMessage.content, aiConfig)
-      
-      const assistantMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        role: 'assistant',
-        content: response,
-        timestamp: new Date(),
-      }
+    const assistantMessage: Message = {
+      id: (Date.now() + 1).toString(),
+      role: 'assistant',
+      content: '',
+      timestamp: new Date(),
+    }
 
-      setMessages((prev) => [...prev, assistantMessage])
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: userMessage.content }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'Backend error')
+      assistantMessage.content = data.response
     } catch (error) {
       console.error('AI Model Error:', error)
-      // Fallback response for now
-      const assistantMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        role: 'assistant',
-        content: 'I understand your question. Let me help you with that. [AI Model Integration Pending]',
-        timestamp: new Date(),
-      }
-      setMessages((prev) => [...prev, assistantMessage])
-    } finally {
-      setIsLoading(false)
+      assistantMessage.content = 'Sorry, an error occurred connecting to the AI service.'
     }
-  }
 
-  // AI model integration with actual API call
-  async function callAIModel(prompt: string, config: AIModelConfig): Promise<string> {
-    try {
-      const response = await fetch('/api/ai', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          prompt,
-          model: config.modelName,
-          temperature: config.temperature,
-          max_tokens: config.maxTokens,
-          system_prompt: 'You are an expert mycology assistant with deep knowledge of fungal biotechnology, substrate optimization, and cultivation techniques. Provide detailed, scientific responses while remaining accessible.'
-        }),
-      })
-
-      if (!response.ok) {
-        throw new Error(`API error: ${response.statusText}`)
-      }
-
-      const data = await response.json()
-      return data.response || 'No response generated'
-    } catch (error) {
-      console.error('AI API Error:', error)
-      throw error
-    }
+    setMessages((prev) => [...prev, assistantMessage])
+    setIsLoading(false)
   }
 
   const handleCopy = async (content: string, id: string) => {
@@ -289,4 +257,4 @@ How can I assist you today?`,
       </div>
     </div>
   )
-} 
+}
