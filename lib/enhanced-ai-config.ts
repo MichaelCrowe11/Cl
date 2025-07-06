@@ -165,6 +165,8 @@ export const FUNCTION_CALLING_CONFIG = {
   defaultTools: MYCOLOGY_FUNCTIONS,
   
   domainTools: {
+    // 'general' falls back to all functions
+    general: MYCOLOGY_FUNCTIONS,
     mycology: MYCOLOGY_FUNCTIONS,
     environmental: MYCOLOGY_FUNCTIONS.filter(f => 
       f.name.includes('environment') || f.name.includes('weather')
@@ -256,7 +258,11 @@ export async function callEnhancedAI(
         model: selectedModel,
         temperature: modelConfig.defaultTemperature,
         max_tokens: modelConfig.defaultMaxTokens,
-        system_prompt: ENHANCED_PROMPTS[`${domain}_function_calling`] || ENHANCED_PROMPTS.mycology_function_calling
+        system_prompt: domain === 'environmental'
+          ? ENHANCED_PROMPTS.environmental_analysis
+          : domain === 'business'
+            ? ENHANCED_PROMPTS.business_strategy
+            : ENHANCED_PROMPTS.mycology_function_calling
       }),
     })
 
