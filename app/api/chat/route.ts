@@ -10,21 +10,26 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Message is required' }, { status: 400 });
     }
 
-    // Forward the request to the Python backend
-    const backendResponse = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/ai/chat`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ message }),
-    });
+    // Determine backend URL: use env var or fallback to the request origin
+    const origin = process.env.NEXT_PUBLIC_BACKEND_URL || new URL(req.url).origin;
 
-    if (!backendResponse.ok) {
-      const errorData = await backendResponse.json();
-      return NextResponse.json({ error: errorData.error || 'Backend error' }, { status: backendResponse.status });
-    }
+    // Forward the request to the Python backend
+    const backendResponse = await fetch(
+      `${origin}/ai/chat`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message }),
+      }
+    );
 
     const data = await backendResponse.json();
+    if (!backendResponse.ok) {
+      return NextResponse.json({ error: data.error || 'Backend error' }, { status: backendResponse.status });
+    }
+
     return NextResponse.json({ response: data.response });
 
   } catch (error) {
