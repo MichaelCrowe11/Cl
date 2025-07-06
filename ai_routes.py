@@ -1,8 +1,8 @@
 """
-AI Assistant Routes for the Mycology Research Pipeline.
+Crowe Logic GPT Routes for the Mycology Research Platform.
 
-This module provides web routes for interacting with the AI assistant,
-including sample analysis, hypothesis generation, and code generation.
+This module provides web routes for interacting with Crowe Logic GPT,
+including mycology research, species identification, and protocol design.
 """
 
 import json
@@ -11,34 +11,51 @@ from datetime import datetime
 from flask import Blueprint, render_template, request, redirect, url_for, jsonify, flash, session
 from flask_login import login_required, current_user
 
-from app import db
-from models import Sample, Compound, Analysis, AIAssistantQuery, LiteratureReference
-from ai_assistant import AIAssistant, analyze_sample, generate_hypothesis, generate_code
+from crowe_logic_gpt import get_crowe_response
 
 logger = logging.getLogger(__name__)
 ai_bp = Blueprint('ai', __name__, url_prefix='/ai')
 
 
-@ai_bp.route('/')
-def ai_dashboard():
-    """Render the AI assistant dashboard."""
-    # Get recent AI queries if the user is logged in
-    recent_queries = []
-    if hasattr(current_user, 'is_authenticated') and current_user.is_authenticated:
-        recent_queries = AIAssistantQuery.query.filter_by(
-            user_id=current_user.id
-        ).order_by(AIAssistantQuery.created_at.desc()).limit(5).all()
-    
-    # Get sample count for context
-    sample_count = Sample.query.count()
-    compound_count = Compound.query.count()
-    
-    return render_template(
-        'ai/dashboard.html',
-        recent_queries=recent_queries,
-        sample_count=sample_count,
-        compound_count=compound_count
-    )
+@ai_bp.route('/chat', methods=['POST'])
+def chat():
+    """Chat endpoint for Crowe Logic GPT"""
+    try:
+        data = request.get_json()
+        if not data or 'message' not in data:
+            return jsonify({'error': 'Message is required'}), 400
+        
+        message = data['message']
+        config = data.get('config', {})
+        
+        # Get response from Crowe Logic GPT
+        response = get_crowe_response(message, config)
+        
+        # Log the interaction
+        logger.info(f"Crowe Logic GPT query: {message[:100]}...")
+        
+        return jsonify({
+            'response': response,
+            'timestamp': datetime.now().isoformat(),
+            'model': 'crowe-logic-gpt'
+        })
+        
+    except Exception as e:
+        logger.error(f"Error in chat endpoint: {str(e)}")
+        return jsonify({
+            'error': 'Internal server error',
+            'message': 'Unable to process your research query at this time.'
+        }), 500
+
+
+@ai_bp.route('/health', methods=['GET'])
+def health():
+    """Health check endpoint for Crowe Logic GPT"""
+    return jsonify({
+        'status': 'healthy',
+        'service': 'crowe-logic-gpt',
+        'timestamp': datetime.now().isoformat()
+    })
 
 
 @ai_bp.route('/analyze-sample/<int:sample_id>', methods=['GET', 'POST'])

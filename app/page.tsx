@@ -1,9 +1,9 @@
-import { ChatInterface } from '@/components/chat-interface'
+import { CroweLogicGPT } from '@/components/crowe-logic-gpt'
 
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col">
-      <ChatInterface />
+      <CroweLogicGPT />
     </main>
   )
 } 

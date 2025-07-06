@@ -5,7 +5,8 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Send, Loader2, Copy, Download, Check } from 'lucide-react'
+import { Send, Copy, Download, Check } from 'lucide-react'
+import { LoadingSpinner } from '@/components/ui/loading'
 import { cn } from '@/lib/utils'
 
 interface Message {
@@ -29,14 +30,17 @@ export function ChatInterface() {
     {
       id: '1',
       role: 'assistant',
-      content: `Welcome to Crowe Logic AI! I'm your expert in mycology, environmental intelligence, and business strategy.
+      content: `Welcome to **Crowe Logic GPT** - Your Advanced Mycology Research Platform! 
 
-🍄 **Mycology Expertise**: Substrate optimization, contamination prevention, yield predictions
-🌍 **Environmental Intelligence**: Climate analysis, ecosystem monitoring, biodiversity tracking  
-💼 **Business Strategy**: Market analysis, operational efficiency, sustainable growth planning
-🔬 **Advanced Capabilities**: MEI platform integration, quantum modeling, biome intelligence
+🍄 **Mycology Research**: Substrate optimization, strain analysis, contamination prevention, yield modeling
+🔬 **Laboratory Management**: Protocol development, quality control, data analysis, research planning
+🌍 **Environmental Intelligence**: Climate analysis, ecosystem monitoring, biodiversity assessments
+� **Data Analytics**: Statistical modeling, predictive analytics, research insights, trend analysis
+💡 **Innovation Support**: R&D guidance, experimental design, literature research, peer collaboration
 
-How can I assist you today?`,
+**Powered by advanced AI** to accelerate your mycological research and discoveries.
+
+What would you like to explore today?`,
       timestamp: new Date(),
     },
   ])
@@ -124,20 +128,24 @@ How can I assist you today?`,
   }
 
   return (
-    <div className="flex flex-col h-screen bg-background">
+    <div className="flex flex-col h-full bg-background">
       {/* Header */}
-      <div className="border-b px-4 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <Avatar className="h-10 w-10 ring-2 ring-yellow-600/50">
-            <AvatarImage src="/crowe-avatar.png" alt="Crowe Logic AI" className="object-cover" />
-            <AvatarFallback className="bg-purple-600 text-white font-bold">CL</AvatarFallback>
+      <div className="border-b px-6 py-4 flex items-center justify-between bg-gradient-to-r from-blue-50 to-orange-50 dark:from-blue-950/20 dark:to-orange-950/20">
+        <div className="flex items-center gap-4">
+          <Avatar className="h-12 w-12 ring-2 ring-primary/20 shadow-md">
+            <AvatarImage src="/crowe-avatar.png" alt="Crowe Logic GPT" className="object-cover" />
+            <AvatarFallback className="crowe-gradient text-white font-bold text-lg">CL</AvatarFallback>
           </Avatar>
           <div>
-            <h1 className="text-lg font-semibold">Crowe Logic AI</h1>
-            <p className="text-sm text-muted-foreground">Mycology • Environmental Intelligence • Business Strategy</p>
+            <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-orange-600 bg-clip-text text-transparent">
+              Crowe Logic GPT
+            </h1>
+            <p className="text-sm text-muted-foreground font-medium">
+              Advanced Mycology Research Platform • AI-Powered Laboratory Assistant
+            </p>
           </div>
         </div>
-        <div className="text-xs text-muted-foreground">
+        <div className="text-xs text-muted-foreground bg-card px-3 py-1 rounded-full border">
           Model: {aiConfig.modelName}
         </div>
       </div>
@@ -174,9 +182,9 @@ How can I assist you today?`,
               >
                 <div
                   className={cn(
-                    "rounded-lg px-3 py-2",
+                    "rounded-2xl px-4 py-3 shadow-sm",
                     message.role === 'assistant'
-                      ? "bg-muted"
+                      ? "bg-muted ai-gradient"
                       : "bg-primary text-primary-foreground"
                   )}
                 >
@@ -224,7 +232,7 @@ How can I assist you today?`,
                 <AvatarFallback className="bg-purple-600 text-white font-bold text-sm">CL</AvatarFallback>
               </Avatar>
               <div className="bg-muted rounded-lg px-3 py-2">
-                <Loader2 className="h-4 w-4 animate-spin" />
+                <LoadingSpinner size="sm" />
               </div>
             </div>
           )}
@@ -245,7 +253,7 @@ How can I assist you today?`,
           />
           <Button onClick={handleSend} disabled={isLoading || !input.trim()}>
             {isLoading ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
+              <LoadingSpinner size="sm" />
             ) : (
               <Send className="h-4 w-4" />
             )}
