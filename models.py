@@ -66,6 +66,7 @@ class Compound(db.Model):
     formula = Column(String(255), nullable=True)
     molecular_weight = Column(Float, nullable=True)
     concentration = Column(Float, nullable=True)
+    molecular_structure = Column(Text, nullable=True)  # SMILES or InChI representation
     bioactivity_index = Column(Float, nullable=True)
     compound_metadata = Column(JSON, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
@@ -299,12 +300,13 @@ class Payment(db.Model):
     
     @property
     def days_remaining(self):
-        """Return the number of days remaining in the membership."""
-        if not self.end_date:
-            return None
-        
-        delta = self.end_date - datetime.utcnow()
-        return max(0, delta.days)
+        """Return the number of days remaining in the related subscription (if any)."""
+        # Payments themselves do not have an end_date; instead, defer to the
+        # associated subscription's current_period_end field (if available).
+        if self.subscription and self.subscription.current_period_end:
+            delta = self.subscription.current_period_end - datetime.utcnow()
+            return max(0, delta.days)
+        return None
 
 
 class OAuthToken(db.Model):
