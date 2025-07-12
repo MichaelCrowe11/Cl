@@ -20,36 +20,50 @@ interface Message {
 
 export default function ChatInterface() {
   const [input, setInput] = useState("")
+  const [mounted, setMounted] = useState(false)
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
       role: "agent",
       userName: "Crowe Logic AI",
-      avatar: "/crowe-avatar.png", // Official Crowe branding
+      avatar: "/crowe-avatar.png",
       content:
         "Welcome to Crowe Logic AI, your dedicated mycology lab partner. How can I assist your cultivation efforts today? You can speak or type your observations, questions, or commands.",
-      timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      timestamp: "",
     },
     {
       id: "2",
       role: "user",
       userName: "Cultivator",
-      avatar: "/placeholder-user.jpg", // Professional user avatar
+      avatar: "/placeholder-user.jpg",
       content:
         "Hey Logic, I'm starting a new batch of Lion's Mane. Substrate is hardwood fuel pellets and soy hulls, 50/50 mix. Planning for 10 bags.",
-      timestamp: new Date(Date.now() + 1 * 60 * 1000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      timestamp: "",
     },
     {
       id: "3",
       role: "agent",
       userName: "Crowe Logic AI",
-      avatar: "/crowe-avatar.png", // Official Crowe branding
+      avatar: "/crowe-avatar.png",
       content:
         "Understood. Logging new Lion's Mane batch (10 bags, HWFP/Soy hulls 50/50).\n\nWould you like me to:\n1. Generate a batch label and SOP for this?\n2. Confirm hydration levels for this substrate mix?\n3. Set reminders for sterilization and inoculation?",
-      timestamp: new Date(Date.now() + 2 * 60 * 1000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      timestamp: "",
     },
   ])
   const scrollAreaRef = useRef<HTMLDivElement>(null)
+
+  // Fix hydration by setting timestamps only on client side
+  useEffect(() => {
+    setMounted(true)
+    const now = new Date()
+    setMessages(prev => prev.map((msg, index) => ({
+      ...msg,
+      timestamp: new Date(now.getTime() + index * 60 * 1000).toLocaleTimeString([], { 
+        hour: "2-digit", 
+        minute: "2-digit" 
+      })
+    })))
+  }, [])
 
   useEffect(() => {
     // Auto-scroll to bottom
@@ -62,12 +76,12 @@ export default function ChatInterface() {
   }, [messages])
 
   const handleSend = () => {
-    if (input.trim() === "") return
+    if (input.trim() === "" || !mounted) return
     const newMessage: Message = {
       id: String(messages.length + 1),
       role: "user",
       userName: "Cultivator",
-      avatar: "/placeholder-user.jpg", // Professional user avatar
+      avatar: "/placeholder-user.jpg",
       content: input,
       timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
     }
@@ -80,7 +94,7 @@ export default function ChatInterface() {
         id: String(messages.length + messages.length + 1), // Ensure unique ID
         role: "agent",
         userName: "Crowe Logic AI",
-        avatar: "/crowe-avatar.png", // Official Crowe branding
+        avatar: "/crowe-avatar.png",
         content: `Acknowledged: "${input.substring(0, 50)}${input.length > 50 ? "..." : ""}". I'm processing this. What would you like to do next?`,
         timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
       }
@@ -105,8 +119,18 @@ export default function ChatInterface() {
               className={cn("flex gap-3 max-w-[85%]", message.role === "user" ? "ml-auto flex-row-reverse" : "mr-auto")}
             >
               <Avatar className="h-8 w-8 border">
-                <AvatarImage src={message.avatar || "/placeholder-user.jpg"} alt={message.userName} />
-                <AvatarFallback>{message.userName.substring(0, 1)}</AvatarFallback>
+                <AvatarImage 
+                  src={mounted ? (message.avatar || "/placeholder-user.jpg") : undefined} 
+                  alt={message.userName}
+                  onError={(e) => {
+                    // Fallback if image fails to load
+                    const target = e.target as HTMLImageElement
+                    target.style.display = 'none'
+                  }}
+                />
+                <AvatarFallback className="text-xs">
+                  {message.role === "agent" ? "AI" : "U"}
+                </AvatarFallback>
               </Avatar>
               <div className={cn("space-y-1", message.role === "user" ? "items-end" : "items-start")}>
                 <div className={cn("flex items-center gap-2", message.role === "user" ? "flex-row-reverse" : "")}>

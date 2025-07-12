@@ -1,0 +1,10 @@
+# Security Configuration
+/.env.local
+/.env.production
+/node_modules
+/.next
+/.vercel
+
+# Secrets
+*.key
+*.pem

@@ -6,7 +6,10 @@ import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Copy, Download, ThumbsUp, ThumbsDown, Mic, Send, Paperclip, Smile, Loader2 } from "lucide-react"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { LoadingSpinner, MessageLoading } from "@/components/ui/loading"
+import { useToast } from "@/hooks/use-toast"
+import { Copy, Download, ThumbsUp, ThumbsDown, Mic, Send, Paperclip, Smile, Loader2, StopCircle, RotateCcw } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 interface Message {
@@ -21,6 +24,8 @@ interface Message {
 export default function ChatInterface() {
   const [input, setInput] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+  const [selectedModel, setSelectedModel] = useState("gpt-4")
+  const [isClient, setIsClient] = useState(false)
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
@@ -29,7 +34,7 @@ export default function ChatInterface() {
       avatar: "/crowe-avatar.png", // Official Crowe branding
       content:
         "Welcome to Crowe Logic AI, your dedicated mycology lab partner. How can I assist your cultivation efforts today? You can speak or type your observations, questions, or commands.",
-      timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      timestamp: "",
     },
     {
       id: "2",
@@ -38,7 +43,7 @@ export default function ChatInterface() {
       avatar: "/placeholder-user.jpg", // Professional user avatar
       content:
         "Hey Logic, I'm starting a new batch of Lion's Mane. Substrate is hardwood fuel pellets and soy hulls, 50/50 mix. Planning for 10 bags.",
-      timestamp: new Date(Date.now() + 1 * 60 * 1000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      timestamp: "",
     },
     {
       id: "3",
@@ -47,10 +52,23 @@ export default function ChatInterface() {
       avatar: "/crowe-avatar.png", // Official Crowe branding
       content:
         "Understood. Logging new Lion's Mane batch (10 bags, HWFP/Soy hulls 50/50).\n\nWould you like me to:\n1. Generate a batch label and SOP for this?\n2. Confirm hydration levels for this substrate mix?\n3. Set reminders for sterilization and inoculation?",
-      timestamp: new Date(Date.now() + 2 * 60 * 1000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      timestamp: "",
     },
   ])
   const scrollAreaRef = useRef<HTMLDivElement>(null)
+  const { toast } = useToast()
+
+  // Fix hydration by setting timestamps only on client side
+  useEffect(() => {
+    setIsClient(true)
+    setMessages(prev => prev.map((msg, index) => ({
+      ...msg,
+      timestamp: new Date(Date.now() + index * 60 * 1000).toLocaleTimeString([], { 
+        hour: "2-digit", 
+        minute: "2-digit" 
+      })
+    })))
+  }, [])
 
   useEffect(() => {
     // Auto-scroll to bottom
@@ -62,7 +80,7 @@ export default function ChatInterface() {
     }
   }, [messages])
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (input.trim() === "" || isLoading) return
     
     const newMessage: Message = {
@@ -73,23 +91,85 @@ export default function ChatInterface() {
       content: input,
       timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
     }
+    
+    const currentInput = input
     setMessages((prevMessages) => [...prevMessages, newMessage])
     setInput("")
     setIsLoading(true)
 
-    // Simulate AI response
-    setTimeout(() => {
+    try {
+      // Prepare messages for API
+      const apiMessages = [...messages, newMessage].map(msg => ({
+        role: msg.role === 'agent' ? 'assistant' : 'user',
+        content: msg.content
+      }))
+
+      // Call the AI API
+      const response = await fetch('/api/ai', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          messages: apiMessages,
+          model: selectedModel,
+          temperature: 0.3,
+          maxTokens: 2000
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error(`API request failed: ${response.status}`)
+      }
+
+      const data = await response.json()
+      
+      if (data.error) {
+        throw new Error(data.details || data.error)
+      }
+
       const aiResponse: Message = {
-        id: String(messages.length + messages.length + 1), // Ensure unique ID
+        id: String(Date.now()), // Use timestamp for unique ID
         role: "agent",
         userName: "Crowe Logic AI",
-        avatar: "/crowe-avatar.png", // Official Crowe branding
-        content: `Acknowledged: "${input.substring(0, 50)}${input.length > 50 ? "..." : ""}". I'm processing this. What would you like to do next?`,
+        avatar: "/crowe-avatar.png",
+        content: data.response || 'No response received',
         timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
       }
+      
       setMessages((prevMessages) => [...prevMessages, aiResponse])
+    } catch (error) {
+      console.error('Failed to get AI response:', error)
+      
+      // Show toast notification for error
+      toast({
+        title: "Connection Error",
+        description: error instanceof Error ? error.message : 'Failed to connect to AI service',
+        variant: "destructive",
+        duration: 5000
+      })
+      
+      // Show error message to user
+      const errorMessage: Message = {
+        id: String(Date.now()),
+        role: "agent", 
+        userName: "Crowe Logic AI",
+        avatar: "/crowe-avatar.png",
+        content: `⚠️ I encountered an error processing your request: ${error instanceof Error ? error.message : 'Unknown error'}
+
+To resolve this:
+1. Check that your API keys are configured in .env.local
+2. Ensure your internet connection is stable
+3. Try again in a moment
+
+You can still use me for general mycology guidance while we resolve the connection issue.`,
+        timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      }
+      
+      setMessages((prevMessages) => [...prevMessages, errorMessage])
+    } finally {
       setIsLoading(false)
-    }, 1000)
+    }
   }
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -105,13 +185,48 @@ export default function ChatInterface() {
   const copyToClipboard = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text)
+      toast({
+        title: "Copied!",
+        description: "Message copied to clipboard",
+        variant: "success",
+        duration: 2000
+      })
     } catch (err) {
       console.error('Failed to copy text: ', err)
+      toast({
+        title: "Copy failed",
+        description: "Could not copy message to clipboard",
+        variant: "destructive",
+        duration: 3000
+      })
     }
   }
 
   return (
     <div className="flex-1 flex flex-col bg-background">
+      {/* Model Selector Header */}
+      <div className="p-4 border-b bg-muted/20">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-medium">AI Model:</span>
+            <Select value={selectedModel} onValueChange={setSelectedModel}>
+              <SelectTrigger className="w-48">
+                <SelectValue placeholder="Select model" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="gpt-4">GPT-4</SelectItem>
+                <SelectItem value="gpt-4-turbo">GPT-4 Turbo</SelectItem>
+                <SelectItem value="claude-3-5-sonnet">Claude 3.5 Sonnet</SelectItem>
+                <SelectItem value="claude-3-opus">Claude 3 Opus</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="text-xs text-muted-foreground">
+            {messages.length} messages
+          </div>
+        </div>
+      </div>
+      
       <ScrollArea className="flex-1 p-6" ref={scrollAreaRef}>
         <div className="space-y-6">
           {messages.map((message) => (
@@ -126,7 +241,9 @@ export default function ChatInterface() {
               <div className={cn("space-y-1", message.role === "user" ? "items-end" : "items-start")}>
                 <div className={cn("flex items-center gap-2", message.role === "user" ? "flex-row-reverse" : "")}>
                   <span className="text-xs font-medium">{message.userName}</span>
-                  <span className="text-xs text-muted-foreground">{message.timestamp}</span>
+                  {isClient && message.timestamp && (
+                    <span className="text-xs text-muted-foreground">{message.timestamp}</span>
+                  )}
                 </div>
                 <div
                   className={cn(

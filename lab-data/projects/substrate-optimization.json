@@ -1,0 +1,12 @@
+{
+  "id": "proj-001",
+  "name": "Substrate Optimization Study",
+  "species": "Pleurotus ostreatus",
+  "status": "active",
+  "created": "2025-07-12T11:13:19.693Z",
+  "parameters": {
+    "temperature": "22-24°C",
+    "humidity": "85-90%",
+    "substrate": "Straw + Wheat Bran"
+  }
+}

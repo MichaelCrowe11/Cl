@@ -1,0 +1,19 @@
+# Sterilization Protocol
+
+## Autoclave Settings
+- Temperature: 121°C (250°F)
+- Pressure: 15 PSI
+- Duration: 15-60 minutes depending on load
+
+## Pre-sterilization Checklist
+- [ ] All materials properly wrapped
+- [ ] Water level checked
+- [ ] Temperature probe calibrated
+
+## Post-sterilization
+- [ ] Allow to cool completely
+- [ ] Check indicator strips
+- [ ] Store in sterile environment
+
+## Notes
+Created automatically to prevent file read errors.

@@ -3,14 +3,24 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --turbo",
+    "dev:webpack": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "type-check": "tsc --noEmit",
     "build:production": "pnpm lint && pnpm type-check && pnpm build",
-    "preview": "pnpm build && pnpm start"
+    "preview": "pnpm build && pnpm start",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest --coverage",
+    "lighthouse": "lighthouse http://localhost:3000 --config-path=./lighthouse.config.js --output=json --output-path=./lighthouse-report.json",
+    "lighthouse:ci": "lhci autorun",
+    "a11y": "pa11y-ci --sitemap http://localhost:3000/sitemap.xml",
+    "canary:deploy": "./deploy-canary.sh",
+    "incident:drill": "./incident-drill.sh",
+    "production:check": "npm run build && npm run lighthouse && npm run a11y"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
@@ -67,6 +77,8 @@
     "@types/node": "^22",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "eslint": "^9.31.0",
+    "eslint-config-next": "15.3.5",
     "postcss": "^8.5",
     "tailwindcss": "^3.4.17",
     "typescript": "^5"

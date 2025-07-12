@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Input Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        input { padding: 10px; margin: 10px; border: 1px solid #ccc; }
+        .test-section { margin: 20px 0; padding: 20px; border: 1px solid #eee; }
+    </style>
+</head>
+<body>
+    <h1>Input Field Test</h1>
+    
+    <div class="test-section">
+        <h2>Basic HTML Input</h2>
+        <input type="text" placeholder="Type here..." id="basic-input">
+        <p>Current value: <span id="basic-value"></span></p>
+    </div>
+    
+    <div class="test-section">
+        <h2>Controlled Input (React-like)</h2>
+        <input type="text" placeholder="Controlled input..." id="controlled-input">
+        <p>Current value: <span id="controlled-value"></span></p>
+    </div>
+    
+    <script>
+        // Basic input test
+        const basicInput = document.getElementById('basic-input');
+        const basicValue = document.getElementById('basic-value');
+        
+        basicInput.addEventListener('input', (e) => {
+            basicValue.textContent = e.target.value;
+            console.log('Basic input:', e.target.value);
+        });
+        
+        // Controlled input test
+        const controlledInput = document.getElementById('controlled-input');
+        const controlledValue = document.getElementById('controlled-value');
+        
+        controlledInput.addEventListener('input', (e) => {
+            controlledValue.textContent = e.target.value;
+            console.log('Controlled input:', e.target.value);
+        });
+        
+        console.log('Input test page loaded');
+    </script>
+</body>
+</html>

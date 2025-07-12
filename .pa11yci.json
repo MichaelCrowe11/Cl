@@ -1,0 +1,18 @@
+{
+  "defaults": {
+    "timeout": 30000,
+    "wait": 500
+  },
+  "standard": "WCAG2AA",
+  "rules": [
+    "color-contrast",
+    "heading-order",
+    "skip-link",
+    "tabindex",
+    "link-name",
+    "button-name",
+    "image-alt",
+    "landmark-one-main",
+    "page-has-heading-one"
+  ]
+}

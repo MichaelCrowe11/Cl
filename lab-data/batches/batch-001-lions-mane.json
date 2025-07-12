@@ -1,0 +1,9 @@
+{
+  "id": "batch-001",
+  "species": "Hericium erinaceus",
+  "inoculated": "2025-07-12T11:13:19.694Z",
+  "status": "incubating",
+  "substrate": "Oak sawdust + bran",
+  "containers": 12,
+  "expectedHarvest": "2025-07-26T11:13:19.694Z"
+}
