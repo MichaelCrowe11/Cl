@@ -42,7 +42,16 @@
       "regex": "^(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))?(?:/)?$"
     }
   ],
-  "dynamicRoutes": [],
+  "dynamicRoutes": [
+    {
+      "page": "/api/security/[endpoint]",
+      "regex": "^/api/security/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPendpoint": "nxtPendpoint"
+      },
+      "namedRegex": "^/api/security/(?<nxtPendpoint>[^/]+?)(?:/)?$"
+    }
+  ],
   "staticRoutes": [
     {
       "page": "/",

@@ -1,4 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
+import OpenAI from 'openai'
+import Anthropic from '@anthropic-ai/sdk'
+import { qfolAnalyzer } from '@/lib/qfol'
 
 // AI Model Configuration Types
 interface AIRequest {
@@ -40,21 +43,15 @@ const MODEL_REGISTRY = {
     apiKey: process.env.OPENAI_API_KEY,
     type: 'openai',
   },
-  // Anthropic Claude Models
-  'claude-3-opus': {
-    name: 'Claude 3 Opus',
+  // Anthropic Claude Models (Latest)
+  'claude-3-5-sonnet-20241022': {
+    name: 'Claude 3.5 Sonnet',
     endpoint: process.env.ANTHROPIC_API_ENDPOINT || 'https://api.anthropic.com/v1/messages',
     apiKey: process.env.ANTHROPIC_API_KEY,
     type: 'anthropic',
   },
-  'claude-3-sonnet': {
-    name: 'Claude 3 Sonnet',
-    endpoint: process.env.ANTHROPIC_API_ENDPOINT || 'https://api.anthropic.com/v1/messages',
-    apiKey: process.env.ANTHROPIC_API_KEY,
-    type: 'anthropic',
-  },
-  'claude-3-haiku': {
-    name: 'Claude 3 Haiku',
+  'claude-3-5-haiku-20241022': {
+    name: 'Claude 3.5 Haiku',
     endpoint: process.env.ANTHROPIC_API_ENDPOINT || 'https://api.anthropic.com/v1/messages',
     apiKey: process.env.ANTHROPIC_API_KEY,
     type: 'anthropic',
@@ -68,10 +65,43 @@ const MODEL_REGISTRY = {
   },
 }
 
+// Initialize AI clients
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+  organization: process.env.OPENAI_ORG_ID,
+})
+
+const anthropic = new Anthropic({
+  apiKey: process.env.ANTHROPIC_API_KEY,
+})
+
 export async function POST(request: NextRequest) {
+  const startTime = Date.now()
+  const sessionId = request.headers.get('x-session-id') || `session_${Date.now()}`
+  
   try {
     const body: AIRequest = await request.json()
-    const { prompt, model = 'claude-3-opus', temperature = 0.3, max_tokens = 4096, system_prompt } = body
+    const { prompt, model = 'gpt-4', temperature = 0.3, max_tokens = 4096, system_prompt } = body
+
+    // Log QFOL query event
+    qfolAnalyzer.logEvent({
+      type: 'query',
+      sessionId,
+      data: {
+        input: prompt,
+        model,
+        metadata: { temperature, max_tokens }
+      }
+    })
+
+    // Check QFOL deployment gate
+    const deploymentCheck = qfolAnalyzer.shouldGateDeployment()
+    if (deploymentCheck.gate) {
+      return NextResponse.json(
+        { error: 'Service temporarily unavailable for safety review', reason: deploymentCheck.reason },
+        { status: 503 }
+      )
+    }
 
     // Validate model
     const modelConfig = MODEL_REGISTRY[model as keyof typeof MODEL_REGISTRY]
@@ -82,101 +112,83 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Prepare the request based on your AI model's API format
-    // This is a generic example - adjust based on your specific model
-    const aiRequest = {
-      messages: [
-        {
-          role: 'system',
-          content: system_prompt || 'You are an expert mycology assistant with deep knowledge of fungal biotechnology, substrate optimization, and cultivation techniques.'
-        },
-        {
-          role: 'user',
-          content: prompt
-        }
-      ],
-      model: model,
-      temperature: temperature,
-      max_tokens: max_tokens,
+    // Enhanced mycology system prompt with safety warnings
+    const systemPrompt = system_prompt || `You are an expert mycologist and AI assistant specializing in mushroom cultivation, identification, and research. You have deep knowledge of:
+
+- Mushroom cultivation techniques and substrates
+- Species identification and characteristics  
+- Growing conditions and environmental factors
+- Contamination prevention and treatment
+- Harvesting and post-harvest handling
+- Commercial and home cultivation methods
+- Medicinal and culinary mushroom properties
+
+IMPORTANT SAFETY GUIDELINES:
+- Always include safety warnings for potentially toxic species
+- Recommend consulting experts for wild mushroom identification
+- Emphasize proper sterilization and contamination prevention
+- Include disclaimers about medical claims
+- Prioritize food safety in all recommendations
+
+Provide accurate, practical, and safety-conscious advice with clear explanations and citations when possible.`
+
+    // Call AI model using proper SDKs
+    let responseContent: string
+    let usage: any
+
+    if (modelConfig.type === 'anthropic') {
+      const completion = await anthropic.messages.create({
+        model: model,
+        max_tokens: max_tokens,
+        temperature: temperature,
+        messages: [{ role: 'user', content: prompt }],
+        system: systemPrompt
+      })
+
+      responseContent = completion.content[0]?.type === 'text' ? completion.content[0].text : 'No response generated'
+      usage = {
+        prompt_tokens: completion.usage.input_tokens,
+        completion_tokens: completion.usage.output_tokens,
+        total_tokens: completion.usage.input_tokens + completion.usage.output_tokens,
+      }
+    } else {
+      // OpenAI
+      const completion = await openai.chat.completions.create({
+        model: model,
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: prompt }
+        ],
+        temperature: temperature,
+        max_tokens: max_tokens,
+      })
+
+      responseContent = completion.choices[0]?.message?.content || 'No response generated'
+      usage = completion.usage
     }
 
-    // Call your AI model based on type
-    if (modelConfig.endpoint) {
-      let response: Response
-      let requestBody: any
+    const responseTime = Date.now() - startTime
 
-      if (modelConfig.type === 'anthropic') {
-        // Anthropic Claude API format
-        requestBody = {
-          model: model,
-          messages: [
-            {
-              role: 'user',
-              content: prompt
-            }
-          ],
-          system: system_prompt || 'You are an expert mycology assistant with deep knowledge of fungal biotechnology, substrate optimization, and cultivation techniques.',
-          max_tokens: max_tokens,
-          temperature: temperature,
-        }
-
-        response = await fetch(modelConfig.endpoint, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-api-key': modelConfig.apiKey || '',
-            'anthropic-version': process.env.ANTHROPIC_API_VERSION || '2023-06-01',
-          },
-          body: JSON.stringify(requestBody),
-        })
-      } else {
-        // OpenAI API format (default)
-        requestBody = aiRequest
-
-        response = await fetch(modelConfig.endpoint, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${modelConfig.apiKey}`,
-            ...(process.env.OPENAI_ORG_ID && { 'OpenAI-Organization': process.env.OPENAI_ORG_ID }),
-          },
-          body: JSON.stringify(requestBody),
-        })
+    // Log QFOL response event
+    qfolAnalyzer.logEvent({
+      type: 'response',
+      sessionId,
+      data: {
+        input: prompt,
+        output: responseContent,
+        model,
+        tokensUsed: usage?.total_tokens,
+        responseTime
       }
+    })
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}))
-        console.error('AI API Error:', errorData)
-        throw new Error(`AI model error: ${response.statusText}`)
-      }
-
-      const data = await response.json()
-      
-      // Format response based on model type
-      let responseContent: string
-      let usage: any
-
-      if (modelConfig.type === 'anthropic') {
-        responseContent = data.content?.[0]?.text || 'No response generated'
-        usage = {
-          prompt_tokens: data.usage?.input_tokens || 0,
-          completion_tokens: data.usage?.output_tokens || 0,
-          total_tokens: (data.usage?.input_tokens || 0) + (data.usage?.output_tokens || 0),
-        }
-      } else {
-        // OpenAI format
-        responseContent = data.choices?.[0]?.message?.content || 'No response generated'
-        usage = data.usage
-      }
-
-      const aiResponse: AIResponse = {
-        response: responseContent,
-        model: modelConfig.name,
-        usage: usage,
-      }
-
-      return NextResponse.json(aiResponse)
+    const aiResponse: AIResponse = {
+      response: responseContent,
+      model: modelConfig.name,
+      usage: usage,
     }
+
+    return NextResponse.json(aiResponse)
 
     // Fallback for development/testing
     const mockResponse: AIResponse = {

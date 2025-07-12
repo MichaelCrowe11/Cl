@@ -4,32 +4,48 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const message = body.message;
+    const { message, config } = body;
 
     if (!message) {
       return NextResponse.json({ error: 'Message is required' }, { status: 400 });
     }
 
-    // Determine backend URL: use env var or fallback to the request origin
-    const origin = process.env.NEXT_PUBLIC_BACKEND_URL || new URL(req.url).origin;
+    // Use the working AI endpoint instead of missing Python backend
+    const origin = new URL(req.url).origin;
 
-    // Forward the request to the Python backend
-    const backendResponse = await fetch(
-      `${origin}/ai/chat`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ message }),
-      }
-    );
+    // Create mycology-specialized system prompt
+    const systemPrompt = `You are Crowe Logic GPT, an advanced AI assistant specializing in mycology, fungal biology, biotechnology, and environmental applications. You have deep expertise in:
 
-    const data = await backendResponse.json();
-    if (!backendResponse.ok) {
-      return NextResponse.json({ error: data.error || 'Backend error' }, { status: backendResponse.status });
+- Fungal identification and taxonomy
+- Cultivation techniques and protocols
+- Biotechnology and fermentation
+- Environmental applications (mycoremediation, carbon sequestration)
+- Research methodologies and data analysis
+- Food safety and regulatory compliance
+
+Provide scientifically accurate, detailed responses with practical applications. When discussing protocols, include specific steps. For research topics, cite relevant principles and methodologies.`;
+
+    // Forward to the working AI endpoint
+    const aiResponse = await fetch(`${origin}/api/ai`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        prompt: message,
+        model: config?.modelName || 'gpt-4',
+        temperature: config?.temperature || 0.3,
+        max_tokens: config?.maxTokens || 4096,
+        system_prompt: systemPrompt
+      }),
+    });
+
+    if (!aiResponse.ok) {
+      const errorData = await aiResponse.json();
+      return NextResponse.json({ error: errorData.error || 'AI service error' }, { status: aiResponse.status });
     }
 
+    const data = await aiResponse.json();
     return NextResponse.json({ response: data.response });
 
   } catch (error) {

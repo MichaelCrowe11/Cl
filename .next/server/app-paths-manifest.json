@@ -2,5 +2,7 @@
   "/_not-found/page": "app/_not-found/page.js",
   "/api/ai/route": "app/api/ai/route.js",
   "/api/chat/route": "app/api/chat/route.js",
+  "/api/qfol/route": "app/api/qfol/route.js",
+  "/api/security/[endpoint]/route": "app/api/security/[endpoint]/route.js",
   "/page": "app/page.js"
 }
