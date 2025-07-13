@@ -13,6 +13,7 @@ import {
   Loader2, 
   RefreshCw,
   User,
+  Check,
   Bot
 } from 'lucide-react'
 import { LoadingSpinner } from '@/components/ui/loading'

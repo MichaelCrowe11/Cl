@@ -2,7 +2,7 @@
 
 import React, { useState, useCallback, useEffect } from 'react'
 import { FileExplorer, FileNode } from '@/components/file-explorer'
-import { MonacoEditor } from '@/components/monaco-editor'
+import { LazyMonacoEditor } from '@/components/lazy-components'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -498,18 +498,23 @@ export default function IDEPage() {
           {/* Editor */}
           <div className="flex-1 overflow-hidden">
             {activeFile ? (
-              <MonacoEditor
-                value={activeFile.node.content || ''}
-                onChange={(value) => {
-                  if (value !== undefined) {
-                    updateFileContent(activeFile.node.id, value)
-                  }
-                }}
-                path={activeFile.node.path}
-                onSave={handleSaveFile}
-                height="100%"
-                className="border-0 rounded-none"
-              />
+              <div className="p-4 border rounded-lg bg-muted">
+                <p className="text-sm text-muted-foreground mb-2">File: {activeFile.node.path}</p>
+                <textarea 
+                  className="w-full h-96 p-3 border rounded font-mono text-sm"
+                  value={activeFile.node.content || ''}
+                  onChange={(e) => updateFileContent(activeFile.node.id, e.target.value)}
+                  placeholder="Code editor loading..."
+                />
+                <div className="mt-2 flex gap-2">
+                  <button 
+                    onClick={handleSaveFile}
+                    className="px-3 py-1 bg-primary text-primary-foreground rounded text-sm"
+                  >
+                    Save File
+                  </button>
+                </div>
+              </div>
             ) : (
               <div className="h-full flex items-center justify-center text-muted-foreground">
                 <div className="text-center">

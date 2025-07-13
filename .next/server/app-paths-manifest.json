@@ -1,1 +1,20 @@
-{}
+{
+  "/_not-found/page": "app/_not-found/page.js",
+  "/api/ai/route": "app/api/ai/route.js",
+  "/api/chat/route": "app/api/chat/route.js",
+  "/api/files/route": "app/api/files/route.js",
+  "/api/ml/route": "app/api/ml/route.js",
+  "/api/qfol/route": "app/api/qfol/route.js",
+  "/api/terminal/route": "app/api/terminal/route.js",
+  "/api/security/[endpoint]/route": "app/api/security/[endpoint]/route.js",
+  "/auth/callback/page": "app/auth/callback/page.js",
+  "/auth/login/page": "app/auth/login/page.js",
+  "/auth/register/page": "app/auth/register/page.js",
+  "/landing/page": "app/landing/page.js",
+  "/page": "app/page.js",
+  "/dashboard/page": "app/dashboard/page.js",
+  "/chat/page": "app/chat/page.js",
+  "/signin/page": "app/signin/page.js",
+  "/vision/page": "app/vision/page.js",
+  "/ide/page": "app/ide/page.js"
+}

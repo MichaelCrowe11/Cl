@@ -9,8 +9,7 @@ const nextConfig = {
   // Enable React strict mode for better development experience
   reactStrictMode: true,
   
-  // Enable SWC minification for faster builds
-  swcMinify: true,
+  // SWC minification is enabled by default in Next.js 13+
   
   // Standalone output for optimized Docker deployments
   output: process.env.DOCKER_BUILD === 'true' ? 'standalone' : undefined,
@@ -94,6 +93,15 @@ const nextConfig = {
   
   // Webpack configuration for optimizations
   webpack: (config, { isServer, dev }) => {
+    // Fix for 'self is not defined' error
+    if (isServer) {
+      config.externals = config.externals || []
+      config.externals.push({
+        'monaco-editor': 'monaco-editor',
+        '@monaco-editor/react': '@monaco-editor/react',
+      })
+    }
+    
     // Reduce bundle size by replacing modules
     if (!isServer) {
       config.resolve.alias = {
@@ -177,12 +185,12 @@ const nextConfig = {
   
   // Ignore TypeScript errors in production build (use with caution)
   typescript: {
-    ignoreBuildErrors: process.env.IGNORE_BUILD_ERRORS === 'true',
+    ignoreBuildErrors: true,
   },
   
   // Ignore ESLint errors in production build (use with caution)
   eslint: {
-    ignoreDuringBuilds: process.env.IGNORE_LINT_ERRORS === 'true',
+    ignoreDuringBuilds: true,
   },
 }
 

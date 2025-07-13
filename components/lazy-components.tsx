@@ -10,7 +10,7 @@ const LoadingSpinner = () => (
 
 // Lazy load heavy components for better performance
 export const LazyMonacoEditor = dynamic(
-  () => import('@/components/monaco-editor').then(mod => mod.MonacoEditor),
+  () => import('@/components/monaco-editor').then(mod => ({ default: mod.MonacoEditor })),
   {
     loading: LoadingSpinner,
     ssr: false, // Monaco doesn't support SSR
