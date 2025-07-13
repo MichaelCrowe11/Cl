@@ -24,7 +24,8 @@ import {
   Users,
   FileText,
   Activity,
-  Settings
+  Settings,
+  Info
 } from 'lucide-react'
 
 // =============================================
