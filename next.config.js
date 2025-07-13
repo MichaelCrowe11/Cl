@@ -95,11 +95,24 @@ const nextConfig = {
   webpack: (config, { isServer, dev }) => {
     // Fix for 'self is not defined' error
     if (isServer) {
+      // Provide global 'self' for libraries that expect it
+      const webpack = require('webpack');
+      config.plugins = config.plugins || [];
+      // Ensure that any reference to the global `self` resolves to `globalThis` at runtime as well
+      config.plugins.push(new webpack.DefinePlugin({ self: 'globalThis' }))
+      config.plugins.push(new webpack.ProvidePlugin({ self: 'globalThis' }))
+      // Ensure Webpack uses a Node-friendly global object instead of `self` in chunks like supabase.js
+      if (!config.output) {
+        config.output = {}
+      }
+      config.output.globalObject = 'globalThis'
       config.externals = config.externals || []
-      config.externals.push({
-        'monaco-editor': 'monaco-editor',
-        '@monaco-editor/react': '@monaco-editor/react',
-      })
+      config.externals.push('monaco-editor', '@monaco-editor/react')
+      config.resolve.alias = {
+        ...(config.resolve.alias || {}),
+        'monaco-editor': false,
+        '@monaco-editor/react': false,
+      }
     }
     
     // Reduce bundle size by replacing modules
@@ -114,8 +127,8 @@ const nextConfig = {
       }
     }
     
-    // Enable webpack 5 optimizations
-    if (!dev) {
+    // Enable webpack optimizations only for client build
+    if (!dev && !isServer) {
       config.optimization = {
         ...config.optimization,
         moduleIds: 'deterministic',

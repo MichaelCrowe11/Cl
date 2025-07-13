@@ -1,6 +1,10 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
+// Polyfill global `self` for Node.js environment to satisfy libraries that expect a browser-like global
+if (typeof (globalThis as any).self === 'undefined') {
+  ;(globalThis as any).self = globalThis
+}
 import { ThemeProvider } from '@/components/theme-provider'
 import { AuthProvider } from '@/contexts/auth-context'
 import { PerformanceProvider } from '@/components/performance-provider'
