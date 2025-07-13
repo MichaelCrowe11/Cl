@@ -1,13 +1,24 @@
 "use client"
 
-import { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Send, Copy, Download, Check } from 'lucide-react'
+import { 
+  Send, 
+  Copy, 
+  Download, 
+  Loader2, 
+  RefreshCw,
+  User,
+  Bot
+} from 'lucide-react'
 import { LoadingSpinner } from '@/components/ui/loading'
+import { useAuth } from '@/contexts/auth-context'
+import { supabase } from '@/lib/supabase'
+import { useTheme } from 'next-themes'
 import { cn } from '@/lib/utils'
 
 interface Message {
@@ -47,8 +58,11 @@ What would you like to explore today?`,
   const [input, setInput] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [copiedId, setCopiedId] = useState<string | null>(null)
+  const [sessionId, setSessionId] = useState<string | null>(null)
   const scrollAreaRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
+  const { user } = useAuth()
+  const { theme } = useTheme()
 
   const [aiConfig, setAiConfig] = useState<AIModelConfig>({
     modelName: 'Crowe Logic GPT',
@@ -56,74 +70,193 @@ What would you like to explore today?`,
     maxTokens: 4096,
   })
 
+  // Create or load chat session
+  useEffect(() => {
+    if (user) {
+      loadOrCreateSession()
+    }
+  }, [user])
+
   useEffect(() => {
     if (scrollAreaRef.current) {
       scrollAreaRef.current.scrollTop = scrollAreaRef.current.scrollHeight
     }
   }, [messages])
 
-  const handleSend = async () => {
+  const loadOrCreateSession = async () => {
+    if (!user) return
+
+    try {
+      // Try to get the most recent session
+      const { data: sessions, error } = await supabase
+        .from('chat_sessions')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('updated_at', { ascending: false })
+        .limit(1)
+
+      if (error) throw error
+
+      if (sessions && sessions.length > 0) {
+        // Load existing session
+        const session = sessions[0]
+        setSessionId(session.id)
+        
+        // Load messages for this session
+        const { data: sessionMessages, error: msgError } = await supabase
+          .from('chat_messages')
+          .select('*')
+          .eq('session_id', session.id)
+          .order('created_at', { ascending: true })
+
+        if (msgError) throw msgError
+
+        if (sessionMessages && sessionMessages.length > 0) {
+          setMessages(sessionMessages.map((msg: any) => ({
+            id: msg.id,
+            role: msg.role,
+            content: msg.content,
+            timestamp: new Date(msg.created_at),
+          })))
+        }
+      } else {
+        // Create new session
+        const { data: newSession, error: createError } = await supabase
+          .from('chat_sessions')
+          .insert({
+            user_id: user.id,
+            title: 'New Chat',
+            model: aiConfig.modelName,
+          })
+          .select()
+          .single()
+
+        if (createError) throw createError
+        setSessionId(newSession.id)
+      }
+    } catch (error) {
+      console.error('Error managing chat session:', error)
+    }
+  }
+
+  const saveMessage = async (message: Message) => {
+    if (!user || !sessionId) return
+
+    try {
+      await supabase
+        .from('chat_messages')
+        .insert({
+          session_id: sessionId,
+          role: message.role,
+          content: message.content,
+        })
+    } catch (error) {
+      console.error('Error saving message:', error)
+    }
+  }
+
+  const handleSendMessage = async () => {
     if (!input.trim() || isLoading) return
 
     const userMessage: Message = {
-      id: Date.now().toString(),
+      id: `user-${Date.now()}`,
       role: 'user',
-      content: input,
+      content: input.trim(),
       timestamp: new Date(),
     }
 
-    setMessages((prev) => [...prev, userMessage])
+    setMessages(prev => [...prev, userMessage])
     setInput('')
     setIsLoading(true)
 
-    const assistantMessage: Message = {
-      id: (Date.now() + 1).toString(),
-      role: 'assistant',
-      content: '',
-      timestamp: new Date(),
-    }
+    // Save user message
+    await saveMessage(userMessage)
 
     try {
-      const res = await fetch('/api/chat', {
+      const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: userMessage.content }),
+        body: JSON.stringify({
+          message: userMessage.content,
+          config: aiConfig,
+          sessionId: sessionId,
+          userId: user?.id,
+        }),
       })
-      const data = await res.json()
-      if (!res.ok) throw new Error(data.error || 'Backend error')
-      assistantMessage.content = data.response
-    } catch (error) {
-      console.error('AI Model Error:', error)
-      assistantMessage.content = 'Sorry, an error occurred connecting to the AI service.'
-    }
 
-    setMessages((prev) => [...prev, assistantMessage])
-    setIsLoading(false)
+      if (!response.ok) {
+        throw new Error('Failed to get response')
+      }
+
+      const data = await response.json()
+      
+      const assistantMessage: Message = {
+        id: `assistant-${Date.now()}`,
+        role: 'assistant',
+        content: data.response,
+        timestamp: new Date(),
+      }
+
+      setMessages(prev => [...prev, assistantMessage])
+      
+      // Save assistant message
+      await saveMessage(assistantMessage)
+      
+      // Update session title if it's still "New Chat"
+      if (sessionId && messages.length === 1) {
+        const title = userMessage.content.slice(0, 50) + (userMessage.content.length > 50 ? '...' : '')
+        await supabase
+          .from('chat_sessions')
+          .update({ title, updated_at: new Date().toISOString() })
+          .eq('id', sessionId)
+      }
+    } catch (error) {
+      console.error('Error:', error)
+      const errorMessage: Message = {
+        id: `error-${Date.now()}`,
+        role: 'assistant',
+        content: 'Sorry, I encountered an error. Please try again.',
+        timestamp: new Date(),
+      }
+      setMessages(prev => [...prev, errorMessage])
+    } finally {
+      setIsLoading(false)
+    }
   }
 
-  const handleCopy = async (content: string, id: string) => {
+  const handleCopyMessage = async (content: string, id: string) => {
     await navigator.clipboard.writeText(content)
     setCopiedId(id)
     setTimeout(() => setCopiedId(null), 2000)
   }
 
-  const handleDownload = (content: string) => {
-    const blob = new Blob([content], { type: 'text/plain' })
+  const handleDownloadConversation = () => {
+    const conversationText = messages
+      .map(msg => `${msg.role.toUpperCase()} (${msg.timestamp.toLocaleString()}):\n${msg.content}\n`)
+      .join('\n---\n\n')
+    
+    const blob = new Blob([conversationText], { type: 'text/plain' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = `crowe-logic-gpt-${Date.now()}.txt`
-    document.body.appendChild(a)
+    a.download = `crowe-logic-conversation-${new Date().toISOString().split('T')[0]}.txt`
     a.click()
-    document.body.removeChild(a)
     URL.revokeObjectURL(url)
   }
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
-      handleSend()
+      handleSendMessage()
     }
+  }
+
+  const formatTimestamp = (date: Date) => {
+    return new Intl.DateTimeFormat('en-US', {
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: true,
+    }).format(date)
   }
 
   return (
@@ -218,7 +351,7 @@ What would you like to explore today?`,
                           <Button
                             variant="ghost"
                             size="sm"
-                            onClick={() => handleCopy(message.content, message.id)}
+                            onClick={() => handleCopyMessage(message.content, message.id)}
                             className="h-8 px-2"
                           >
                             {copiedId === message.id ? (
@@ -230,7 +363,7 @@ What would you like to explore today?`,
                           <Button
                             variant="ghost"
                             size="sm"
-                            onClick={() => handleDownload(message.content)}
+                            onClick={() => handleDownloadConversation()}
                             className="h-8 px-2"
                           >
                             <Download className="h-4 w-4" />
@@ -285,7 +418,7 @@ What would you like to explore today?`,
               disabled={isLoading}
             />
             <Button
-              onClick={handleSend}
+              onClick={handleSendMessage}
               disabled={!input.trim() || isLoading}
               className="absolute right-2 top-2 h-8 w-8 p-0 rounded-lg bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300"
             >

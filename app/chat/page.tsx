@@ -1,18 +1,18 @@
 'use client'
 
-import { useEffect } from 'react'
+import { UnifiedChatInterface } from '@/components/unified-chat-interface'
 import { useAuth } from '@/contexts/auth-context'
 import { useRouter } from 'next/navigation'
-import { LandingPage } from '@/components/landing-page'
+import { useEffect } from 'react'
 import { Loader2 } from 'lucide-react'
 
-export default function Home() {
+export default function ChatPage() {
   const { user, loading } = useAuth()
   const router = useRouter()
 
   useEffect(() => {
-    if (!loading && user) {
-      router.push('/dashboard')
+    if (!loading && !user) {
+      router.push('/auth/login')
     }
   }, [user, loading, router])
 
@@ -24,9 +24,13 @@ export default function Home() {
     )
   }
 
-  if (user) {
-    return null // Redirecting...
+  if (!user) {
+    return null // Redirecting to login...
   }
 
-  return <LandingPage />
-}
+  return (
+    <div className="h-screen flex flex-col">
+      <UnifiedChatInterface />
+    </div>
+  )
+} 

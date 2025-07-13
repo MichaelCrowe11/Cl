@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import { ThemeProvider } from '@/components/theme-provider'
+import { AuthProvider } from '@/contexts/auth-context'
+import { PerformanceProvider } from '@/components/performance-provider'
 import Sidebar from '@/components/Sidebar'
 import ToolsPanel from '@/components/ToolsPanel'
 import { CroweBackdrop } from '@/components/ui/loading'
@@ -34,14 +36,18 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <CroweBackdrop opacity={0.02} />
-          <div className="flex h-screen relative bg-white dark:bg-gray-900">
-            <Sidebar />
-            <main className="flex-1 overflow-auto">
-              {children}
-            </main>
-            <ToolsPanel />
-          </div>
+          <PerformanceProvider>
+            <AuthProvider>
+              <CroweBackdrop opacity={0.02} />
+              <div className="flex h-screen relative bg-white dark:bg-gray-900">
+                <Sidebar />
+                <main className="flex-1 overflow-auto">
+                  {children}
+                </main>
+                <ToolsPanel />
+              </div>
+            </AuthProvider>
+          </PerformanceProvider>
         </ThemeProvider>
       </body>
     </html>
