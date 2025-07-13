@@ -3,6 +3,12 @@
   "/api/ai/route": "/api/ai",
   "/api/chat/route": "/api/chat",
   "/api/qfol/route": "/api/qfol",
+  "/api/files/route": "/api/files",
+  "/api/terminal/route": "/api/terminal",
   "/api/security/[endpoint]/route": "/api/security/[endpoint]",
-  "/page": "/"
+  "/dashboard/page": "/dashboard",
+  "/ide/page": "/ide",
+  "/landing/page": "/landing",
+  "/page": "/",
+  "/signin/page": "/signin"
 }

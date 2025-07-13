@@ -1,0 +1,39 @@
+/* SVG representation of the Crowe Logic official logo for web use */
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <radialGradient id="purpleGradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#7C3AED"/>
+      <stop offset="100%" style="stop-color:#4C1D95"/>
+    </radialGradient>
+    <linearGradient id="goldBorder" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F59E0B"/>
+      <stop offset="50%" style="stop-color:#D97706"/>
+      <stop offset="100%" style="stop-color:#B45309"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Gold border -->
+  <circle cx="50" cy="50" r="49" fill="url(#goldBorder)" stroke="#92400E" stroke-width="1"/>
+  
+  <!-- Purple background -->
+  <circle cx="50" cy="50" r="45" fill="url(#purpleGradient)"/>
+  
+  <!-- Stylized portrait silhouette -->
+  <g fill="white" opacity="0.9">
+    <!-- Face shape -->
+    <ellipse cx="50" cy="40" rx="18" ry="22"/>
+    
+    <!-- Hair -->
+    <path d="M32 25 C32 15, 42 10, 50 10 C58 10, 68 15, 68 25 C68 35, 65 40, 60 45 L40 45 C35 40, 32 35, 32 25 Z"/>
+    
+    <!-- Beard -->
+    <path d="M38 55 C38 50, 42 48, 50 48 C58 48, 62 50, 62 55 C62 65, 58 70, 50 72 C42 70, 38 65, 38 55 Z"/>
+    
+    <!-- Mustache -->
+    <ellipse cx="50" cy="52" rx="8" ry="3"/>
+  </g>
+  
+  <!-- Subtle highlights -->
+  <circle cx="45" cy="30" r="2" fill="white" opacity="0.3"/>
+  <circle cx="55" cy="30" r="2" fill="white" opacity="0.3"/>
+</svg>

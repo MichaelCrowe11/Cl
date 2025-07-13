@@ -1,64 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    /* Crowe Logic brand colors - extracted from official logos */
+    /* Classic Light Theme - Clean Black & White */
     --background: 0 0% 100%;
-    --foreground: 220 15% 15%;
+    --foreground: 0 0% 0%;
     --card: 0 0% 100%;
-    --card-foreground: 220 15% 15%;
+    --card-foreground: 0 0% 0%;
     --popover: 0 0% 100%;
-    --popover-foreground: 220 15% 15%;
-    --primary: 215 85% 45%;  /* Crowe Logic Deep Blue */
+    --popover-foreground: 0 0% 0%;
+    --primary: 0 0% 0%;  /* Pure Black */
     --primary-foreground: 0 0% 100%;
-    --secondary: 25 85% 55%;  /* Crowe Logic Orange */
-    --secondary-foreground: 0 0% 100%;
-    --muted: 220 10% 96%;
-    --muted-foreground: 220 10% 45%;
-    --accent: 25 85% 55%;  /* Crowe Logic Orange */
-    --accent-foreground: 0 0% 100%;
+    --secondary: 0 0% 96%;  /* Light Gray */
+    --secondary-foreground: 0 0% 0%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 45%;
+    --accent: 0 0% 96%;  /* Light Gray Accent */
+    --accent-foreground: 0 0% 0%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
-    --border: 220 10% 90%;
-    --input: 220 5% 95%;
-    --ring: 215 85% 45%;
+    --border: 0 0% 90%;
+    --input: 0 0% 96%;
+    --ring: 0 0% 0%;
     --radius: 0.75rem;
-    
-    /* Custom Crowe Logic brand properties */
-    --crowe-blue: 215 85% 45%;
-    --crowe-blue-dark: 215 85% 35%;
-    --crowe-orange: 25 85% 55%;
-    --crowe-orange-light: 25 85% 65%;
-    --crowe-gray: 220 15% 15%;
-    --crowe-gray-light: 220 10% 65%;
-    --gradient-primary: 215 85% 45%;
-    --gradient-secondary: 25 85% 55%;
-    --shadow-crowe: 0 4px 20px 0 rgb(0 0 0 / 0.08);
-    --shadow-crowe-lg: 0 8px 40px 0 rgb(0 0 0 / 0.12);
   }
 
   .dark {
-    --background: 220 25% 8%;
-    --foreground: 220 10% 95%;
-    --card: 220 20% 12%;
-    --card-foreground: 220 10% 95%;
-    --popover: 220 20% 12%;
-    --popover-foreground: 220 10% 95%;
-    --primary: 215 85% 55%;
-    --primary-foreground: 220 25% 8%;
-    --secondary: 25 85% 60%;
-    --secondary-foreground: 220 25% 8%;
-    --muted: 220 15% 18%;
-    --muted-foreground: 220 10% 60%;
-    --accent: 25 85% 60%;
-    --accent-foreground: 220 25% 8%;
-    --destructive: 0 62% 30%;
-    --destructive-foreground: 0 0% 95%;
-    --border: 220 15% 20%;
-    --input: 220 15% 15%;
-    --ring: 215 85% 55%;
+    /* Classic Dark Theme - Pure Black & White */
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+    --card: 0 0% 4%;
+    --card-foreground: 0 0% 100%;
+    --popover: 0 0% 4%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 0 0% 100%;  /* Pure White */
+    --primary-foreground: 0 0% 0%;
+    --secondary: 0 0% 8%;  /* Dark Gray */
+    --secondary-foreground: 0 0% 100%;
+    --muted: 0 0% 8%;
+    --muted-foreground: 0 0% 60%;
+    --accent: 0 0% 8%;  /* Dark Gray Accent */
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 62% 50%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 15%;
+    --input: 0 0% 8%;
+    --ring: 0 0% 100%;
   }
 }
 
@@ -77,7 +68,7 @@
 }
 
 @layer components {
-  /* Crowe Logic GPT-style components */
+  /* Classic IDE components */
   .chat-container {
     @apply max-w-4xl mx-auto;
   }
@@ -86,56 +77,12 @@
     @apply rounded-2xl px-4 py-3 shadow-sm;
   }
   
-  .crowe-gradient {
-    background: linear-gradient(135deg, hsl(var(--crowe-blue)), hsl(var(--crowe-orange)));
-  }
-  
-  .crowe-gradient-reverse {
-    background: linear-gradient(135deg, hsl(var(--crowe-orange)), hsl(var(--crowe-blue)));
-  }
-  
   .clean-card {
     @apply bg-card rounded-xl border shadow-sm p-6 transition-all duration-200 hover:shadow-md;
-    box-shadow: var(--shadow-crowe);
-  }
-  
-  .clean-card:hover {
-    box-shadow: var(--shadow-crowe-lg);
   }
   
   .input-clean {
     @apply bg-input border-0 rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary/20 transition-all;
-  }
-  
-  /* Crowe Logic logo styles */
-  .logo-container {
-    @apply relative w-10 h-10 rounded-full overflow-hidden;
-    background: linear-gradient(135deg, hsl(var(--crowe-blue)), hsl(var(--crowe-orange)));
-  }
-  
-  .logo-fallback {
-    @apply flex items-center justify-center w-full h-full text-white font-semibold text-lg;
-  }
-  
-  /* Official Crowe Logic branding */
-  .crowe-logo {
-    @apply rounded-full;
-    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.1));
-  }
-  
-  .loading-icon {
-    @apply w-8 h-8 animate-spin;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
-  }
-  
-  /* Crowe Logic branded backdrop */
-  .crowe-backdrop {
-    background-image: url('/crowe-logo-secondary.png');
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    opacity: 0.03;
-    pointer-events: none;
   }
 }
 

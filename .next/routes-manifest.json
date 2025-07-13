@@ -64,6 +64,30 @@
       "regex": "^/_not\\-found(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/_not\\-found(?:/)?$"
+    },
+    {
+      "page": "/dashboard",
+      "regex": "^/dashboard(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/dashboard(?:/)?$"
+    },
+    {
+      "page": "/ide",
+      "regex": "^/ide(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/ide(?:/)?$"
+    },
+    {
+      "page": "/landing",
+      "regex": "^/landing(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/landing(?:/)?$"
+    },
+    {
+      "page": "/signin",
+      "regex": "^/signin(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/signin(?:/)?$"
     }
   ],
   "dataRoutes": [],

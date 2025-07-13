@@ -15,7 +15,40 @@ import {
   Moon,
   MoreHorizontal
 } from "lucide-react";
-import { useState, useRef, useEffect } from "react";
+import {     <div className="flex h-screen w-screen bg-white text-gray-900 font-sans">
+      {/* New File Dialog */}
+      {showNewFileDialog && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-96 max-w-full">
+            <h3 className="text-lg font-medium mb-4">Create New File</h3>
+            <input
+              type="text"
+              placeholder="Enter file name..."
+              value={newFileName}
+              onChange={(e) => setNewFileName(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && createNewFile()}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md mb-4"
+              autoFocus
+            />
+            <div className="flex gap-2 justify-end">
+              <button
+                onClick={() => setShowNewFileDialog(false)}
+                className="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={createNewFile}
+                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+              >
+                Create
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ───────────────────────── HEADER BAR ───────────────────────── */}eState, useRef, useEffect } from "react";
 
 // Types
 interface Message {
@@ -38,9 +71,15 @@ interface SidebarItem {
 // -------------------------------------------------------------------------
 
 export default function CroweLogicLabInterface() {
+  const [isMounted, setIsMounted] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isTerminalMaximized, setIsTerminalMaximized] = useState(false);
   const [expandedSections, setExpandedSections] = useState(new Set(['batches', 'projects', 'sops']));
+  
+  // Handle client-side mounting to prevent hydration mismatch
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
   
   // Chat state
   const [messages, setMessages] = useState<Message[]>([
@@ -51,10 +90,56 @@ export default function CroweLogicLabInterface() {
       timestamp: new Date()
     }
   ]);
-  const [inputValue, setInputValue] = useState<string>('');
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [inputValue, setInputValue] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  
+  // File management state
+  const [files, setFiles] = useState<any[]>([]);
+  const [selectedFile, setSelectedFile] = useState<any>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [showNewFileDialog, setShowNewFileDialog] = useState(false);
+  const [newFileName, setNewFileName] = useState('');
 
+  // Load files on component mount
+  useEffect(() => {
+    loadFiles();
+  }, []);
+
+  const loadFiles = async () => {
+    try {
+      const response = await fetch('/api/files?action=list');
+      const data = await response.json();
+      setFiles(data.files || []);
+    } catch (error) {
+      console.error('Failed to load files:', error);
+    }
+  };
+
+  const createNewFile = async () => {
+    if (!newFileName.trim()) return;
+    
+    try {
+      const response = await fetch('/api/files', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'create',
+          name: newFileName,
+          content: '// New file created in Crowe Logic AI Lab\n'
+        })
+      });
+      
+      if (response.ok) {
+        await loadFiles();
+        setNewFileName('');
+        setShowNewFileDialog(false);
+      }
+    } catch (error) {
+      console.error('Failed to create file:', error);
+    }
+  };
+  
   const sidebarItems: SidebarItem[] = [
     {
       id: 'batches',
@@ -168,6 +253,11 @@ export default function CroweLogicLabInterface() {
       {/* ───────────────────────── HEADER ───────────────────────── */}
       <div className="absolute top-0 left-0 right-0 h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6 z-10">
         <div className="flex items-center gap-4">
+          <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center flex-shrink-0">
+            <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
+              <span className="text-blue-600 text-sm font-bold">C</span>
+            </div>
+          </div>
           <h1 className="text-xl font-semibold text-gray-900">Crowe Logic AI</h1>
         </div>
         <div className="flex items-center gap-6">
@@ -189,10 +279,18 @@ export default function CroweLogicLabInterface() {
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-medium text-gray-900">Lab Explorer</h2>
               <div className="flex items-center gap-2">
-                <button className="p-1.5 rounded hover:bg-gray-200 transition-colors">
+                <button 
+                  onClick={() => setShowNewFileDialog(true)}
+                  className="p-1.5 rounded hover:bg-gray-200 transition-colors"
+                  title="Create new file"
+                >
                   <Plus className="w-4 h-4 text-gray-600" />
                 </button>
-                <button className="p-1.5 rounded hover:bg-gray-200 transition-colors">
+                <button 
+                  onClick={() => setSearchQuery(searchQuery ? '' : 'search')}
+                  className="p-1.5 rounded hover:bg-gray-200 transition-colors"
+                  title="Search files"
+                >
                   <Search className="w-4 h-4 text-gray-600" />
                 </button>
               </div>
@@ -201,6 +299,41 @@ export default function CroweLogicLabInterface() {
 
           {/* Sidebar Content */}
           <div className="flex-1 overflow-y-auto p-4">
+            {/* Search Input */}
+            {searchQuery && (
+              <div className="mb-4">
+                <input
+                  type="text"
+                  placeholder="Search files..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
+                />
+              </div>
+            )}
+            
+            {/* Files Section */}
+            <div className="mb-6">
+              <h3 className="text-sm font-medium text-gray-700 mb-2">Workspace Files</h3>
+              <div className="space-y-1">
+                {files.map(file => (
+                  <div
+                    key={file.path}
+                    onClick={() => setSelectedFile(file)}
+                    className={`flex items-center gap-2 p-2 rounded cursor-pointer transition-colors ${
+                      selectedFile?.path === file.path ? 'bg-blue-100' : 'hover:bg-gray-100'
+                    }`}
+                  >
+                    <FileText className="w-4 h-4 text-gray-500" />
+                    <span className="text-sm text-gray-700 truncate">{file.name}</span>
+                  </div>
+                ))}
+                {files.length === 0 && (
+                  <div className="text-sm text-gray-500 italic">No files found</div>
+                )}
+              </div>
+            </div>
+            
             <div className="space-y-2">
               {sidebarItems.map(item => {
                 const isExpanded = expandedSections.has(item.id);
@@ -238,8 +371,10 @@ export default function CroweLogicLabInterface() {
           {/* Top Navigation Bar */}
           <div className="h-14 bg-white border-b border-gray-200 flex items-center justify-between px-6">
             <div className="flex items-center gap-1">
-              <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center">
-                <span className="text-white text-sm font-medium">CL</span>
+              <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center">
+                <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center">
+                  <span className="text-blue-600 text-xs font-bold">C</span>
+                </div>
               </div>
               <span className="ml-3 font-medium text-gray-900">Crowe Logic AI</span>
             </div>
@@ -279,10 +414,14 @@ export default function CroweLogicLabInterface() {
                 <div className="max-w-4xl mx-auto space-y-6">
                   {messages.map(message => (
                     <div key={message.id} className="flex gap-4">
-                      <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center flex-shrink-0">
-                        <span className="text-white text-sm font-medium">
-                          {message.type === 'assistant' ? 'CL' : 'You'}
-                        </span>
+                      <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center flex-shrink-0">
+                        {message.type === 'assistant' ? (
+                          <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center">
+                            <span className="text-blue-600 text-xs font-bold">C</span>
+                          </div>
+                        ) : (
+                          <span className="text-white text-sm font-medium">You</span>
+                        )}
                       </div>
                       <div className="flex-1">
                         <div className="text-sm text-gray-500 mb-2">
@@ -292,15 +431,21 @@ export default function CroweLogicLabInterface() {
                           {message.content}
                         </div>
                         <div className="text-xs text-gray-400 mt-2">
-                          {message.timestamp.toLocaleTimeString()}
+                          {isMounted ? message.timestamp.toLocaleTimeString('en-US', { 
+                            hour: '2-digit', 
+                            minute: '2-digit',
+                            hour12: true 
+                          }) : '--:--'}
                         </div>
                       </div>
                     </div>
                   ))}
                   {isLoading && (
                     <div className="flex gap-4">
-                      <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center flex-shrink-0">
-                        <span className="text-white text-sm font-medium">CL</span>
+                      <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center flex-shrink-0">
+                        <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center">
+                          <span className="text-blue-600 text-xs font-bold">C</span>
+                        </div>
                       </div>
                       <div className="flex-1">
                         <div className="text-sm text-gray-500 mb-2">Crowe Logic AI</div>

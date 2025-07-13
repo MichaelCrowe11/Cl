@@ -1,7 +1,7 @@
 "use client"
 
-import CroweLogicLabInterface from '@/components/crowe-logic-lab-interface'
+import CroweLogicIDE from '@/components/crowe-logic-ide-shell'
 
 export default function Home() {
-  return <CroweLogicLabInterface />
+  return <CroweLogicIDE />
 }
