@@ -1,3 +1,5 @@
+"use client"
+
 import type React from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -18,6 +20,7 @@ import {
   Target,
   Brain
 } from "lucide-react"
+import { CroweLogicHeaderLogo } from "@/components/croweos-logo-system"
 
 interface ModuleCardProps {
   name: string
@@ -186,13 +189,13 @@ export default function CroweLogicDashboard() {
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
-            <div>
-              <h1 className="text-4xl font-bold text-slate-900 dark:text-slate-100">
-                Crowe Logic AI
-              </h1>
-              <p className="text-lg text-slate-600 dark:text-slate-400">
-                Professional Mycology Platform v3.1
-              </p>
+            <div className="flex items-center gap-4">
+              <CroweLogicHeaderLogo />
+              <div>
+                <p className="text-lg text-slate-600 dark:text-slate-400">
+                  Professional Mycology Platform v3.1
+                </p>
+              </div>
             </div>
             <div className="flex items-center space-x-4">
               <Button variant="outline" size="sm">

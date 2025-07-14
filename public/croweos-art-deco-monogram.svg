@@ -1,0 +1,11 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .stroke{fill:none;stroke:#C6A351;stroke-width:16;stroke-linecap:round;stroke-linejoin:round;}
+      .fill{fill:#C6A351;font-family:'Trajan Pro 3',serif;font-size:170px;}
+    </style>
+  </defs>
+  <circle class="stroke" cx="256" cy="256" r="224"/>
+  <circle class="stroke" cx="256" cy="256" r="160"/>
+  <text class="fill" x="50%" y="55%" dominant-baseline="middle" text-anchor="middle">C0S</text>
+</svg>

@@ -1,0 +1,205 @@
+/* Enhanced IDE-style design system */
+
+/* VS Code-like color palette for lab interface */
+:root {
+  /* IDE-specific colors */
+  --ide-primary: 220 13% 18%;
+  --ide-secondary: 220 13% 22%;
+  --ide-tertiary: 220 13% 26%;
+  --ide-accent: 39 100% 67%;
+  --ide-accent-secondary: 197 71% 52%;
+  
+  /* Status colors */
+  --status-success: 142 76% 36%;
+  --status-warning: 38 92% 50%;
+  --status-error: 0 84% 60%;
+  --status-info: 199 89% 48%;
+  
+  /* Mycology-themed colors */
+  --myco-primary: 120 38% 35%;      /* Forest green */
+  --myco-secondary: 35 77% 49%;     /* Golden brown */
+  --myco-accent: 271 81% 56%;       /* Purple spore */
+  --myco-substrate: 30 24% 87%;     /* Substrate beige */
+  
+  /* Enhanced shadows for depth */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  
+  /* IDE panel dimensions */
+  --sidebar-width: 280px;
+  --header-height: 48px;
+  --toolbar-height: 36px;
+  --status-bar-height: 24px;
+}
+
+.dark {
+  /* Enhanced dark mode for IDE */
+  --ide-primary: 220 26% 14%;
+  --ide-secondary: 220 26% 18%;
+  --ide-tertiary: 220 26% 22%;
+  --ide-background: 220 26% 10%;
+}
+
+/* IDE-specific component styles */
+.ide-panel {
+  @apply bg-background border-r border-border;
+  background: hsl(var(--ide-secondary));
+  border-color: hsl(var(--border));
+}
+
+.ide-header {
+  @apply h-12 border-b border-border bg-background/95 backdrop-blur-sm;
+  background: hsl(var(--ide-primary));
+  border-color: hsl(var(--border));
+}
+
+.ide-toolbar {
+  @apply h-9 border-b border-border bg-muted/50;
+  background: hsl(var(--ide-tertiary));
+}
+
+.ide-status-bar {
+  @apply h-6 border-t border-border bg-primary text-primary-foreground text-xs;
+  background: hsl(var(--ide-accent));
+  color: hsl(var(--ide-primary));
+}
+
+/* Enhanced file explorer */
+.file-tree-item {
+  @apply flex items-center gap-2 px-2 py-1 text-sm rounded-sm cursor-pointer transition-colors;
+  &:hover {
+    @apply bg-accent/50;
+  }
+  &.active {
+    @apply bg-accent text-accent-foreground;
+  }
+}
+
+/* Professional tabs */
+.ide-tab {
+  @apply px-3 py-2 text-xs border-r border-border cursor-pointer transition-colors;
+  background: hsl(var(--ide-secondary));
+  
+  &:hover {
+    background: hsl(var(--ide-tertiary));
+  }
+  
+  &.active {
+    @apply bg-background border-b-2 border-b-primary;
+  }
+  
+  &.dirty::before {
+    content: "●";
+    @apply mr-1 text-warning;
+  }
+}
+
+/* Enhanced terminal */
+.terminal-container {
+  @apply bg-black text-green-400 font-mono;
+  background: #1e1e1e;
+  color: #d4d4d4;
+}
+
+.terminal-header {
+  @apply border-b border-gray-700 bg-gray-800;
+}
+
+/* Chat interface enhancements */
+.chat-message {
+  @apply p-3 rounded-lg transition-all duration-200;
+  
+  &.user {
+    @apply bg-primary/10 ml-12;
+  }
+  
+  &.assistant {
+    @apply bg-muted/50 mr-12;
+  }
+  
+  &.streaming {
+    @apply animate-pulse;
+  }
+}
+
+/* Status indicators */
+.status-indicator {
+  @apply inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium;
+  
+  &.success {
+    @apply bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300;
+  }
+  
+  &.warning {
+    @apply bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300;
+  }
+  
+  &.error {
+    @apply bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300;
+  }
+  
+  &.info {
+    @apply bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300;
+  }
+}
+
+/* Animated loading states */
+.loading-skeleton {
+  @apply animate-pulse bg-muted rounded;
+}
+
+.loading-dots {
+  @apply inline-flex space-x-1;
+}
+
+.loading-dots div {
+  @apply w-1 h-1 bg-current rounded-full animate-bounce;
+}
+
+.loading-dots div:nth-child(1) { animation-delay: -0.3s; }
+.loading-dots div:nth-child(2) { animation-delay: -0.15s; }
+.loading-dots div:nth-child(3) { animation-delay: 0s; }
+
+/* Professional hover effects */
+.hover-lift {
+  @apply transition-all duration-200;
+  &:hover {
+    @apply shadow-md -translate-y-0.5;
+  }
+}
+
+.hover-glow {
+  @apply transition-all duration-200;
+  &:hover {
+    @apply shadow-lg ring-2 ring-primary/20;
+  }
+}
+
+/* Enhanced focus states */
+.focus-ring {
+  @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2;
+}
+
+/* Mycology-themed accents */
+.myco-accent {
+  background: linear-gradient(135deg, hsl(var(--myco-primary)), hsl(var(--myco-secondary)));
+}
+
+.spore-pattern {
+  background-image: radial-gradient(circle at 2px 2px, hsl(var(--myco-accent)) 1px, transparent 0);
+  background-size: 20px 20px;
+  opacity: 0.1;
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 768px) {
+  :root {
+    --sidebar-width: 240px;
+  }
+  
+  .ide-panel {
+    @apply w-60;
+  }
+}

@@ -1,0 +1,35 @@
+<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="goldBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24"/>
+      <stop offset="100%" stop-color="#f59e0b"/>
+    </linearGradient>
+    <linearGradient id="goldRings" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f59e0b"/>
+      <stop offset="50%" stop-color="#fbbf24"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Triple concentric rings -->
+  <circle cx="32" cy="32" r="30" stroke="url(#goldRings)" stroke-width="1.5" fill="none"/>
+  <circle cx="32" cy="32" r="27" stroke="url(#goldRings)" stroke-width="1" fill="none"/>
+  <circle cx="32" cy="32" r="24" stroke="url(#goldRings)" stroke-width="0.5" fill="none"/>
+  
+  <!-- White inner background -->
+  <circle cx="32" cy="32" r="21" fill="white"/>
+  
+  <!-- Stylized human figure -->
+  <g fill="url(#goldBg)">
+    <!-- Head -->
+    <circle cx="32" cy="24" r="4"/>
+    
+    <!-- Body/torso -->
+    <path d="M26 34 L26 42 L28 42 L28 36 L36 36 L36 42 L38 42 L38 34 C38 31 35 30 32 30 C29 30 26 31 26 34 Z"/>
+  </g>
+  
+  <!-- OS text -->
+  <text x="32" y="52" text-anchor="middle" dominant-baseline="middle" 
+        fill="url(#goldBg)" font-size="8" font-weight="bold" 
+        font-family="system-ui, -apple-system, sans-serif">OS</text>
+</svg>

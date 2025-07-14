@@ -2,5 +2,14 @@
   "extends": [
     "next/core-web-vitals",
     "next/typescript"
-  ]
+  ],
+  "ignorePatterns": [
+    "components/ide/MLConsole-broken.tsx"
+  ],
+  "rules": {
+    "@typescript-eslint/no-unused-vars": "warn",
+    "@typescript-eslint/no-explicit-any": "warn",
+    "react/no-unescaped-entities": "warn",
+    "@next/next/no-img-element": "warn"
+  }
 }

@@ -33,7 +33,7 @@ echo "🔍 Running pre-deployment checks..."
 
 # Install dependencies
 echo "📦 Installing dependencies..."
-npm ci
+npm install --legacy-peer-deps
 
 # Type checking
 echo "🔷 Type checking..."

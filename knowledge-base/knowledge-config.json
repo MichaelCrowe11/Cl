@@ -1,0 +1,83 @@
+{
+  "knowledgeBase": {
+    "version": "1.0.0",
+    "lastUpdated": "2025-07-13",
+    "description": "CroweOS Systems comprehensive knowledge base for Crowe Logic AI assistant",
+    "sources": [
+      {
+        "id": "core-principles",
+        "path": "./core-principles.md",
+        "topics": ["monitor", "decide", "act", "learn", "framework", "pillars"],
+        "priority": "high",
+        "searchable": true
+      },
+      {
+        "id": "environmental-controls", 
+        "path": "./environmental-controls.md",
+        "topics": ["co2", "environment", "alerts", "sensors", "automation"],
+        "priority": "high",
+        "searchable": true
+      },
+      {
+        "id": "platform-features",
+        "path": "./platform-features.md", 
+        "topics": ["features", "telemetry", "batch", "ai", "sop", "inventory"],
+        "priority": "high",
+        "searchable": true
+      },
+      {
+        "id": "substrate-recipes",
+        "path": "./substrate-recipes.md",
+        "topics": ["substrates", "recipes", "species", "mushrooms", "growing"],
+        "priority": "medium",
+        "searchable": true
+      },
+      {
+        "id": "troubleshooting",
+        "path": "./troubleshooting.md",
+        "topics": ["problems", "solutions", "diagnosis", "quality", "contamination"],
+        "priority": "high", 
+        "searchable": true
+      },
+      {
+        "id": "ui-components",
+        "path": "./ui-components.md",
+        "topics": ["ui", "components", "technical", "specifications", "dashboard"],
+        "priority": "low",
+        "searchable": true
+      }
+    ],
+    "searchIndex": {
+      "co2": ["environmental-controls", "troubleshooting", "ui-components"],
+      "contamination": ["troubleshooting", "substrate-recipes", "platform-features"], 
+      "alerts": ["environmental-controls", "platform-features", "troubleshooting"],
+      "fruiting": ["environmental-controls", "substrate-recipes", "troubleshooting"],
+      "lions-mane": ["substrate-recipes", "environmental-controls"],
+      "oyster": ["substrate-recipes", "troubleshooting"],
+      "shiitake": ["substrate-recipes"],
+      "dashboard": ["ui-components", "platform-features"],
+      "ai": ["platform-features", "core-principles", "troubleshooting"],
+      "batch": ["platform-features", "troubleshooting", "substrate-recipes"],
+      "sop": ["platform-features", "troubleshooting"],
+      "sensors": ["environmental-controls", "platform-features", "ui-components"],
+      "yield": ["troubleshooting", "substrate-recipes", "platform-features"],
+      "temperature": ["environmental-controls", "substrate-recipes", "troubleshooting"],
+      "humidity": ["environmental-controls", "substrate-recipes", "troubleshooting"]
+    },
+    "quickReference": {
+      "co2Ranges": {
+        "fruiting": "400-600 ppm",
+        "colonize": "≤1,000 ppm", 
+        "incubate": "≤1,200 ppm"
+      },
+      "commonSpecies": [
+        "Lions Mane (Hericium erinaceus)",
+        "Phoenix Oyster (Pleurotus pulmonarius)", 
+        "King Oyster (Pleurotus eryngii)",
+        "Shiitake (Lentinula edodes)"
+      ],
+      "alertSeverity": ["OK", "WARN", "ALERT"],
+      "phases": ["Soak", "Bag", "Sterilise", "Colonise", "Fruit", "Harvest"]
+    }
+  }
+}

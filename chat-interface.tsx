@@ -11,6 +11,7 @@ import { LoadingSpinner, MessageLoading } from "@/components/ui/loading"
 import { useToast } from "@/hooks/use-toast"
 import { Copy, Download, ThumbsUp, ThumbsDown, Mic, Send, Paperclip, Smile, Loader2, StopCircle, RotateCcw } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { CroweLogicAvatar } from "@/components/croweos-logo-system"
 
 interface Message {
   id: string
@@ -234,10 +235,15 @@ You can still use me for general mycology guidance while we resolve the connecti
               key={message.id}
               className={cn("flex gap-3 max-w-[85%]", message.role === "user" ? "ml-auto flex-row-reverse" : "mr-auto")}
             >
-              <Avatar className="h-8 w-8 border">
-                <AvatarImage src={message.avatar || "/placeholder-user.jpg"} alt={message.userName} />
-                <AvatarFallback>{message.userName.substring(0, 1)}</AvatarFallback>
-              </Avatar>
+              {/* Use CroweLogicAvatar for AI responses, regular Avatar for users */}
+              {message.role === "agent" ? (
+                <CroweLogicAvatar size={32} className="border" />
+              ) : (
+                <Avatar className="h-8 w-8 border">
+                  <AvatarImage src={message.avatar || "/placeholder-user.jpg"} alt={message.userName} />
+                  <AvatarFallback>{message.userName.substring(0, 1)}</AvatarFallback>
+                </Avatar>
+              )}
               <div className={cn("space-y-1", message.role === "user" ? "items-end" : "items-start")}>
                 <div className={cn("flex items-center gap-2", message.role === "user" ? "flex-row-reverse" : "")}>
                   <span className="text-xs font-medium">{message.userName}</span>
@@ -279,6 +285,24 @@ You can still use me for general mycology guidance while we resolve the connecti
               </div>
             </div>
           ))}
+          
+          {/* Loading state with Crowe Logic avatar */}
+          {isLoading && (
+            <div className="flex gap-3 max-w-[85%] mr-auto">
+              <CroweLogicAvatar size={32} className="border" />
+              <div className="space-y-1 items-start">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-medium">Crowe Logic AI</span>
+                </div>
+                <div className="bg-muted/60 rounded-xl rounded-bl-none p-3 shadow-sm text-sm">
+                  <div className="flex items-center gap-2">
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    <span className="text-muted-foreground">Thinking...</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </ScrollArea>
       <div className="p-4 border-t bg-muted/30">

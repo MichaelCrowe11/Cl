@@ -1,0 +1,19 @@
+<svg width="780" height="280" viewBox="0 0 780 280" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .line{fill:none;stroke:#C6A351;stroke-width:14;stroke-linecap:round;stroke-linejoin:round;}
+    .word{fill:#C6A351;font-family:'Trajan Pro 3',serif;font-size:120px;letter-spacing:2px;}
+    .sub{fill:#C6A351;font-family:'Inter',sans-serif;font-size:72px;letter-spacing:4px;}
+  </style>
+  <!-- Crest -->
+  <g transform="translate(60 0)">
+    <path class="line" d="M150 190 L150 60"/>
+    <path class="line" d="M110 190 C110 130 70 140 70 60"/>
+    <path class="line" d="M190 190 C190 130 230 140 230 60"/>
+    <path class="line" d="M90 190 L60 140"/>
+    <path class="line" d="M210 190 L240 140"/>
+    <path class="line" d="M60 140 L150 60 L240 140"/>
+  </g>
+  <!-- Word-mark -->
+  <text class="word" x="340" y="140">CroweOS</text>
+  <text class="sub"  x="340" y="230">SYSTEMS</text>
+</svg>

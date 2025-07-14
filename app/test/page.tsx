@@ -23,7 +23,7 @@ export default function TestPage() {
             placeholder="Type something here..."
             className="w-full"
           />
-          <p className="text-sm text-gray-600 mt-2">Current value: "{input}"</p>
+          <p className="text-sm text-gray-600 mt-2">Current value: &ldquo;{input}&rdquo;</p>
         </div>
         
         <div>
