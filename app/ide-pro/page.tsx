@@ -1,16 +1,16 @@
 import { Metadata } from 'next';
-import ProCroweLogicIDESimple from '@/components/pro-crowe-logic-ide-simple';
+import VSCodeProIDE from '@/components/vscode-pro-ide-clean';
 
 export const metadata: Metadata = {
-  title: 'Professional IDE - Crowe Logic AI Pro',
-  description: 'Advanced professional IDE with AI-powered code completion, real-time debugging, performance monitoring, and specialized mycology development tools.',
-  keywords: ['Pro IDE', 'AI development', 'mycology', 'debugging', 'collaboration', 'professional coding'],
+  title: 'CroweOS Pro IDE - VS Code Enhanced',
+  description: 'Professional VS Code-styled IDE with integrated Crowe Logic AI, advanced debugging, mycology tools, and seamless development experience.',
+  keywords: ['Pro IDE', 'VS Code', 'AI development', 'mycology', 'debugging', 'collaboration', 'professional coding'],
 };
 
 export default function IDEProPage() {
   return (
-    <div className="h-screen">
-      <ProCroweLogicIDESimple />
+    <div className="h-screen overflow-hidden">
+      <VSCodeProIDE />
     </div>
   );
 }
