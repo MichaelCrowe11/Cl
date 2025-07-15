@@ -20,7 +20,10 @@
     "a11y": "pa11y-ci --sitemap http://localhost:3000/sitemap.xml",
     "canary:deploy": "./deploy-canary.sh",
     "incident:drill": "./incident-drill.sh",
-    "production:check": "npm run build && npm run lighthouse && npm run a11y"
+    "production:check": "npm run build && npm run lighthouse && npm run a11y",
+    "production:deploy": "./production-deploy.sh",
+    "production:start": "NODE_ENV=production pnpm start",
+    "analyze": "cross-env ANALYZE=true pnpm build"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
@@ -54,6 +57,7 @@
     "@radix-ui/react-tooltip": "1.1.6",
     "@xterm/addon-fit": "^0.10.0",
     "@xterm/xterm": "^5.5.0",
+    "archiver": "^7.0.1",
     "autoprefixer": "^10.4.20",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -80,14 +84,17 @@
     "vaul": "^0.9.6",
     "xterm": "^5.3.0",
     "xterm-addon-fit": "^0.8.0",
-    "zod": "^3.24.1"
+    "zod": "^3.24.1",
+    "zustand": "^5.0.6"
   },
   "devDependencies": {
+    "@types/archiver": "^6.0.3",
     "@types/node": "^22",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9.31.0",
     "eslint-config-next": "15.3.5",
+    "next-transpile-modules": "^10.0.1",
     "postcss": "^8.5",
     "tailwindcss": "^3.4.17",
     "typescript": "^5"

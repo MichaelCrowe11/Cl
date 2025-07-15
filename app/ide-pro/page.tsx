@@ -1,16 +1,16 @@
 import { Metadata } from 'next';
-import CroweLogicIDE from '@/components/CroweLogicIDE';
+import ProCroweLogicIDESimple from '@/components/pro-crowe-logic-ide-simple';
 
 export const metadata: Metadata = {
-  title: 'Professional IDE - Crowe Logic AI',
-  description: 'Professional integrated development environment for mycology research with advanced AI assistance, file management, and terminal integration.',
-  keywords: ['IDE', 'development environment', 'mycology', 'coding', 'AI assistance'],
+  title: 'Professional IDE - Crowe Logic AI Pro',
+  description: 'Advanced professional IDE with AI-powered code completion, real-time debugging, performance monitoring, and specialized mycology development tools.',
+  keywords: ['Pro IDE', 'AI development', 'mycology', 'debugging', 'collaboration', 'professional coding'],
 };
 
 export default function IDEProPage() {
   return (
     <div className="h-screen">
-      <CroweLogicIDE />
+      <ProCroweLogicIDESimple />
     </div>
   );
 }

@@ -3,6 +3,14 @@ const nextConfig = {
   experimental: {
     optimizePackageImports: ['lucide-react', '@radix-ui/react-icons'],
   },
+  transpilePackages: [
+    '@xterm/xterm',
+    '@xterm/addon-fit', 
+    'xterm',
+    'xterm-addon-fit',
+    'vaul',
+    'react-day-picker'
+  ],
   eslint: {
     // Allow production builds to complete even with ESLint errors/warnings
     ignoreDuringBuilds: true,

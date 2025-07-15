@@ -39,6 +39,7 @@ import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import CroweLogicChatInterface from '@/components/crowe-logic-chat-interface';
+import IDEChatInterface from '@/components/ide-chat-interface';
 import { CroweLogo } from '@/components/crowe-logo';
 import { useTheme } from 'next-themes';
 
@@ -160,6 +161,7 @@ batch_001.add_log_entry("Mycelium colonization beginning", 22.5, 85.0)
     }
   ]);
   const [activeFileId, setActiveFileId] = useState<string | null>('1');
+  const [selectedCode, setSelectedCode] = useState<string>('');
   const [terminalLines, setTerminalLines] = useState<TerminalLine[]>([
     {
       id: 'welcome_1',
@@ -188,7 +190,7 @@ batch_001.add_log_entry("Mycelium colonization beginning", 22.5, 85.0)
   const [leftSidebarExpanded, setLeftSidebarExpanded] = useState(true);
   const [rightSidebarExpanded, setRightSidebarExpanded] = useState(true);
   const [activeLeftPanel, setActiveLeftPanel] = useState('explorer');
-  const [activeRightPanel, setActiveRightPanel] = useState('tools');
+  const [activeRightPanel, setActiveRightPanel] = useState('ai-assistant');
   const terminalScrollRef = useRef<HTMLDivElement>(null);
   const { theme, setTheme } = useTheme();
 
@@ -281,6 +283,40 @@ batch_001.add_log_entry("Mycelium colonization beginning", 22.5, 85.0)
   ];
 
   const rightPanels: SidebarPanel[] = [
+    {
+      id: 'ai-assistant',
+      name: 'AI Assistant',
+      icon: <Brain className="w-4 h-4" />,
+      content: (
+        <div className="h-[600px]">
+          <IDEChatInterface 
+            currentFile={
+              activeFileId 
+                ? {
+                    name: openFiles.find(f => f.id === activeFileId)?.name || '',
+                    content: openFiles.find(f => f.id === activeFileId)?.content || '',
+                    language: openFiles.find(f => f.id === activeFileId)?.type || 'text'
+                  }
+                : undefined
+            }
+            selectedCode={selectedCode}
+            onCodeGenerated={(code) => {
+              // Handle generated code - could insert into current file
+              if (activeFileId) {
+                const activeFile = openFiles.find(f => f.id === activeFileId);
+                if (activeFile) {
+                  // Insert code at the end of current file or replace selection
+                  const newContent = selectedCode 
+                    ? activeFile.content.replace(selectedCode, code)
+                    : activeFile.content + '\n\n' + code;
+                  updateFileContent(activeFileId, newContent);
+                }
+              }
+            }}
+          />
+        </div>
+      )
+    },
     {
       id: 'tools',
       name: 'Tools & Analysis',
@@ -684,6 +720,16 @@ Ready for mycology data analysis and automation...`;
                         <Textarea
                           value={activeFile.content}
                           onChange={(e) => updateFileContent(activeFile.id, e.target.value)}
+                          onSelect={(e) => {
+                            const target = e.target as HTMLTextAreaElement;
+                            const start = target.selectionStart;
+                            const end = target.selectionEnd;
+                            if (start !== end) {
+                              setSelectedCode(target.value.substring(start, end));
+                            } else {
+                              setSelectedCode('');
+                            }
+                          }}
                           className="min-h-[400px] font-mono text-sm resize-none border-none focus:ring-0 bg-transparent"
                           placeholder={`Start coding in ${activeFile.name}...`}
                         />
@@ -718,7 +764,22 @@ Ready for mycology data analysis and automation...`;
             {/* Split View - Chat */}
             {splitView && (
               <div className="w-1/2 bg-background">
-                <CroweLogicChatInterface />
+                <IDEChatInterface 
+                  currentFile={
+                    activeFileId 
+                      ? {
+                          name: openFiles.find(f => f.id === activeFileId)?.name || '',
+                          content: openFiles.find(f => f.id === activeFileId)?.content || '',
+                          language: openFiles.find(f => f.id === activeFileId)?.type || 'text'
+                        }
+                      : undefined
+                  }
+                  selectedCode={selectedCode}
+                  onCodeGenerated={(code) => {
+                    // Handle generated code - could insert into current file
+                    console.log('Generated code:', code);
+                  }}
+                />
               </div>
             )}
           </div>
