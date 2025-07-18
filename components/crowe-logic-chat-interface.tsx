@@ -66,27 +66,27 @@ export default function CroweLogicChatInterface() {
   ];
 
   return (
-    <div className="flex flex-col h-full max-w-4xl mx-auto">
+    <div className="flex flex-col h-full max-w-4xl mx-auto bg-white">
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b bg-muted/20">
+      <div className="flex items-center justify-between p-4 border-b bg-zinc-900">
         <div className="flex items-center gap-3">
           <CroweLogicAvatar size={40} variant="circle" />
           <div>
-            <h2 className="font-semibold text-lg text-foreground">
+            <h2 className="font-semibold text-lg text-white">
               Crowe Logic AI Assistant
             </h2>
-            <p className="text-sm text-muted-foreground">
-              Powered by CroweOS Systems Knowledge Base
+            <p className="text-sm text-zinc-400">
+              Powered by Crowe Logic Knowledge Base
             </p>
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <Badge variant="outline" className="text-xs">
+          <Badge variant="outline" className="text-xs bg-white text-zinc-900 border-white">
             <Book className="w-3 h-3 mr-1" />
             Knowledge Base Active
           </Badge>
           {error && (
-            <Badge variant="destructive" className="text-xs">
+            <Badge variant="destructive" className="text-xs bg-red-600 text-white">
               <AlertTriangle className="w-3 h-3 mr-1" />
               Error
             </Badge>

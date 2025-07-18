@@ -25,16 +25,16 @@ interface Message {
 export default function ChatInterface() {
   const [input, setInput] = useState("")
   const [isLoading, setIsLoading] = useState(false)
-  const [selectedModel, setSelectedModel] = useState("gpt-4")
+  const [selectedModel, setSelectedModel] = useState("grok-beta")
   const [isClient, setIsClient] = useState(false)
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
       role: "agent",
       userName: "Crowe Logic AI",
-      avatar: "/crowe-avatar.png", // Official Crowe branding
+      avatar: "/crowe-avatar.svg", // Official Crowe branding
       content:
-        "Welcome to Crowe Logic AI, your dedicated mycology lab partner. How can I assist your cultivation efforts today? You can speak or type your observations, questions, or commands.",
+        "Welcome to Crowe Logic AI, your dedicated mycology lab partner powered by the Crowe Logic Knowledge Base. How can I assist your cultivation efforts today? You can speak or type your observations, questions, or commands.",
       timestamp: "",
     },
     {
@@ -215,10 +215,8 @@ You can still use me for general mycology guidance while we resolve the connecti
                 <SelectValue placeholder="Select model" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="gpt-4">GPT-4</SelectItem>
-                <SelectItem value="gpt-4-turbo">GPT-4 Turbo</SelectItem>
-                <SelectItem value="claude-3-5-sonnet">Claude 3.5 Sonnet</SelectItem>
-                <SelectItem value="claude-3-opus">Claude 3 Opus</SelectItem>
+                <SelectItem value="grok-beta">Grok Beta</SelectItem>
+                <SelectItem value="grok-vision-beta">Grok Vision Beta</SelectItem>
               </SelectContent>
             </Select>
           </div>

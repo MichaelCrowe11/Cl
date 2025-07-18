@@ -3,7 +3,7 @@
     "orgId": "crowe-os"
   },
   "buildCommand": "pnpm run build",
-  "installCommand": "pnpm install --frozen-lockfile && pnpm approve-builds",
+  "installCommand": "pnpm install --no-frozen-lockfile",
   "framework": "nextjs",
   "functions": {
     "app/api/**/*.js": {

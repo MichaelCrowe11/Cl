@@ -26,7 +26,7 @@ export default function ChatInterface() {
       id: "1",
       role: "agent",
       userName: "Crowe Logic AI",
-      avatar: "/crowe-avatar.png",
+      avatar: "/crowe-avatar.svg",
       content:
         "Welcome to Crowe Logic AI, your dedicated mycology lab partner. How can I assist your cultivation efforts today? You can speak or type your observations, questions, or commands.",
       timestamp: "",
@@ -44,7 +44,7 @@ export default function ChatInterface() {
       id: "3",
       role: "agent",
       userName: "Crowe Logic AI",
-      avatar: "/crowe-avatar.png",
+      avatar: "/crowe-avatar.svg",
       content:
         "Understood. Logging new Lion's Mane batch (10 bags, HWFP/Soy hulls 50/50).\n\nWould you like me to:\n1. Generate a batch label and SOP for this?\n2. Confirm hydration levels for this substrate mix?\n3. Set reminders for sterilization and inoculation?",
       timestamp: "",
@@ -94,7 +94,7 @@ export default function ChatInterface() {
         id: String(messages.length + messages.length + 1), // Ensure unique ID
         role: "agent",
         userName: "Crowe Logic AI",
-        avatar: "/crowe-avatar.png",
+        avatar: "/crowe-avatar.svg",
         content: `Acknowledged: "${input.substring(0, 50)}${input.length > 50 ? "..." : ""}". I'm processing this. What would you like to do next?`,
         timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
       }

@@ -64,7 +64,7 @@ export default function CroweLogicChatGPTInterface() {
         {
           id: '1',
           role: 'assistant',
-          content: 'Hello! I\'m Crowe Logic AI, your advanced mycology research assistant. I specialize in mushroom identification, cultivation protocols, contamination analysis, and bioactivity research. I can help you with:\n\n• **Species Identification** - Analyze specimen characteristics\n• **Cultivation Protocols** - Optimize growing conditions\n• **Contamination Analysis** - Detect and prevent contamination\n• **Data Analysis** - Process research data and generate insights\n• **Code Development** - Python scripts for mycology research\n\nHow can I assist your mycology work today?',
+          content: 'Hello! I\'m Crowe Logic AI, your advanced mycology research assistant powered by the Crowe Logic Knowledge Base. I specialize in mushroom identification, cultivation protocols, contamination analysis, and bioactivity research. I can help you with:\n\n• **Species Identification** - Analyze specimen characteristics\n• **Cultivation Protocols** - Optimize growing conditions\n• **Contamination Analysis** - Detect and prevent contamination\n• **Data Analysis** - Process research data and generate insights\n• **Code Development** - Python scripts for mycology research\n\nHow can I assist your mycology work today?',
           timestamp: new Date(),
           type: 'text'
         }
@@ -387,7 +387,7 @@ How can I specifically help with your mycology project today?`
         {
           id: `msg_${Date.now()}`,
           role: 'assistant',
-          content: 'Hello! I\'m Crowe Logic AI, ready to assist with your mycology research. What would you like to explore today?',
+          content: 'Hello! I\'m Crowe Logic AI, ready to assist with your mycology research powered by the Crowe Logic Knowledge Base. What would you like to explore today?',
           timestamp: new Date(),
           type: 'text'
         }

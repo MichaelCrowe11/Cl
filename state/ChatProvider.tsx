@@ -21,15 +21,15 @@ const INITIAL_AGENT: Message = {
   id: "sys-welcome",
   role: "agent",
   userName: "Crowe Logic AI",
-  avatar: "/crowe-avatar.png",
+  avatar: "/crowe-avatar.svg",
   content:
-    "Welcome to Crowe Logic AI, your dedicated mycology lab partner. How can I assist your cultivation efforts today?",
+    "Welcome to Crowe Logic AI, your dedicated mycology lab partner powered by the Crowe Logic Knowledge Base. How can I assist your cultivation efforts today?",
   timestamp: "",
 };
 
 const initialState: ChatState = {
   messages: [INITIAL_AGENT],
-  model: "gpt-4",
+  model: "grok-beta",
   isSending: false,
 };
 
@@ -67,7 +67,7 @@ function chatReducer(state: ChatState, action: ChatAction): ChatState {
         id: generateId(),
         role: "agent",
         userName: "Crowe Logic AI",
-        avatar: "/crowe-avatar.png",
+        avatar: "/crowe-avatar.svg",
         content: "",
         timestamp: userMsg.timestamp,
         loading: true,

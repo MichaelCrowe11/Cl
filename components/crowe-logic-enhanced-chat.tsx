@@ -105,7 +105,7 @@ export default function CroweLogicGPTInterface() {
       setMessages(prev => [...prev, assistantMessage])
 
       // Enhanced system prompt for Crowe Logic AI
-      const systemPrompt = `You are Crowe Logic AI, an expert mycology research assistant with deep knowledge in:
+      const systemPrompt = `You are Crowe Logic AI, an expert mycology research assistant powered by the Crowe Logic Knowledge Base with deep knowledge in:
 
 • Mushroom identification and taxonomy
 • Cultivation protocols and techniques  
@@ -136,7 +136,7 @@ Provide scientific, accurate, and actionable advice. Include relevant tags in yo
             })),
             { role: 'user' as ApiRole, content: userMessage.content }
           ],
-          model: 'gpt-4o-mini',
+          model: 'grok-beta',
           temperature: 0.7,
           maxTokens: 2000
         },

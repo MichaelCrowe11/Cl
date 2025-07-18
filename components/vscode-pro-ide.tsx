@@ -47,7 +47,8 @@ import {
   ChevronDown,
   File,
   Folder,
-  Package
+  Package,
+  Beaker
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -93,10 +94,12 @@ interface Notification {
 export default function VSCodeProIDE() {
   const { theme, setTheme } = useTheme();
   const [isLoading, setIsLoading] = useState(false);
-  const [activeSidebarTab, setActiveSidebarTab] = useState('explorer');
+  const [leftSidebarTab, setLeftSidebarTab] = useState('explorer');
+  const [rightSidebarTab, setRightSidebarTab] = useState('tools');
   const [activePanel, setActivePanel] = useState('terminal');
   const [panelHeight, setPanelHeight] = useState(250);
-  const [sidebarWidth, setSidebarWidth] = useState(280);
+  const [leftSidebarWidth, setLeftSidebarWidth] = useState(280);
+  const [rightSidebarWidth, setRightSidebarWidth] = useState(280);
   const [explorerExpanded, setExplorerExpanded] = useState(true);
   const [croweAIExpanded, setCroweAIExpanded] = useState(true);
   const [showCommandPalette, setShowCommandPalette] = useState(false);
@@ -116,10 +119,6 @@ export default function VSCodeProIDE() {
     { name: 'CroweAI: Generate Tests', shortcut: 'Ctrl+Shift+T', action: () => {} },
     { name: 'CroweAI: Optimize Code', shortcut: 'Ctrl+Shift+O', action: () => {} }
   ];
-
-  const filteredCommands = commands.filter((cmd: Command) =>
-    cmd.name.toLowerCase().includes(commandInput.toLowerCase())
-  );
 
   // Keyboard shortcuts
   React.useEffect(() => {
@@ -198,13 +197,7 @@ print(f"Started: {analyzer.created_at}")`,
     }
   ]);
   const [aiInput, setAiInput] = useState('');
-  const [showCommandPalette, setShowCommandPalette] = useState(false);
-  const [commandInput, setCommandInput] = useState('');
-  const [notifications, setNotifications] = useState([
-    { id: 1, type: 'info', message: 'CroweOS AI analysis complete', timestamp: new Date() },
-    { id: 2, type: 'success', message: 'Build successful', timestamp: new Date() }
-  ]);
-
+  
   const fileTree: FileTreeItem[] = [
     {
       id: 'workspace',
@@ -463,42 +456,42 @@ Would you like me to help implement any of these improvements?`,
         {/* Activity Bar */}
         <div className="w-12 bg-accent border-r flex flex-col items-center py-2 gap-1">
           <Button
-            variant={activeSidebarTab === 'explorer' ? 'default' : 'ghost'}
+            variant={leftSidebarTab === 'explorer' ? 'default' : 'ghost'}
             size="icon"
             className="h-10 w-10"
-            onClick={() => setActiveSidebarTab('explorer')}
+            onClick={() => setLeftSidebarTab('explorer')}
           >
             <FolderOpen className="h-5 w-5" />
           </Button>
           <Button
-            variant={activeSidebarTab === 'search' ? 'default' : 'ghost'}
+            variant={leftSidebarTab === 'search' ? 'default' : 'ghost'}
             size="icon"
             className="h-10 w-10"
-            onClick={() => setActiveSidebarTab('search')}
+            onClick={() => setLeftSidebarTab('search')}
           >
             <Search className="h-5 w-5" />
           </Button>
           <Button
-            variant={activeSidebarTab === 'git' ? 'default' : 'ghost'}
+            variant={leftSidebarTab === 'git' ? 'default' : 'ghost'}
             size="icon"
             className="h-10 w-10"
-            onClick={() => setActiveSidebarTab('git')}
+            onClick={() => setLeftSidebarTab('git')}
           >
             <GitBranch className="h-5 w-5" />
           </Button>
           <Button
-            variant={activeSidebarTab === 'debug' ? 'default' : 'ghost'}
+            variant={leftSidebarTab === 'debug' ? 'default' : 'ghost'}
             size="icon"
             className="h-10 w-10"
-            onClick={() => setActiveSidebarTab('debug')}
+            onClick={() => setLeftSidebarTab('debug')}
           >
             <Bug className="h-5 w-5" />
           </Button>
           <Button
-            variant={activeSidebarTab === 'crowe-ai' ? 'default' : 'ghost'}
+            variant={leftSidebarTab === 'crowe-ai' ? 'default' : 'ghost'}
             size="icon"
             className="h-10 w-10"
-            onClick={() => setActiveSidebarTab('crowe-ai')}
+            onClick={() => setLeftSidebarTab('crowe-ai')}
           >
             <Brain className="h-5 w-5" />
           </Button>
@@ -514,11 +507,11 @@ Would you like me to help implement any of these improvements?`,
         <div className="w-80 bg-muted/30 border-r flex flex-col">
           <div className="h-9 border-b flex items-center justify-between px-3">
             <span className="text-sm font-medium">
-              {activeSidebarTab === 'explorer' && 'Explorer'}
-              {activeSidebarTab === 'search' && 'Search'}
-              {activeSidebarTab === 'git' && 'Source Control'}
-              {activeSidebarTab === 'debug' && 'Run and Debug'}
-              {activeSidebarTab === 'crowe-ai' && 'Crowe Logic AI'}
+              {leftSidebarTab === 'explorer' && 'Explorer'}
+              {leftSidebarTab === 'search' && 'Search'}
+              {leftSidebarTab === 'git' && 'Source Control'}
+              {leftSidebarTab === 'debug' && 'Run and Debug'}
+              {leftSidebarTab === 'crowe-ai' && 'Crowe Logic AI'}
             </span>
             <div className="flex gap-1">
               <Button variant="ghost" size="icon" className="h-6 w-6">
@@ -528,7 +521,7 @@ Would you like me to help implement any of these improvements?`,
           </div>
 
           <ScrollArea className="flex-1">
-            {activeSidebarTab === 'explorer' && (
+            {leftSidebarTab === 'explorer' && (
               <div className="p-2">
                 <div className="mb-3">
                   <div className="flex items-center justify-between mb-2">
@@ -544,7 +537,7 @@ Would you like me to help implement any of these improvements?`,
               </div>
             )}
 
-            {activeSidebarTab === 'crowe-ai' && (
+            {leftSidebarTab === 'crowe-ai' && (
               <div className="p-3 h-full flex flex-col">
                 <div className="flex-1 mb-3">
                   <div className="space-y-3 max-h-96 overflow-y-auto">
@@ -602,7 +595,7 @@ Would you like me to help implement any of these improvements?`,
               </div>
             )}
 
-            {activeSidebarTab === 'git' && (
+            {leftSidebarTab === 'git' && (
               <div className="p-3">
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">

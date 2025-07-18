@@ -202,27 +202,27 @@ export default function IDEChatInterface({
   };
 
   return (
-    <div className="flex flex-col h-full bg-background">
+    <div className="flex flex-col h-full bg-white">
       {/* Header */}
-      <div className="flex items-center justify-between p-3 border-b bg-muted/20">
+      <div className="flex items-center justify-between p-3 border-b bg-zinc-900">
         <div className="flex items-center gap-2">
-          <Brain className="h-5 w-5 text-primary" />
-          <h3 className="font-semibold text-sm">AI Assistant</h3>
+          <Brain className="h-5 w-5 text-white" />
+          <h3 className="font-semibold text-sm text-white">AI Assistant</h3>
           {currentFile && (
-            <Badge variant="outline" className="text-xs">
+            <Badge variant="outline" className="text-xs bg-white text-zinc-900 border-white">
               {currentFile.name}
             </Badge>
           )}
         </div>
         <div className="flex items-center gap-1">
           {error && (
-            <AlertCircle className="h-4 w-4 text-destructive" />
+            <AlertCircle className="h-4 w-4 text-red-400" />
           )}
           <Button
             variant="ghost"
             size="sm"
             onClick={clearMessages}
-            className="h-6 w-6 p-0"
+            className="h-6 w-6 p-0 text-white hover:bg-zinc-800"
           >
             <Trash2 className="h-3 w-3" />
           </Button>
@@ -230,14 +230,14 @@ export default function IDEChatInterface({
       </div>
 
       {/* Quick Actions */}
-      <div className="p-3 border-b">
+      <div className="p-3 border-b bg-white">
         <div className="grid grid-cols-2 gap-2">
           <Button
             variant="outline"
             size="sm"
             onClick={() => handleQuickAction('analyze')}
             disabled={!currentFile || isLoading}
-            className="text-xs"
+            className="text-xs bg-white text-zinc-900 border-zinc-300 hover:bg-zinc-100"
           >
             <Code className="h-3 w-3 mr-1" />
             Analyze
@@ -247,7 +247,7 @@ export default function IDEChatInterface({
             size="sm"
             onClick={() => handleQuickAction('explain')}
             disabled={!currentFile || isLoading}
-            className="text-xs"
+            className="text-xs bg-white text-zinc-900 border-zinc-300 hover:bg-zinc-100"
           >
             <FileText className="h-3 w-3 mr-1" />
             Explain
@@ -257,7 +257,7 @@ export default function IDEChatInterface({
             size="sm"
             onClick={() => handleQuickAction('debug')}
             disabled={!currentFile || isLoading}
-            className="text-xs"
+            className="text-xs bg-white text-zinc-900 border-zinc-300 hover:bg-zinc-100"
           >
             <Bug className="h-3 w-3 mr-1" />
             Debug
@@ -267,7 +267,7 @@ export default function IDEChatInterface({
             size="sm"
             onClick={() => handleQuickAction('optimize')}
             disabled={!currentFile || isLoading}
-            className="text-xs"
+            className="text-xs bg-white text-zinc-900 border-zinc-300 hover:bg-zinc-100"
           >
             <Zap className="h-3 w-3 mr-1" />
             Optimize
@@ -276,7 +276,7 @@ export default function IDEChatInterface({
       </div>
 
       {/* Messages */}
-      <ScrollArea className="flex-1 p-3">
+      <ScrollArea className="flex-1 p-3 bg-white">
         <div className="space-y-4">
           {messages.map((message, index) => (
             <div
@@ -291,8 +291,8 @@ export default function IDEChatInterface({
               <div
                 className={`max-w-[80%] rounded-lg p-3 ${
                   message.role === 'user'
-                    ? 'bg-primary text-primary-foreground'
-                    : 'bg-muted'
+                    ? 'bg-zinc-900 text-white'
+                    : 'bg-zinc-100 text-zinc-900'
                 }`}
               >
                 <div className="text-sm">
@@ -329,7 +329,7 @@ export default function IDEChatInterface({
       </ScrollArea>
 
       {/* Input */}
-      <div className="p-3 border-t">
+      <div className="p-3 border-t bg-zinc-900">
         <div className="flex gap-2">
           <Textarea
             value={input}
@@ -342,13 +342,13 @@ export default function IDEChatInterface({
                 ? `Ask about ${currentFile.name}...`
                 : "Ask me anything about your code..."
             }
-            className="min-h-[60px] resize-none text-sm"
+            className="min-h-[60px] resize-none text-sm bg-white text-zinc-900 border-zinc-300 placeholder:text-zinc-500"
             disabled={isLoading}
           />
           <Button
             onClick={handleSubmit}
             disabled={!input.trim() || isLoading}
-            className="self-end"
+            className="self-end bg-white text-zinc-900 hover:bg-zinc-100"
           >
             {isLoading ? (
               <Loader2 className="h-4 w-4 animate-spin" />
@@ -359,7 +359,7 @@ export default function IDEChatInterface({
         </div>
         {selectedCode && (
           <div className="mt-2">
-            <Badge variant="secondary" className="text-xs">
+            <Badge variant="secondary" className="text-xs bg-white text-zinc-900">
               {selectedCode.split('\n').length} lines selected
             </Badge>
           </div>

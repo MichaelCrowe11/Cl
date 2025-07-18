@@ -1,0 +1,30 @@
+Compound: Hericenones
+Found In: Lion's Mane (fruiting bodies)
+Properties: Can cross blood-brain barrier; Promotes nerve growth factor synthesis
+Research Status: Well-studied in both in vitro and in vivo models
+
+Compound: Erinacines
+Found In: Lion's Mane (mycelia)
+Properties: Can cross blood-brain barrier; Promotes nerve growth factor synthesis; Neuroprotective
+Research Status: Multiple animal studies showing cognitive benefits
+
+Compound: Ganoderic acids
+Found In: Reishi
+Properties: Triterpenes with anti-inflammatory, antioxidant, and anticancer properties
+Research Status: Extensively studied in laboratory and animal models
+
+Compound: β-D-glucans
+Found In: All three mushrooms
+Properties: Immunomodulating; Anti-inflammatory; Potential anticancer activity
+Research Status: Widely researched for immune effects
+
+Compound: Lentinan
+Found In: Shiitake
+Properties: β-glucan with immune-boosting properties; Adjuvant in cancer treatment
+Research Status: Used clinically in some countries as adjuvant therapy
+
+Compound: Eritadenine
+Found In: Shiitake
+Properties: Reduces cholesterol by increasing excretion through feces
+Research Status: Multiple studies confirming cholesterol-lowering effects
+

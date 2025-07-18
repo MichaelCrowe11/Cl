@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useLayoutEffect } from 'react';
+import React, { useState, useRef, useLayoutEffect, useEffect } from 'react';
 import { 
   Brain, 
   FileText, 
@@ -28,6 +28,8 @@ import {
   ChevronRight,
   ChevronLeft,
   Folder,
+  CheckCircle,
+  Cpu,
   Files,
   Layers,
   Bug
@@ -194,13 +196,25 @@ batch_001.add_log_entry("Mycelium colonization beginning", 22.5, 85.0)
   const terminalScrollRef = useRef<HTMLDivElement>(null);
   const { theme, setTheme } = useTheme();
 
+  // Enhanced status bar data
+  const statusBarData = {
+    language: openFiles.find(f => f.id === activeFileId)?.type || 'text',
+    encoding: 'UTF-8',
+    lineEnding: 'LF',
+    cursorPosition: '1:1',
+    selection: selectedCode ? `${selectedCode.split('\n').length} lines selected` : '',
+    gitBranch: 'main',
+    aiStatus: 'Ready',
+    environmentStatus: 'Connected'
+  };
+
   const getFileTypeConfig = (type: string) => {
     const configs = {
-      python: { icon: <Code className="w-3 h-3" />, color: 'text-blue-600', bgColor: 'bg-blue-100' },
-      markdown: { icon: <FileText className="w-3 h-3" />, color: 'text-green-600', bgColor: 'bg-green-100' },
-      json: { icon: <Layers className="w-3 h-3" />, color: 'text-yellow-600', bgColor: 'bg-yellow-100' },
-      text: { icon: <FileText className="w-3 h-3" />, color: 'text-gray-600', bgColor: 'bg-gray-100' },
-      yaml: { icon: <FileText className="w-3 h-3" />, color: 'text-purple-600', bgColor: 'bg-purple-100' },
+      python: { icon: <Code className="w-3 h-3" />, color: 'text-emerald-600', bgColor: 'bg-emerald-100 dark:bg-emerald-900/30' },
+      markdown: { icon: <FileText className="w-3 h-3" />, color: 'text-purple-600', bgColor: 'bg-purple-100 dark:bg-purple-900/30' },
+      json: { icon: <Layers className="w-3 h-3" />, color: 'text-amber-600', bgColor: 'bg-amber-100 dark:bg-amber-900/30' },
+      text: { icon: <FileText className="w-3 h-3" />, color: 'text-slate-600', bgColor: 'bg-slate-100 dark:bg-slate-800/30' },
+      yaml: { icon: <FileText className="w-3 h-3" />, color: 'text-indigo-600', bgColor: 'bg-indigo-100 dark:bg-indigo-900/30' },
     };
     return configs[type as keyof typeof configs] || configs.text;
   };
@@ -378,6 +392,24 @@ batch_001.add_log_entry("Mycelium colonization beginning", 22.5, 85.0)
     }
   ];
 
+  const [showCommandPalette, setShowCommandPalette] = useState(false);
+  const [commandSearch, setCommandSearch] = useState('');
+
+  const commands = [
+    { id: 'new-file', label: 'File: New File', shortcut: 'Ctrl+N', action: () => createNewFile() },
+    { id: 'save-file', label: 'File: Save', shortcut: 'Ctrl+S', action: () => console.log('Save') },
+    { id: 'toggle-sidebar', label: 'View: Toggle Sidebar', shortcut: 'Ctrl+B', action: () => setLeftSidebarExpanded(!leftSidebarExpanded) },
+    { id: 'toggle-terminal', label: 'View: Toggle Terminal', shortcut: 'Ctrl+`', action: () => setIsTerminalExpanded(!isTerminalExpanded) },
+    { id: 'ai-chat', label: 'AI: Open Assistant', shortcut: 'Ctrl+K', action: () => { setActiveRightPanel('ai-assistant'); setRightSidebarExpanded(true); } },
+    { id: 'analyze-code', label: 'AI: Analyze Code', shortcut: '', action: () => console.log('Analyze') },
+    { id: 'debug-code', label: 'AI: Debug Code', shortcut: '', action: () => console.log('Debug') },
+    { id: 'optimize-code', label: 'AI: Optimize Code', shortcut: '', action: () => console.log('Optimize') },
+  ];
+
+  const filteredCommands = commands.filter(cmd =>
+    cmd.label.toLowerCase().includes(commandSearch.toLowerCase())
+  );
+
   const createNewFile = (type: 'python' | 'markdown' | 'json' | 'text' = 'python') => {
     const extensions = { python: '.py', markdown: '.md', json: '.json', text: '.txt' };
     const name = `untitled${openFiles.length + 1}${extensions[type]}`;
@@ -413,7 +445,7 @@ batch_001.add_log_entry("Mycelium colonization beginning", 22.5, 85.0)
     ));
   };
 
-  const executeTerminalCommand = () => {
+  const executeTerminalCommand = async () => {
     if (!terminalInput.trim()) return;
 
     const newInputLine: TerminalLine = {
@@ -423,107 +455,116 @@ batch_001.add_log_entry("Mycelium colonization beginning", 22.5, 85.0)
       timestamp: new Date()
     };
 
-    let outputContent = '';
-    let outputType: 'output' | 'error' = 'output';
-
-    // Mycology-specific commands
-    const command = terminalInput.trim().toLowerCase();
+    // Add input line immediately
+    setTerminalLines(prev => [...prev, newInputLine]);
     
-    if (command === 'help') {
-      outputContent = `Crowe Logic™ Cultivation Commands:
-  monitor-batch <id>     Monitor cultivation batch status
-  create-batch <species> Create new cultivation batch
-  check-env             Check environmental conditions
-  generate-sop          Generate standard operating procedure
-  contamination-check   Run contamination analysis
-  harvest-ready <id>    Check if batch is ready for harvest
-  sterilize-log         Log sterilization cycle
-  help                  Show this help message`;
-    } else if (command.startsWith('monitor-batch')) {
-      const batchId = command.split(' ')[1] || 'LM-001';
-      outputContent = `[${batchId}] Monitoring Status:
-  Species: Pleurotus ostreatus (Oyster Mushroom)
-  Day: 12/16 (Colonization Phase)
-  Temperature: 22.3°C ✓
-  Humidity: 87% ✓
-  Contamination: None detected ✓
-  Growth Rate: Normal progression`;
-    } else if (command.startsWith('create-batch')) {
-      const species = command.split(' ').slice(1).join(' ') || 'Pleurotus ostreatus';
-      const batchId = `LM-${String(Math.floor(Math.random() * 1000)).padStart(3, '0')}`;
-      outputContent = `Created new batch: ${batchId}
-  Species: ${species}
-  Substrate: Prepared and sterilized
-  Inoculation: Ready for spawn introduction
-  Expected harvest: 14-21 days`;
-    } else if (command === 'check-env') {
-      outputContent = `Environmental Status:
-  Lab Temperature: 22.3°C ✓
-  Lab Humidity: 65% ✓
-  CO₂ Level: 450 ppm ✓
-  Air Filtration: Active ✓
-  Sterile Conditions: Maintained ✓`;
-    } else if (command === 'generate-sop') {
-      outputContent = `Generating SOP for current cultivation...
-  ✓ Substrate preparation protocol
-  ✓ Sterilization procedures
-  ✓ Inoculation guidelines
-  ✓ Environmental controls
-  ✓ Harvest timing
-  
-  SOP saved to: sop_protocol.md`;
-    } else if (command === 'contamination-check') {
-      outputContent = `Running contamination analysis...
-  ✓ Visual inspection: Clear
-  ✓ Odor assessment: Normal mushroom scent
-  ✓ Growth pattern: Uniform white mycelium
-  ✓ Color analysis: No discoloration
-  
-  Result: No contamination detected`;
-    } else if (command.startsWith('harvest-ready')) {
-      const batchId = command.split(' ')[1] || 'LM-001';
-      outputContent = `[${batchId}] Harvest Assessment:
-  Cap size: 3-5cm (optimal range)
-  Spore release: Minimal (good timing)
-  Texture: Firm and fresh
-  Color: Natural species color
-  
-  Recommendation: Ready for harvest within 24 hours`;
-    } else if (command === 'sterilize-log') {
-      outputContent = `Sterilization Cycle Logged:
-  Timestamp: ${new Date().toLocaleString()}
-  Method: Steam autoclave
-  Temperature: 121°C
-  Duration: 90 minutes
-  Pressure: 15 PSI
-  Status: Successful ✓`;
-    } else if (command === 'ls' || command === 'dir') {
-      outputContent = `cultivation_log.py
-sop_protocol.md
-batch_data.json
-environmental_logs/
-sterilization_records/
-harvest_reports/`;
-    } else if (command === 'pwd') {
-      outputContent = `/lab/crowe-logic/cultivation-workspace`;
-    } else if (command.startsWith('python')) {
-      outputContent = `Python 3.11.0 (Crowe Logic Cultivation Environment)
-Ready for mycology data analysis and automation...`;
-    } else {
-      outputContent = `Command '${terminalInput}' not recognized. Type 'help' for available commands.`;
-      outputType = 'error';
+    try {
+      // Call the actual terminal API
+      const response = await fetch('/api/terminal', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ command: terminalInput }),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        const outputLines = Array.isArray(result.output) 
+          ? result.output 
+          : [result.output || 'Command executed successfully'];
+
+        // Add each output line
+        outputLines.forEach((line: string, index: number) => {
+          const outputLine: TerminalLine = {
+            id: `output_${Date.now()}_${index}`,
+            content: line,
+            type: 'output',
+            timestamp: new Date()
+          };
+          setTerminalLines(prev => [...prev, outputLine]);
+        });
+      } else {
+        const errorLine: TerminalLine = {
+          id: `error_${Date.now()}`,
+          content: `Error: ${response.statusText}`,
+          type: 'error',
+          timestamp: new Date()
+        };
+        setTerminalLines(prev => [...prev, errorLine]);
+      }
+    } catch (error) {
+      const errorLine: TerminalLine = {
+        id: `error_${Date.now()}`,
+        content: `Network error: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        type: 'error',
+        timestamp: new Date()
+      };
+      setTerminalLines(prev => [...prev, errorLine]);
     }
 
-    const outputLine: TerminalLine = {
-      id: `output_${Date.now()}`,
-      content: outputContent,
-      type: outputType,
-      timestamp: new Date()
-    };
-
-    setTerminalLines(prev => [...prev, newInputLine, outputLine]);
     setTerminalInput('');
   };
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Command Palette
+      if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key === 'P') {
+        e.preventDefault();
+        setShowCommandPalette(true);
+      }
+      
+      // Toggle sidebars
+      if ((e.metaKey || e.ctrlKey) && e.key === 'b') {
+        e.preventDefault();
+        setLeftSidebarExpanded(!leftSidebarExpanded);
+      }
+      
+      // Quick AI chat
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        setIsChatMinimized(false);
+        setActiveRightPanel('ai-assistant');
+        setRightSidebarExpanded(true);
+      }
+      
+      // Close current file
+      if ((e.metaKey || e.ctrlKey) && e.key === 'w') {
+        e.preventDefault();
+        if (activeFileId) {
+          closeFile(activeFileId);
+        }
+      }
+      
+      // Save file
+      if ((e.metaKey || e.ctrlKey) && e.key === 's') {
+        e.preventDefault();
+        // Save current file logic
+        console.log('Saving file:', activeFileId);
+      }
+      
+      // New file
+      if ((e.metaKey || e.ctrlKey) && e.key === 'n') {
+        e.preventDefault();
+        createNewFile();
+      }
+      
+      // Toggle terminal
+      if ((e.metaKey || e.ctrlKey) && e.key === '`') {
+        e.preventDefault();
+        setIsTerminalExpanded(!isTerminalExpanded);
+      }
+      
+      // Escape to close overlays
+      if (e.key === 'Escape') {
+        setShowCommandPalette(false);
+        setIsChatMinimized(true);
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [leftSidebarExpanded, rightSidebarExpanded, isTerminalExpanded, activeFileId, isChatMinimized]);
 
   const activeFile = openFiles.find(f => f.id === activeFileId);
   const activeLeftPanelData = leftPanels.find(p => p.id === activeLeftPanel);
@@ -580,6 +621,46 @@ Ready for mycology data analysis and automation...`;
           </Button>
         </div>
       </header>
+
+      {/* Command Palette */}
+      {showCommandPalette && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-start justify-center pt-20">
+          <Card className="w-96 max-h-96 bg-background border shadow-2xl">
+            <div className="p-3 border-b">
+              <Input
+                value={commandSearch}
+                onChange={(e) => setCommandSearch(e.target.value)}
+                placeholder="Type a command..."
+                className="border-none outline-none focus:ring-0"
+                autoFocus
+              />
+            </div>
+            <ScrollArea className="max-h-80">
+              {filteredCommands.map((cmd) => (
+                <div
+                  key={cmd.id}
+                  className="p-2 hover:bg-muted cursor-pointer flex items-center justify-between text-sm"
+                  onClick={() => {
+                    cmd.action();
+                    setShowCommandPalette(false);
+                    setCommandSearch('');
+                  }}
+                >
+                  <span>{cmd.label}</span>
+                  {cmd.shortcut && (
+                    <span className="text-xs text-muted-foreground">{cmd.shortcut}</span>
+                  )}
+                </div>
+              ))}
+              {filteredCommands.length === 0 && (
+                <div className="p-4 text-center text-muted-foreground text-sm">
+                  No commands found
+                </div>
+              )}
+            </ScrollArea>
+          </Card>
+        </div>
+      )}
 
       {/* Main Layout */}
       <div className="flex flex-1 overflow-hidden">
@@ -896,6 +977,90 @@ Ready for mycology data analysis and automation...`;
           </Button>
         </div>
       )}
+
+      {/* Command Palette */}
+      {showCommandPalette && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div className="bg-background p-4 rounded-lg shadow-lg w-96">
+            <div className="flex items-center mb-2">
+              <h3 className="font-medium text-sm flex-1">Command Palette</h3>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowCommandPalette(false)}
+              >
+                <X className="w-3 h-3" />
+              </Button>
+            </div>
+            
+            <Input
+              placeholder="Search commands..."
+              value={commandSearch}
+              onChange={(e) => setCommandSearch(e.target.value)}
+              className="mb-2"
+            />
+
+            <div className="space-y-1">
+              {filteredCommands.length === 0 && (
+                <div className="text-sm text-muted-foreground">
+                  No commands found
+                </div>
+              )}
+              {filteredCommands.map(command => (
+                <div
+                  key={command.id}
+                  className="flex items-center justify-between p-2 rounded cursor-pointer hover:bg-muted/50"
+                  onClick={() => {
+                    command.action();
+                    setShowCommandPalette(false);
+                  }}
+                >
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-muted-foreground">{command.shortcut}</span>
+                    <span className="text-sm">{command.label}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Professional Status Bar */}
+      <div className="h-6 bg-blue-600 dark:bg-blue-700 text-white flex items-center justify-between px-4 text-xs font-mono">
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-1">
+            <GitBranch className="w-3 h-3" />
+            <span>{statusBarData.gitBranch}</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <CheckCircle className="w-3 h-3" />
+            <span>No problems</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <Code className="w-3 h-3" />
+            <span>{statusBarData.language.toUpperCase()}</span>
+          </div>
+          <span>{statusBarData.encoding}</span>
+          <span>{statusBarData.lineEnding}</span>
+        </div>
+        <div className="flex items-center gap-4">
+          <span>{statusBarData.cursorPosition}</span>
+          {statusBarData.selection && <span>{statusBarData.selection}</span>}
+          <div className="flex items-center gap-1">
+            <Brain className="w-3 h-3" />
+            <span>AI {statusBarData.aiStatus}</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <Activity className="w-3 h-3" />
+            <span>{statusBarData.environmentStatus}</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <Cpu className="w-3 h-3" />
+            <span>CroweOS Pro</span>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

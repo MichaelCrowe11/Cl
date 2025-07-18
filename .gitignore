@@ -26,3 +26,20 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 .env*.local
+
+# Security and large files
+*.tar.gz
+*.zip
+*.rar
+*.key
+*.pem
+*.p12
+*.pfx
+*.heic
+*.DS_Store
+*.log
+dev.log
+sterilization.txt
+
+# Stripe CLI
+stripe_*

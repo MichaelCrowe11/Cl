@@ -43,8 +43,8 @@ export function MessageRow({ msg, onCopy, onAbort }: Props) {
           className={cn(
             "p-3 rounded-xl shadow-sm text-sm",
             msg.role === "agent"
-              ? "bg-muted/60 rounded-bl-none"
-              : "bg-primary text-primary-foreground rounded-br-none",
+              ? "bg-zinc-100 rounded-bl-none text-zinc-900"
+              : "bg-zinc-900 text-white rounded-br-none",
           )}
         >
           <div className="whitespace-pre-wrap leading-relaxed">
@@ -53,7 +53,7 @@ export function MessageRow({ msg, onCopy, onAbort }: Props) {
           </div>
           
           {msg.error && (
-            <div className="text-destructive text-xs mt-2 flex items-center gap-1">
+            <div className="text-red-600 text-xs mt-2 flex items-center gap-1">
               ⚠️ {msg.error}
             </div>
           )}
@@ -64,7 +64,7 @@ export function MessageRow({ msg, onCopy, onAbort }: Props) {
             <Button 
               variant="ghost" 
               size="icon" 
-              className="h-7 w-7 text-muted-foreground hover:text-foreground"
+              className="h-7 w-7 text-zinc-500 hover:text-zinc-900"
               onClick={() => onCopy(msg.content)}
             >
               <Copy className="h-3.5 w-3.5" />
@@ -72,21 +72,21 @@ export function MessageRow({ msg, onCopy, onAbort }: Props) {
             <Button 
               variant="ghost" 
               size="icon" 
-              className="h-7 w-7 text-muted-foreground hover:text-foreground"
+              className="h-7 w-7 text-zinc-500 hover:text-zinc-900"
             >
               <Download className="h-3.5 w-3.5" />
             </Button>
             <Button 
               variant="ghost" 
               size="icon" 
-              className="h-7 w-7 text-muted-foreground hover:text-foreground"
+              className="h-7 w-7 text-zinc-500 hover:text-zinc-900"
             >
               <ThumbsUp className="h-3.5 w-3.5" />
             </Button>
             <Button 
               variant="ghost" 
               size="icon" 
-              className="h-7 w-7 text-muted-foreground hover:text-foreground"
+              className="h-7 w-7 text-zinc-500 hover:text-zinc-900"
             >
               <ThumbsDown className="h-3.5 w-3.5" />
             </Button>
@@ -97,7 +97,7 @@ export function MessageRow({ msg, onCopy, onAbort }: Props) {
           <Button
             variant="ghost"
             size="icon"
-            className="h-6 w-6 text-muted-foreground hover:text-foreground"
+            className="h-6 w-6 text-zinc-500 hover:text-zinc-900"
             onClick={onAbort}
           >
             <X className="h-4 w-4" />

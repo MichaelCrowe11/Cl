@@ -49,7 +49,7 @@ export default function Page() {
     {
       id: '1',
       role: 'assistant',
-      content: 'Hello! I\'m Crowe Logic AI, your mycology lab assistant. I can help you with substrate optimization, environmental monitoring, contamination prevention, and protocol development. What can I help you with today?',
+      content: 'Hello! I\'m Crowe Logic AI, your mycology lab assistant powered by the Crowe Logic Knowledge Base. I can help you with substrate optimization, environmental monitoring, contamination prevention, and protocol development. What can I help you with today?',
       timestamp: new Date()
     }
   ])
@@ -120,7 +120,7 @@ export default function Page() {
             role: m.role,
             content: m.content
           })),
-          model: 'gpt-4',
+          model: 'grok-beta',
           temperature: 0.3,
           maxTokens: 2000
         })

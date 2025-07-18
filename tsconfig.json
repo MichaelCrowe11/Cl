@@ -20,11 +20,16 @@
     ],
     "paths": {
       "@/*": ["./*"]
-    }
+    },
+    "types": []
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": [
     "node_modules",
-    "components/ide/MLConsole-broken.tsx"
+    "components/ide/MLConsole-broken.tsx",
+    "adk-samples/**/*",
+    ".next/types/app/api/auth/**/*",
+    ".next/types/app/api/subscription/**/*",
+    ".next/types/app/api/webhooks/**/*"
   ]
 }

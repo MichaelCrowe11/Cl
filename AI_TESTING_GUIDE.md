@@ -3,6 +3,7 @@
 ## Quick Test Checklist
 
 ### 1. **Basic IDE Setup** ✅
+
 - [ ] Open https://www.croweos.com/ide
 - [ ] Verify file explorer loads on left
 - [ ] Verify AI Assistant panel appears on right

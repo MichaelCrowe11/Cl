@@ -50,7 +50,7 @@ I'm here to help you with:
 - 📝 **Code Generation** - Writing new functions and modules
 - 🍄 **Mycology Focus** - Lab automation and data analysis
 
-What would you like to work on?`,
+Powered by the Crowe Logic Knowledge Base. What would you like to work on?`,
       timestamp: new Date()
     }
   ]);
@@ -68,7 +68,7 @@ What would you like to work on?`,
           role: msg.role,
           content: msg.content
         })),
-        model: 'gpt-4',
+        model: 'grok-beta',
         temperature: 0.1, // Lower temperature for more precise code assistance
         maxTokens: 3000
       } as AIRequest)

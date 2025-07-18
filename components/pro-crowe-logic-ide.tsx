@@ -60,7 +60,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
 import { Separator } from '@/components/ui/separator';
 import IDEChatInterface from '@/components/ide-chat-interface';
-import { CroweLogo } from '@/components/crowe-logo';
+// SVG logos will be imported directly as image sources
 import { useTheme } from 'next-themes';
 // import { useAIAssistant } from '@/hooks/use-ai-assistant';
 
@@ -945,29 +945,37 @@ if __name__ == "__main__":
   );
 
   return (
-    <div className="h-screen bg-background text-foreground flex flex-col overflow-hidden">
+    <div className="h-screen bg-white text-zinc-900 flex flex-col overflow-hidden">
       {/* Pro IDE Header */}
-      <div className="border-b bg-card/50 backdrop-blur-sm">
+      <div className="border-b border-zinc-900 bg-zinc-900 backdrop-blur-sm">
         <div className="flex items-center justify-between px-4 py-2">
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
-              <CroweLogo className="h-6 w-6" />
-              <span className="font-bold text-lg">Crowe Logic</span>
-              <Badge className="bg-gradient-to-r from-purple-500 to-blue-500 text-white">PRO</Badge>
+              <img 
+                src="/crowe-avatar.svg" 
+                alt="Crowe Logic AI Avatar" 
+                className="h-8 w-8 rounded-full border-2 border-white shadow-lg bg-white p-1"
+              />
+              <img 
+                src="/croweos-logo.svg" 
+                alt="CroweOS" 
+                className="h-6 w-auto filter brightness-0 invert"
+              />
+              <Badge className="bg-white text-zinc-900 border-white font-bold">PRO</Badge>
             </div>
             
-            <Separator orientation="vertical" className="h-6" />
+            <Separator orientation="vertical" className="h-6 bg-zinc-700" />
             
             <div className="flex items-center gap-2">
-              <Button variant="ghost" size="sm">
+              <Button variant="ghost" size="sm" className="text-white hover:bg-zinc-800">
                 <Save className="h-4 w-4 mr-1" />
                 Save
               </Button>
-              <Button variant="ghost" size="sm">
+              <Button variant="ghost" size="sm" className="text-white hover:bg-zinc-800">
                 <Play className="h-4 w-4 mr-1" />
                 Run
               </Button>
-              <Button variant="ghost" size="sm">
+              <Button variant="ghost" size="sm" className="text-white hover:bg-zinc-800">
                 <GitCommit className="h-4 w-4 mr-1" />
                 Commit
               </Button>
@@ -975,22 +983,23 @@ if __name__ == "__main__":
           </div>
           
           <div className="flex items-center gap-2">
-            <div className="flex items-center gap-1 text-xs text-muted-foreground">
-              <CheckCircle className="h-3 w-3 text-green-500" />
+            <div className="flex items-center gap-1 text-xs text-zinc-300">
+              <CheckCircle className="h-3 w-3 text-white" />
               <span>AI Active</span>
             </div>
-            <div className="flex items-center gap-1 text-xs text-muted-foreground">
-              <Clock className="h-3 w-3 text-blue-500" />
+            <div className="flex items-center gap-1 text-xs text-zinc-300">
+              <Clock className="h-3 w-3 text-white" />
               <span>Auto-save</span>
             </div>
             <Button
               variant="ghost"
               size="sm"
               onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+              className="text-white hover:bg-zinc-800"
             >
               {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </Button>
-            <Button variant="ghost" size="sm">
+            <Button variant="ghost" size="sm" className="text-white hover:bg-zinc-800">
               <Settings className="h-4 w-4" />
             </Button>
           </div>
@@ -1000,13 +1009,13 @@ if __name__ == "__main__":
       {/* Main IDE Layout */}
       <div className="flex-1 flex overflow-hidden">
         {/* Left Sidebar */}
-        <div className={`${sidebarCollapsed ? 'w-12' : 'w-80'} border-r bg-card/50 transition-all duration-200`}>
+        <div className={`${sidebarCollapsed ? 'w-12' : 'w-80'} border-r border-zinc-900 bg-zinc-900 transition-all duration-200`}>
           <div className="p-2">
             <Button
               variant="ghost"
               size="sm"
               onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-              className="w-full justify-start"
+              className="w-full justify-start text-white hover:bg-zinc-800"
             >
               {sidebarCollapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
               {!sidebarCollapsed && <span className="ml-2">File Explorer</span>}
@@ -1021,7 +1030,11 @@ if __name__ == "__main__":
                     key={file.id}
                     variant={activeFile === file.id ? "secondary" : "ghost"}
                     size="sm"
-                    className="w-full justify-start text-left"
+                    className={`w-full justify-start text-left ${
+                      activeFile === file.id 
+                        ? "bg-white text-zinc-900" 
+                        : "text-zinc-300 hover:bg-zinc-800 hover:text-white"
+                    }`}
                     onClick={() => {
                       setActiveFile(file.id);
                       setCurrentFile(file);
@@ -1030,9 +1043,9 @@ if __name__ == "__main__":
                     <FileText className="h-4 w-4 mr-2 flex-shrink-0" />
                     <div className="flex-1 min-w-0">
                       <div className="truncate">{file.name}</div>
-                      <div className="text-xs text-muted-foreground truncate">{file.path}</div>
+                      <div className="text-xs opacity-60 truncate">{file.path}</div>
                     </div>
-                    {file.unsaved && <div className="w-2 h-2 rounded-full bg-blue-500 flex-shrink-0"></div>}
+                    {file.unsaved && <div className="w-2 h-2 rounded-full bg-white flex-shrink-0"></div>}
                   </Button>
                 ))}
               </div>
@@ -1044,12 +1057,12 @@ if __name__ == "__main__":
         <div className="flex-1 flex flex-col">
           {/* File Tabs */}
           {activeFile && (
-            <div className="border-b bg-card/30">
+            <div className="border-b border-zinc-900 bg-zinc-900">
               <div className="flex items-center px-2 py-1">
-                <div className="flex items-center gap-2 px-3 py-1 bg-card rounded-t border-b border-transparent">
-                  <FileText className="h-3 w-3" />
-                  <span className="text-sm">{currentFile?.name}</span>
-                  <Button variant="ghost" size="sm" className="h-4 w-4 p-0">
+                <div className="flex items-center gap-2 px-3 py-1 bg-white rounded-t border-b border-transparent">
+                  <FileText className="h-3 w-3 text-zinc-600" />
+                  <span className="text-sm text-zinc-900">{currentFile?.name}</span>
+                  <Button variant="ghost" size="sm" className="h-4 w-4 p-0 text-zinc-500 hover:text-zinc-900">
                     <X className="h-3 w-3" />
                   </Button>
                 </div>
@@ -1059,14 +1072,14 @@ if __name__ == "__main__":
 
           {/* AI Suggestions Bar */}
           {aiSuggestions.length > 0 && (
-            <div className="border-b bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/20 dark:to-purple-950/20 p-2">
+            <div className="border-b border-zinc-900 bg-zinc-800 p-2">
               <div className="flex items-center gap-2">
-                <Lightbulb className="h-4 w-4 text-blue-500" />
-                <span className="text-sm font-medium">AI Suggestions:</span>
+                <Lightbulb className="h-4 w-4 text-white" />
+                <span className="text-sm font-medium text-white">AI Suggestions:</span>
                 <ScrollArea className="flex-1">
                   <div className="flex gap-2">
                     {aiSuggestions.slice(0, 2).map((suggestion, index) => (
-                      <Badge key={index} variant="outline" className="text-xs whitespace-nowrap">
+                      <Badge key={index} variant="outline" className="text-xs whitespace-nowrap border-zinc-600 text-zinc-300 bg-zinc-700">
                         {suggestion}
                       </Badge>
                     ))}
@@ -1089,13 +1102,13 @@ if __name__ == "__main__":
                       setCurrentFile(updatedFile);
                     }}
                     onSelect={handleTextSelection}
-                    className="w-full h-full font-mono text-sm resize-none border-0 bg-transparent"
+                    className="w-full h-full font-mono text-sm resize-none border-0 bg-transparent text-zinc-900"
                     placeholder="Start coding..."
                   />
                 </div>
                 
                 {/* Line numbers */}
-                <div className="w-12 bg-muted/30 border-l text-center text-xs text-muted-foreground py-4">
+                <div className="w-12 bg-zinc-900 border-l border-zinc-900 text-center text-xs text-zinc-300 py-4">
                   {currentFile.content.split('\n').map((_, index) => (
                     <div key={index} className="h-5 leading-5">
                       {index + 1}
@@ -1104,11 +1117,11 @@ if __name__ == "__main__":
                 </div>
               </div>
             ) : (
-              <div className="h-full flex items-center justify-center text-muted-foreground">
+              <div className="h-full flex items-center justify-center text-zinc-500">
                 <div className="text-center">
-                  <Code className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                  <h3 className="text-lg font-semibold mb-2">Welcome to Crowe Logic Pro IDE</h3>
-                  <p className="text-sm">Select a file from the explorer to start coding with AI assistance</p>
+                  <Code className="h-12 w-12 mx-auto mb-4 opacity-50 text-zinc-400" />
+                  <h3 className="text-lg font-semibold mb-2 text-zinc-900">Welcome to Crowe Logic Pro IDE</h3>
+                  <p className="text-sm text-zinc-600">Select a file from the explorer to start coding with AI assistance</p>
                 </div>
               </div>
             )}
@@ -1116,25 +1129,25 @@ if __name__ == "__main__":
         </div>
 
         {/* Right Panel */}
-        <div className={`${rightPanelCollapsed ? 'w-12' : 'w-96'} border-l bg-card/50 transition-all duration-200`}>
-          <div className="p-2 border-b">
+        <div className={`${rightPanelCollapsed ? 'w-12' : 'w-96'} border-l border-zinc-900 bg-zinc-900 transition-all duration-200`}>
+          <div className="p-2 border-b border-zinc-700">
             <div className="flex items-center justify-between">
               {!rightPanelCollapsed && (
                 <Tabs value={activeRightPanel} onValueChange={(value: any) => setActiveRightPanel(value)}>
-                  <TabsList className="grid w-full grid-cols-5">
-                    <TabsTrigger value="ai" className="p-1">
+                  <TabsList className="grid w-full grid-cols-5 bg-zinc-800">
+                    <TabsTrigger value="ai" className="p-1 data-[state=active]:bg-white data-[state=active]:text-zinc-900">
                       <Brain className="h-3 w-3" />
                     </TabsTrigger>
-                    <TabsTrigger value="debug" className="p-1">
+                    <TabsTrigger value="debug" className="p-1 data-[state=active]:bg-white data-[state=active]:text-zinc-900">
                       <Bug className="h-3 w-3" />
                     </TabsTrigger>
-                    <TabsTrigger value="git" className="p-1">
+                    <TabsTrigger value="git" className="p-1 data-[state=active]:bg-white data-[state=active]:text-zinc-900">
                       <GitBranch className="h-3 w-3" />
                     </TabsTrigger>
-                    <TabsTrigger value="performance" className="p-1">
+                    <TabsTrigger value="performance" className="p-1 data-[state=active]:bg-white data-[state=active]:text-zinc-900">
                       <Activity className="h-3 w-3" />
                     </TabsTrigger>
-                    <TabsTrigger value="mycology" className="p-1">
+                    <TabsTrigger value="mycology" className="p-1 data-[state=active]:bg-white data-[state=active]:text-zinc-900">
                       <Microscope className="h-3 w-3" />
                     </TabsTrigger>
                   </TabsList>
@@ -1145,6 +1158,7 @@ if __name__ == "__main__":
                 variant="ghost"
                 size="sm"
                 onClick={() => setRightPanelCollapsed(!rightPanelCollapsed)}
+                className="text-white hover:bg-zinc-800"
               >
                 {rightPanelCollapsed ? <ChevronLeft className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
               </Button>
@@ -1155,8 +1169,12 @@ if __name__ == "__main__":
             <ScrollArea className="h-full">
               {activeRightPanel === 'ai' && (
                 <IDEChatInterface 
-                  currentFile={currentFile?.name || ''} 
-                  selectedText={selectedText}
+                  currentFile={currentFile ? {
+                    name: currentFile.name,
+                    content: currentFile.content,
+                    language: currentFile.language
+                  } : undefined}
+                  selectedCode={selectedText}
                 />
               )}
               {activeRightPanel === 'debug' && renderDebugPanel()}
@@ -1169,14 +1187,14 @@ if __name__ == "__main__":
       </div>
 
       {/* Status Bar */}
-      <div className="border-t bg-card/50 px-4 py-1">
-        <div className="flex items-center justify-between text-xs text-muted-foreground">
+      <div className="border-t border-zinc-900 bg-zinc-900 px-4 py-1">
+        <div className="flex items-center justify-between text-xs text-zinc-300">
           <div className="flex items-center gap-4">
             <span>Line 42, Col 18</span>
             <span>Python</span>
             <span>UTF-8</span>
             {debugMode && (
-              <Badge variant="destructive" className="text-xs">
+              <Badge variant="destructive" className="text-xs bg-white text-zinc-900">
                 Debug Active
               </Badge>
             )}
@@ -1184,11 +1202,11 @@ if __name__ == "__main__":
           
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-1">
-              <div className="w-2 h-2 rounded-full bg-green-500"></div>
+              <div className="w-2 h-2 rounded-full bg-white"></div>
               <span>AI Assistant Ready</span>
             </div>
             <div className="flex items-center gap-1">
-              <Zap className="h-3 w-3 text-yellow-500" />
+              <Zap className="h-3 w-3 text-white" />
               <span>Pro Features Active</span>
             </div>
             <span>Crowe Logic Pro IDE v2.1.0</span>

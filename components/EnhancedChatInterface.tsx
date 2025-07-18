@@ -31,7 +31,7 @@ function EnhancedMessageRow({ message, onCopy, onAbort }: EnhancedMessageRowProp
           </>
         ) : (
           <>
-            <AvatarImage src="/crowe-avatar.png" alt="Crowe Logic AI" />
+            <AvatarImage src="/crowe-avatar.svg" alt="Crowe Logic AI" />
             <AvatarFallback className="bg-gradient-to-br from-purple-500 to-blue-600">
               <Brain className="h-4 w-4 text-white" />
             </AvatarFallback>
@@ -173,7 +173,7 @@ export default function EnhancedChatInterface() {
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">
             <Avatar className="h-7 w-7">
-              <AvatarImage src="/crowe-avatar.png" alt="Crowe Logic AI" />
+              <AvatarImage src="/crowe-avatar.svg" alt="Crowe Logic AI" />
               <AvatarFallback className="bg-gradient-to-br from-purple-500 to-blue-600">
                 <Brain className="h-4 w-4 text-white" />
               </AvatarFallback>

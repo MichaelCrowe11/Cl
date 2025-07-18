@@ -57,32 +57,30 @@ export default function ChatInterface() {
   };
 
   return (
-    <div className="flex flex-col flex-1 bg-background">
+    <div className="flex flex-col flex-1 bg-white">
       {/* Model Selector Header */}
-      <div className="p-4 border-b bg-muted/20">
+      <div className="p-4 border-b bg-zinc-900">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="text-sm font-medium">AI Model:</span>
+            <span className="text-sm font-medium text-white">AI Model:</span>
             <Select value={model} onValueChange={setModel}>
-              <SelectTrigger className="w-48">
+              <SelectTrigger className="w-48 bg-white text-zinc-900 border-zinc-300">
                 <SelectValue placeholder="Select model" />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="gpt-4">GPT-4</SelectItem>
-                <SelectItem value="gpt-4-turbo">GPT-4 Turbo</SelectItem>
-                <SelectItem value="claude-3-5-sonnet">Claude 3.5 Sonnet</SelectItem>
-                <SelectItem value="claude-3-opus">Claude 3 Opus</SelectItem>
+              <SelectContent className="bg-white border-zinc-300">
+                <SelectItem value="grok-beta" className="text-zinc-900 hover:bg-zinc-100">Grok Beta</SelectItem>
+                <SelectItem value="grok-vision-beta" className="text-zinc-900 hover:bg-zinc-100">Grok Vision Beta</SelectItem>
               </SelectContent>
             </Select>
           </div>
-          <div className="text-xs text-muted-foreground">
+          <div className="text-xs text-zinc-400">
             {messages.length} messages
           </div>
         </div>
       </div>
 
       {/* Messages Area */}
-      <ScrollArea className="flex-1 p-6">
+      <ScrollArea className="flex-1 p-6 bg-white">
         <div className="space-y-6">
           {messages.map((message) => (
             <MessageRow
@@ -97,35 +95,35 @@ export default function ChatInterface() {
       </ScrollArea>
 
       {/* Input Composer */}
-      <div className="p-4 border-t bg-muted/30">
+      <div className="p-4 border-t bg-zinc-900">
         <div className="relative">
           <Textarea
             placeholder="Speak or type your lab notes, questions, or commands..."
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            className="min-h-[52px] max-h-40 pr-28 pl-10 py-3.5 resize-none"
+            className="min-h-[52px] max-h-40 pr-28 pl-10 py-3.5 resize-none bg-white text-zinc-900 border-zinc-300 placeholder:text-zinc-500"
             disabled={isSending}
           />
           
           {/* Left side buttons */}
           <div className="absolute top-1/2 left-3 transform -translate-y-1/2 flex items-center">
-            <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-primary">
+            <Button variant="ghost" size="icon" className="h-8 w-8 text-zinc-500 hover:text-zinc-900">
               <Paperclip className="h-4 w-4" />
             </Button>
           </div>
           
           {/* Right side buttons */}
           <div className="absolute top-1/2 right-3 transform -translate-y-1/2 flex items-center gap-1">
-            <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-primary">
+            <Button variant="ghost" size="icon" className="h-8 w-8 text-zinc-500 hover:text-zinc-900">
               <Smile className="h-4 w-4" />
             </Button>
-            <Button variant="ghost" size="icon" className="h-9 w-9 text-muted-foreground hover:text-primary">
+            <Button variant="ghost" size="icon" className="h-9 w-9 text-zinc-500 hover:text-zinc-900">
               <Mic className="h-5 w-5" />
             </Button>
             <Button 
               onClick={handleSubmit} 
-              className="h-9 w-9 p-0" 
+              className="h-9 w-9 p-0 bg-white text-zinc-900 hover:bg-zinc-100" 
               size="icon" 
               disabled={!input.trim() || isSending}
             >
@@ -138,7 +136,7 @@ export default function ChatInterface() {
           </div>
         </div>
         
-        <p className="text-xs text-muted-foreground mt-2 text-center">
+        <p className="text-xs text-zinc-400 mt-2 text-center">
           Crowe Logic AI can respond to voice commands. Click the microphone or start typing.
         </p>
       </div>

@@ -508,7 +508,7 @@ What would you like to work on?`
           <div className="h-full flex flex-col">
             <div className="flex items-center gap-2 mb-3">
               <Avatar className="h-6 w-6">
-                <AvatarImage src="/crowe-avatar.png" />
+                <AvatarImage src="/crowe-avatar.svg" />
                 <AvatarFallback>AI</AvatarFallback>
               </Avatar>
               <span className="font-medium text-sm">Crowe Logic AI Coder</span>
@@ -521,7 +521,7 @@ What would you like to work on?`
                     <div className={`flex gap-2 ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                       {message.role === 'assistant' && (
                         <Avatar className="h-6 w-6">
-                          <AvatarImage src="/crowe-avatar.png" />
+                          <AvatarImage src="/crowe-avatar.svg" />
                           <AvatarFallback>AI</AvatarFallback>
                         </Avatar>
                       )}
@@ -538,7 +538,7 @@ What would you like to work on?`
                 {isAILoading && (
                   <div className="flex gap-2">
                     <Avatar className="h-6 w-6">
-                      <AvatarImage src="/crowe-avatar.png" />
+                      <AvatarImage src="/crowe-avatar.svg" />
                       <AvatarFallback>AI</AvatarFallback>
                     </Avatar>
                     <div className="bg-muted p-2 rounded">

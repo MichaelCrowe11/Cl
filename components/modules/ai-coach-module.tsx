@@ -203,7 +203,7 @@ export default function AICoachModule() {
                   <div key={message.id} className={`p-3 rounded-lg border-l-4 ${getPriorityColor(message.priority)}`}>
                     <div className="flex items-start space-x-3">
                       <Avatar className="h-8 w-8">
-                        <AvatarImage src={message.type === "user" ? "/placeholder-user.jpg" : "/crowe-avatar.png"} />
+                        <AvatarImage src={message.type === "user" ? "/placeholder-user.jpg" : "/crowe-avatar.svg"} />
                         <AvatarFallback>
                           {message.type === "user" ? "U" : <Brain className="h-4 w-4" />}
                         </AvatarFallback>

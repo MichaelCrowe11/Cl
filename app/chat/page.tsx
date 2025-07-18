@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import { PageWrapper } from '@/components/page-wrapper';
-import CroweLogicChatGPTInterface from "@/components/crowe-logic-chatgpt-interface";
+import AIChatEnhanced from '@/components/chat/ai-chat-enhanced';
 
 export const metadata: Metadata = {
   title: 'AI Assistant - Crowe Logic AI',
@@ -15,7 +15,7 @@ export default function ChatPage() {
       description="Intelligent assistant for mycology research and lab management"
       showBreadcrumbs={true}
     >
-      <CroweLogicChatGPTInterface />
+      <AIChatEnhanced />
     </PageWrapper>
   );
 }

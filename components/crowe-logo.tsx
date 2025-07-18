@@ -30,10 +30,8 @@ export function CroweLogo({
       xl: 64
     }[size]
 
-    // Use transparent logo for light backgrounds, darker logo for dark headers
-    const logoSrc = variant === 'official-circle' 
-      ? (darkTheme ? '/crowe0s1.png' : '/crowe0s.png')  // Dark header uses crowe0s1.png, light uses crowe0s.png
-      : (darkTheme ? '/crowe0s1.png' : '/crowe0s.png')  // Both variants respect theme
+    // Use CoS SVG logo instead of PNG files
+    const logoSrc = '/cos-logo.svg'
 
     return (
       <div className={cn("flex items-center gap-3", className)}>
