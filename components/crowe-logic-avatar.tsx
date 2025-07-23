@@ -1,6 +1,6 @@
 /**
  * Crowe Logic AI Avatar Component
- * ALWAYS uses crowe-avatar.png for Crowe Logic AI branding
+ * ALWAYS uses crowelogic-avatar.png for Crowe Logic AI branding
  * This is separate from CroweOS Systems logos
  */
 

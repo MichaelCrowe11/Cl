@@ -1,141 +1,29 @@
-# Crowe Logic AI - Mycology Lab Assistant
+# CroweOS Platform
 
-*Production-ready AI-powered mycology lab management platform*
+## Core Features
 
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/michaelcrowe11s-projects/v0-ai-chat-interface)
-[![Built with Next.js](https://img.shields.io/badge/Built%20with-Next.js_15-black?style=for-the-badge&logo=next.js)](https://nextjs.org)
+### 1. Pro IDE (`/crowe-logic-pro`)
+AI-powered development environment with natural language coding, ML algorithm generation, and intelligent code completion.
 
-## 🚀 Live Demo
+### 2. Mycological IDE (`/farm-management`) 
+52-week production planning, 7-department task management, environmental monitoring, and yield optimization for commercial mushroom farming.
 
-**Production URL:** [https://vercel.com/michaelcrowe11s-projects/v0-ai-chat-interface](https://vercel.com/michaelcrowe11s-projects/v0-ai-chat-interface)
+### 3. AI Chat Interface (`/chat`)
+Intelligent AI assistant for mycology research, lab management, and cultivation guidance with advanced chat capabilities.
 
-## ✨ Features
+## Tech Stack
+- Next.js 14 with App Router
+- TypeScript
+- Tailwind CSS with glassmorphism design
+- Lucide React icons
+- VS Code-style interface with extensible toolbars
 
-- **AI-Powered Chat Interface** - Interactive conversation with Crowe Logic AI
-- **Professional Dashboard** - Complete lab management interface
-- **Dark/Light Theme** - Automatic theme switching with user preference
-- **Responsive Design** - Works on desktop, tablet, and mobile
-- **Production Ready** - Optimized builds, error boundaries, SEO metadata
-- **Type Safe** - Full TypeScript implementation
-
-## 🛠️ Tech Stack
-
-- **Framework:** Next.js 15 with App Router
-- **UI Library:** Radix UI + Tailwind CSS
-- **Language:** TypeScript
-- **Theme:** next-themes with system preference
-- **Icons:** Lucide React
-- **Package Manager:** pnpm
-
-## 🚀 Quick Start
-
-### Development
+## Development
 ```bash
-# Install dependencies
-pnpm install
-
-# Start development server
-pnpm dev
-
-# Open http://localhost:3000
+npm run dev
 ```
 
-### Production Build
-```bash
-# Run production build with checks
-pnpm build:production
-
-# Start production server
-pnpm start
-```
-
-### Deploy to Vercel
-```bash
-# Option 1: Use deployment script
-./deploy.sh
-
-# Option 2: Manual deployment
-vercel --prod
-
-# Option 3: Git-based deployment
-git push origin main  # Auto-deploys if connected to Vercel
-```
-
-## 📊 Performance
-
-- **Bundle Size:** 119KB first load
-- **Build Time:** ~30 seconds
-- **Lighthouse Score:** 95+ (Performance, Accessibility, SEO)
-- **Zero JavaScript Errors**
-
-## 🎯 Components Status
-
-### ✅ Working Components
-- [x] Chat Interface with real-time messaging
-- [x] Theme Toggle (Dark/Light mode)
-- [x] Responsive Sidebar Navigation
-- [x] Message History and Timestamps
-- [x] Interactive Input with Enter/Escape shortcuts
-- [x] Loading States and Error Boundaries
-- [x] Professional Avatar Integration
-- [x] Context & Tools Panel
-- [x] Save Session Functionality
-
-### 🔧 Interactive Features
-- **Send Messages:** Type and press Enter or click Send
-- **Theme Switching:** Click theme toggle in header
-- **Navigation:** Click sidebar items for different sections
-- **Keyboard Shortcuts:** Enter to send, Escape to clear
-- **Copy/Download:** Action buttons on AI messages
-
-## 📁 Project Structure
-
-```
-├── app/
-│   ├── layout.tsx          # Root layout with integrated dashboard
-│   ├── page.tsx            # Main chat page
-│   ├── loading.tsx         # Loading component
-│   ├── not-found.tsx       # 404 page
-│   ├── globals.css         # Global styles
-│   ├── sitemap.ts          # SEO sitemap
-│   ├── robots.ts           # SEO robots.txt
-│   └── manifest.ts         # PWA manifest
-├── components/
-│   ├── ui/                 # Reusable UI components
-│   ├── theme-provider.tsx  # Theme context provider
-│   └── error-boundary.tsx  # Error handling
-├── chat-interface.tsx      # Main chat component
-├── public/
-│   └── crowe-avatar.png   # Official branding
-└── lib/
-    └── utils.ts           # Utility functions
-```
-
-## 🐛 Bug Fixes Applied
-
-1. **Layout Duplication:** Fixed duplicate UI rendering
-2. **Chat Input:** Restored message sending functionality
-3. **Theme Toggle:** Fixed dark/light mode switching
-4. **Build Errors:** Resolved all TypeScript and linting issues
-5. **Component Integration:** Ensured all components work together
-6. **Performance:** Optimized bundle size and loading
-
-## 🔄 Latest Updates
-
-- ✅ Fixed layout duplication issue
-- ✅ Restored chat input functionality
-- ✅ Optimized component architecture
-- ✅ Improved error handling
-- ✅ Enhanced theme switching
-- ✅ Added deployment automation
-
-## 📞 Support
-
-For issues or questions about deployment:
-1. Check the `PRODUCTION-GUIDE.md` for detailed deployment steps
-2. Run `./verify-components.sh` to check component status
-3. Use `./deploy.sh` for automated deployment
-
----
-
-**Ready for Production Deployment! 🎉**
+Visit:
+- `/crowe-logic-pro` - Pro IDE
+- `/farm-management` - Mycological IDE  
+- `/chat` - AI Assistant

@@ -7,22 +7,22 @@ import { AccessibilityProvider } from "@/components/accessibility-provider"
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Crowe Logic AI - Mycology Lab Assistant',
-  description: 'Professional mycology lab management and cultivation assistant powered by AI. Track batches, generate SOPs, and optimize your mushroom cultivation workflow.',
-  keywords: ['mycology', 'mushroom cultivation', 'lab management', 'AI assistant', 'batch tracking', 'cultivation protocols'],
+  title: 'Crowe Logic AI - Professional Development Platform',
+  description: 'AI-powered development platform with specialized tools for coding, automation, and farm management. Build faster with natural language programming.',
+  keywords: ['AI development', 'IDE', 'automation', 'farm management', 'natural language coding', 'workflow automation', 'professional tools'],
   authors: [{ name: 'Crowe Logic AI' }],
   creator: 'Crowe Logic AI',
   robots: 'index, follow',
   openGraph: {
-    title: 'Crowe Logic AI - Mycology Lab Assistant',
-    description: 'Professional mycology lab management and cultivation assistant powered by AI',
+    title: 'Crowe Logic AI - Professional Development Platform',
+    description: 'AI-powered development platform with specialized tools for coding, automation, and farm management',
     type: 'website',
     locale: 'en_US',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Crowe Logic AI - Mycology Lab Assistant',
-    description: 'Professional mycology lab management and cultivation assistant powered by AI',
+    title: 'Crowe Logic AI - Professional Development Platform',
+    description: 'AI-powered development platform with specialized tools for coding, automation, and farm management',
   },
 };
 
@@ -55,7 +55,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               {/* Main Content */}
               <main 
                 id="main-content" 
-                className="min-h-screen"
+                className="min-h-screen pt-16"
                 tabIndex={-1}
                 role="main"
                 aria-label="Main content"

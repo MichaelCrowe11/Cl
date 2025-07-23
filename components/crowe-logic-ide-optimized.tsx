@@ -11,7 +11,7 @@ import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useTheme } from "next-themes"
 import { useToast } from "@/hooks/use-toast"
-import { CroweLogo } from "@/components/crowe-logo"
+import { CroweLogo } from "./crowe-logo"
 import { MLConsole } from "@/components/ml-console"
 import { 
   Code2, 

@@ -1,4 +1,7 @@
+"use client";
+
 import React from 'react'
+import { useRouter } from 'next/navigation'
 import { CroweLogo } from '@/components/crowe-logo'
 import { Button } from '@/components/ui/button'
 import { 
@@ -11,6 +14,7 @@ import {
 } from 'lucide-react'
 
 export default function LabManagementEnhanced() {
+  const router = useRouter()
   const capabilities = [
     {
       icon: <Microscope className="h-8 w-8" />,
@@ -57,13 +61,24 @@ export default function LabManagementEnhanced() {
               </div>
             </div>
             <div className="hidden md:flex items-center gap-6">
-              <Button variant="ghost" className="text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100">
+              <Button 
+                variant="ghost" 
+                className="text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100"
+                onClick={() => router.push('/analytics')}
+              >
                 <BarChart2 className="mr-2 h-4 w-4" /> Analytics
               </Button>
-              <Button variant="ghost" className="text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100">
+              <Button 
+                variant="ghost" 
+                className="text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100"
+                onClick={() => alert('Schedule feature coming soon!')}
+              >
                 <Clock className="mr-2 h-4 w-4" /> Schedule
               </Button>
-              <Button className="bg-zinc-900 text-white hover:bg-zinc-800">
+              <Button 
+                className="bg-zinc-900 text-white hover:bg-zinc-800"
+                onClick={() => router.push('/ide')}
+              >
                 Start Lab Session
               </Button>
             </div>

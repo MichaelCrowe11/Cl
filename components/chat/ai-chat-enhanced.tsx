@@ -1,10 +1,14 @@
+"use client";
+
 import React from 'react'
-import { CroweLogo } from '@/components/crowe-logo'
+import { useRouter } from 'next/navigation'
+import { CroweLogicAvatar } from '@/components/crowe-logic-avatar'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { MessageCircle, Brain, MessageSquare, Users } from 'lucide-react'
 
 export default function AIChatEnhanced() {
+  const router = useRouter()
   const features = [
     {
       icon: <MessageCircle className="h-8 w-8" />,
@@ -34,32 +38,37 @@ export default function AIChatEnhanced() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="flex items-center">
-                <CroweLogo 
-                  variant="official-circle"
+                <CroweLogicAvatar 
                   size={40}
-                  systemBranding={true}
-                  showText={false}
+                  variant="circle"
                 />
                 <Image 
                   src="/cos-logo.svg" 
-                  alt="CoS Logo" 
-                  width={32} 
-                  height={32} 
-                  className="ml-2 h-8 w-auto"
+                  alt="CroweOS Systems" 
+                  width={24} 
+                  height={24} 
+                  className="ml-2 h-6 w-auto opacity-50"
                 />
               </div>
               <div>
                 <div className="flex items-center gap-1">
-                  <span className="font-bold text-lg text-white">CroweOS</span>
+                  <span className="font-bold text-lg text-white">Crowe Logic</span>
                   <span className="text-sm font-medium text-zinc-300 tracking-wider">AI CHAT</span>
                 </div>
               </div>
             </div>
             <div className="hidden md:flex items-center gap-6">
-              <Button variant="ghost" className="text-zinc-300 hover:text-white">
+              <Button 
+                variant="ghost" 
+                className="text-zinc-300 hover:text-white"
+                onClick={() => router.push('/crowe-logic')}
+              >
                 <MessageSquare className="mr-2 h-4 w-4" /> Start Chat
               </Button>
-              <Button className="bg-white text-zinc-900 hover:bg-zinc-100">
+              <Button 
+                className="bg-white text-zinc-900 hover:bg-zinc-100"
+                onClick={() => router.push('/crowe-logic')}
+              >
                 Ask AI
               </Button>
             </div>
@@ -73,11 +82,11 @@ export default function AIChatEnhanced() {
           <div className="flex flex-col md:flex-row items-center justify-center gap-8 mb-8">
             <div className="w-1/2 md:w-1/4 animate-float">
               <Image 
-                src="/crowe-avatar.svg" 
-                alt="Crowe Avatar" 
+                src="/crowe-avatar.png" 
+                alt="AI Assistant" 
                 width={300} 
                 height={300} 
-                className="w-full h-auto max-w-xs"
+                className="w-full h-auto max-w-xs rounded-full"
               />
             </div>
             <div className="w-full md:w-2/3">

@@ -9,7 +9,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Badge } from "@/components/ui/badge"
 import { useTheme } from "next-themes"
 import { useToast } from "@/hooks/use-toast"
-import { CroweLogo } from "@/components/crowe-logo"
+import { CroweLogo } from "./crowe-logo"
 import { 
   Send, 
   Loader2, 

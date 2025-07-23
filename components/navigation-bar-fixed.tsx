@@ -5,7 +5,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { ThemeToggle } from "@/components/ui/theme-toggle"
-import { CroweLogo } from "@/components/crowe-logo"
+import { CroweLogo } from "./crowe-logo"
 import { 
   MessageSquare, 
   Code2, 

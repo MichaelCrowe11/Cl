@@ -26,6 +26,7 @@
     "analyze": "cross-env ANALYZE=true pnpm build"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.57.0",
     "@auth/core": "^0.40.0",
     "@hookform/resolvers": "^3.9.1",
     "@monaco-editor/react": "^4.7.0",
