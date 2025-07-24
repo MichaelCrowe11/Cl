@@ -63,7 +63,6 @@ print("🤖 Crowe Logic AI Ready - Let's build something amazing!")
 
   // Auto-scroll console to bottom
   useEffect(() => {
-// ... existing code ...
     if (consoleRef.current) {
       consoleRef.current.scrollTop = consoleRef.current.scrollHeight;
     }
@@ -122,7 +121,6 @@ print("🤖 Crowe Logic AI Ready - Let's build something amazing!")
       setConsoleMessages(prev => [...prev, successMessage]);
 
     } catch (error) {
-// ... existing code ...
       console.error('AI generation error:', error);
       
       const errorMessage: ConsoleMessage = {
@@ -140,7 +138,6 @@ print("🤖 Crowe Logic AI Ready - Let's build something amazing!")
   };
 
   const executeConsoleCommand = (command: string) => {
-// ... existing code ...
     const newMessage: ConsoleMessage = {
       type: 'input',
       content: `$ ${command}`,
@@ -150,7 +147,6 @@ print("🤖 Crowe Logic AI Ready - Let's build something amazing!")
     setConsoleMessages(prev => [...prev, newMessage]);
 
     // Simulate command execution
-// ... existing code ...
     setTimeout(() => {
       let response = '';
       
@@ -177,13 +173,11 @@ print("🤖 Crowe Logic AI Ready - Let's build something amazing!")
   };
 
   return (
-// ... existing code ...
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <div className="container mx-auto p-6">
         {/* Header */}
         <div className="mb-6">
           <div className="flex items-center space-x-3 mb-2">
-// ... existing code ...
             <img src="/crowelogic-avatar.png" alt="Crowe Logic AI" className="h-8 w-8" />
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
               Crowe Logic Pro IDE
@@ -217,7 +211,6 @@ print("🤖 Crowe Logic AI Ready - Let's build something amazing!")
                 <Input
                   placeholder={`Chat with ${aiModel === 'crowe-logic-coder' ? 'the Coder' : 'the Assistant'}...`}
                   value={naturalLanguageInput}
-// ... existing code ...
                   onChange={(e) => setNaturalLanguageInput(e.target.value)}
                   onKeyPress={(e) => {
                     if (e.key === 'Enter' && naturalLanguageInput.trim()) {
@@ -260,7 +253,6 @@ print("🤖 Crowe Logic AI Ready - Let's build something amazing!")
 
           {/* Tabs */}
           <div className="flex border-b border-gray-200 dark:border-gray-700">
-// ... existing code ...
             <button
               onClick={() => setActiveTab('editor')}
               className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
@@ -286,7 +278,6 @@ print("🤖 Crowe Logic AI Ready - Let's build something amazing!")
           </div>
 
           {/* Content Area */}
-// ... existing code ...
           <div className="flex-1 overflow-hidden">
             {activeTab === 'editor' && (
               <div className="h-full flex flex-col">
@@ -304,7 +295,6 @@ print("🤖 Crowe Logic AI Ready - Let's build something amazing!")
                     )}
                   </div>
                   <div className="flex items-center space-x-2">
-// ... existing code ...
                     <Button variant="ghost" size="sm">
                       <Save className="h-4 w-4" />
                     </Button>
@@ -322,7 +312,6 @@ print("🤖 Crowe Logic AI Ready - Let's build something amazing!")
             )}
 
             {activeTab === 'terminal' && (
-// ... existing code ...
               <div className="h-full flex flex-col bg-gray-900 text-green-400 font-mono">
                 <div className="p-3 border-b border-gray-700 bg-gray-800">
                   <div className="flex items-center space-x-2">
@@ -335,7 +324,6 @@ print("🤖 Crowe Logic AI Ready - Let's build something amazing!")
                 </div>
                 
                 <ScrollArea ref={consoleRef} className="flex-1 p-4">
-// ... existing code ...
                   <div className="space-y-2">
                     {consoleMessages.map((message, index) => (
                       <div key={index} className="text-sm">
@@ -354,7 +342,6 @@ print("🤖 Crowe Logic AI Ready - Let's build something amazing!")
                 </ScrollArea>
                 
                 <div className="p-4 border-t border-gray-700">
-// ... existing code ...
                   <div className="flex items-center space-x-2">
                     <span className="text-green-400">$</span>
                     <Input
@@ -371,7 +358,6 @@ print("🤖 Crowe Logic AI Ready - Let's build something amazing!")
                   </div>
                   
                   <div className="mt-3 grid grid-cols-2 gap-2">
-// ... existing code ...
                     <Button
                       variant="outline"
                       size="sm"
