@@ -133,7 +133,7 @@ git push origin main  # Auto-deploys if connected to Vercel
 
 For issues or questions about deployment:
 1. Check the `PRODUCTION-GUIDE.md` for detailed deployment steps
-2. Run `./verify-components.sh` to check component status
+2. Run `./scripts/verify-production.sh <your-production-url>` to verify the deployment
 3. Use `./deploy.sh` for automated deployment
 
 # Getting Started
