@@ -1,5 +1,5 @@
 """
-AutoML pipeline for accidently classifying sections of the SWM Food Safety Plan.
+AutoML pipeline for accidentally classifying sections of the SWM Food Safety Plan.
 This script:
  1. Reads the cleaned Markdown.
  2. Splits it into sections (by header).
