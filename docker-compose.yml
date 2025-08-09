@@ -1,0 +1,33 @@
+version: "3.9"
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    env_file: .env
+    environment:
+      - CLX_ENV=prod
+    ports: ["8000:8000"]
+    depends_on: [influxdb, grafana]
+  influxdb:
+    image: influxdb:2.7
+    ports: ["8086:8086"]
+    environment:
+      DOCKER_INFLUXDB_INIT_MODE: setup
+      DOCKER_INFLUXDB_INIT_USERNAME: clx
+      DOCKER_INFLUXDB_INIT_PASSWORD: ${INFLUX_PASSWORD:?set in .env}
+      DOCKER_INFLUXDB_INIT_ORG: ${INFLUX_ORG}
+      DOCKER_INFLUXDB_INIT_BUCKET: ${INFLUX_BUCKET}
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: ${INFLUX_TOKEN}
+    volumes: ["influxdb-data:/var/lib/influxdb2"]
+  grafana:
+    image: grafana/grafana:10.4.2
+    ports: ["3000:3000"]
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=${GF_SECURITY_ADMIN_PASSWORD:?set in .env}
+    volumes:
+      - ./ops/grafana/provisioning:/etc/grafana/provisioning
+      - ./ops/grafana/dashboards:/var/lib/grafana/dashboards
+volumes:
+  influxdb-data:

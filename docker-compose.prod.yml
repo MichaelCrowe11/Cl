@@ -1,0 +1,7 @@
+services:
+  api:
+    environment:
+      - CLX_API_KEY=${CLX_API_KEY}
+      - ALLOWED_HOSTS=${ALLOWED_HOSTS}
+      - CORS_ORIGINS=${CORS_ORIGINS}
+    command: ["uvicorn", "clx_mpdet.service:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "2", "--proxy-headers"]
