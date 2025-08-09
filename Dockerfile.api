@@ -1,0 +1,24 @@
+# Crowe Logic™ Proprietary
+FROM python:3.11-slim AS base
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 PIP_NO_CACHE_DIR=1
+RUN apt-get update && apt-get install -y --no-install-recommends build-essential && rm -rf /var/lib/apt/lists/*
+WORKDIR /app
+
+FROM base AS deps
+COPY pyproject.toml README.md ./
+RUN pip install --upgrade pip && pip install . --no-cache-dir
+
+FROM base AS runtime
+RUN useradd -ms /bin/bash appuser
+WORKDIR /app
+COPY --from=deps /usr/local/lib/python3.11 /usr/local/lib/python3.11
+COPY clx_mpdet ./clx_mpdet
+COPY ops ./ops
+COPY data ./data
+COPY program_CLX-MPDET_Research_Sprint.json . || true
+COPY clx_mpdet_bootstrap_artifacts.json . || true
+USER appuser
+EXPOSE 8000
+ENV CLX_ENV=prod
+HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 CMD python -c "import requests,sys; exit(0 if requests.get('http://127.0.0.1:8000/health',timeout=2).status_code==200 else 1)" || exit 1
+CMD ["uvicorn", "clx_mpdet.service:app", "--host", "0.0.0.0", "--port", "8000", "--proxy-headers", "--forwarded-allow-ips", "*"]
