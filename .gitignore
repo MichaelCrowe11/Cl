@@ -2,3 +2,9 @@ node_modules
 .vercel
 .next/
 node_modules/
+tsconfig.tsbuildinfo
+.env.local
+.env
+dist/
+build/
+*.log
