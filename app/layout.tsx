@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
 import './globals.css'
 // Polyfill global `self` for Node.js environment to satisfy libraries that expect a browser-like global
 if (typeof (globalThis as any).self === 'undefined') {
@@ -12,7 +11,8 @@ import Sidebar from '@/components/Sidebar'
 import ToolsPanel from '@/components/ToolsPanel'
 import { CroweBackdrop } from '@/components/ui/loading'
 
-const inter = Inter({ subsets: ['latin'] })
+// Using system fonts for now due to network restrictions
+// const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'Crowe Logic GPT - Mycology Research Platform',
@@ -33,7 +33,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
+      <body className="font-sans">
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
