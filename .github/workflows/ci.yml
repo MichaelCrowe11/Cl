@@ -22,7 +22,7 @@ jobs:
       - name: Build Docker
         run: docker build -t clx-mpdet:ci -f Dockerfile.api .
       - name: Trivy Scan
-        uses: aquasecurity/trivy-action@0.32.0
+        uses: aquasecurity/trivy-action@0.33.0
         with:
           image-ref: clx-mpdet:ci
           format: 'table'
